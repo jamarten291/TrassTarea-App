@@ -3,6 +3,8 @@ package pmdm.jmh.app_gestion_tareas.modelo;
 import androidx.annotation.NonNull;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class Tarea {
     private String titulo;
@@ -69,6 +71,17 @@ public class Tarea {
 
     public void setPrioritaria(boolean prioritaria) {
         this.prioritaria = prioritaria;
+    }
+
+    public long getDiasRestantes() {
+        return ChronoUnit
+                .DAYS
+                .between(LocalDateTime.now(), this.fechaObjetivo);
+    }
+
+    public String getFechaLimiteFormateada() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return this.fechaObjetivo.format(format);
     }
 
     @NonNull

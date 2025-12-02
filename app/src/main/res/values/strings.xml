@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">App-Gestion-Tareas</string>
+    <string name="app_slogan">Tus tareas, tu ritmo, tu éxito</string>
+    <string name="bt_entrar_text">Entrar</string>
+    <string name="iv_quedan">Quedan: </string>
+    <string name="iv_dias"> días</string>
 </resources>
