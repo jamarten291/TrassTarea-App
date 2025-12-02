@@ -22,6 +22,7 @@
             android:exported="false" />
         <activity
             android:name=".vista.MainActivity"
+            android:theme="@style/Base.Theme.AppGestionTareas.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

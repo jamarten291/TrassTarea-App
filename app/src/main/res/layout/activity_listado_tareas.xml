@@ -12,4 +12,13 @@
         android:id="@+id/rv_tareas"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tv_sin_tareas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center_vertical|center|center_horizontal"
+        android:text="@string/tv_sin_tareas"
+        android:layout_centerInParent="true"/>
+
 </RelativeLayout>

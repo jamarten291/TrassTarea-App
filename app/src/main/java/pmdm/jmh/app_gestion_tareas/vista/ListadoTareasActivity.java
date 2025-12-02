@@ -1,6 +1,7 @@
 package pmdm.jmh.app_gestion_tareas.vista;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,7 @@ public class ListadoTareasActivity extends AppCompatActivity {
     private ArrayList<Tarea> listaTareas;
     private TareaAdapter adaptadorTarea;
     private RecyclerView rvTareas;
+    private TextView tvSinTareas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +38,20 @@ public class ListadoTareasActivity extends AppCompatActivity {
 
         // Bindings
         rvTareas = findViewById(R.id.rv_tareas);
+        tvSinTareas = findViewById(R.id.tv_sin_tareas);
 
         // Creación de tareas
         listaTareas = new ArrayList<>();
         crearTareas();
+
+        // Visibilidad según haya notas o no
+        rvTareas.setVisibility(listaTareas.isEmpty() ?
+                RecyclerView.INVISIBLE :
+                RecyclerView.VISIBLE);
+
+        tvSinTareas.setVisibility(listaTareas.isEmpty() ?
+                TextView.VISIBLE :
+                TextView.INVISIBLE);
 
         // Inicialización de adaptador del RecyclerView
         adaptadorTarea = new TareaAdapter(listaTareas);
@@ -49,6 +61,9 @@ public class ListadoTareasActivity extends AppCompatActivity {
                         LinearLayoutManager.VERTICAL,
                         false)
         );
+        rvTareas.setOnClickListener(v -> {
+
+        });
     }
 
 

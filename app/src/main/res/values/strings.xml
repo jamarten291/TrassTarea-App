@@ -4,4 +4,5 @@
     <string name="bt_entrar_text">Entrar</string>
     <string name="iv_quedan">Quedan: </string>
     <string name="iv_dias"> días</string>
+    <string name="tv_sin_tareas">No hay tareas disponibles</string>
 </resources>
