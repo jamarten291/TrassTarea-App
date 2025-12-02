@@ -114,7 +114,7 @@ public class ListadoTareasActivity extends AppCompatActivity {
                 "Incluir últimos proyectos y certificaciones",
                 (byte) 30,
                 LocalDateTime.now().minusDays(4),
-                LocalDateTime.now().plusDays(3),
+                LocalDateTime.now().minusDays(3),
                 true));
 
         listaTareas.add(new Tarea(

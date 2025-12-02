@@ -1,5 +1,7 @@
 package pmdm.jmh.app_gestion_tareas.controlador;
 
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +58,15 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
             tvNombreTarea.setText(t.getTitulo());
             progressTarea.setProgress(t.getProgreso(), true);
             tvFechaLimite.setText(t.getFechaLimiteFormateada());
-            tvCantDias.setText(String.valueOf(t.getDiasRestantes()));
+
+            if (t.getDiasRestantes() < 0) {
+                tvCantDias.setText("0");
+                // El operador | agrega otro flag sin perder los flags anteriores
+                tvNombreTarea.setPaintFlags(tvCantDias.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                tvCantDias.setTextColor(Color.RED);
+            } else {
+                tvCantDias.setText(String.valueOf(t.getDiasRestantes()));
+            }
         }
     }
 }
