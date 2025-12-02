@@ -12,16 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppGestionTareas">
         <activity
-            android:name=".EditarTareaActivity"
+            android:name=".vista.EditarTareaActivity"
             android:exported="false" />
         <activity
-            android:name=".CrearTareaActivity"
+            android:name=".vista.CrearTareaActivity"
             android:exported="false" />
         <activity
-            android:name=".ListadoTareasActivity"
+            android:name=".vista.ListadoTareasActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".vista.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
