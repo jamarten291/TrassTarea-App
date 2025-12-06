@@ -1,9 +1,15 @@
 package pmdm.jmh.app_gestion_tareas.vista;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -13,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.TareaAdapter;
@@ -24,6 +32,7 @@ public class ListadoTareasActivity extends AppCompatActivity {
     private TareaAdapter adaptadorTarea;
     private RecyclerView rvTareas;
     private TextView tvSinTareas;
+    private boolean filtradoActualmente = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +70,58 @@ public class ListadoTareasActivity extends AppCompatActivity {
                         LinearLayoutManager.VERTICAL,
                         false)
         );
-        rvTareas.setOnClickListener(v -> {
-
-        });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_principal, menu);
+        menu.setGroupVisible(R.id.item_acerca, true);
+        menu.setGroupVisible(R.id.item_agregar, true);
+        menu.setGroupVisible(R.id.item_prioritarias, true);
+        menu.setGroupVisible(R.id.item_salir, true);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.item_acerca) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("TrassTarea")
+                    .setMessage(R.string.mensaje_acerca)
+                    .setPositiveButton(R.string.boton_msg_acerca, (dialog, which) -> {
+
+                    });
+            AlertDialog mensaje = builder.create();
+            mensaje.show();
+        } else if (id == R.id.item_agregar) {
+            Intent intent = new Intent(this, CrearTareaActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (id == R.id.item_prioritarias) {
+            if (!filtradoActualmente) {
+                // Si no está filtrado, crea un adaptador con la lista de tareas filtradas
+                ArrayList<Tarea> tareasFiltradas = (ArrayList<Tarea>) List.copyOf(listaTareas)
+                        .stream()
+                        .filter(Tarea::isPrioritaria)
+                        .collect(Collectors.toList());
+
+                TareaAdapter adaptadorFiltro = new TareaAdapter(tareasFiltradas);
+                rvTareas.setAdapter(adaptadorFiltro);
+                filtradoActualmente = true;
+            } else {
+                // Si está filtrado, establece el adaptador al adaptador original
+                rvTareas.setAdapter(adaptadorTarea);
+                filtradoActualmente = false;
+            }
+        } else if (id == R.id.item_salir) {
+            Toast.makeText(this, R.string.despedida_toast, Toast.LENGTH_SHORT).show();
+            finishAffinity();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private void crearTareas() {
         listaTareas.add(new Tarea(

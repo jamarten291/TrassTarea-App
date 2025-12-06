@@ -5,4 +5,11 @@
     <string name="iv_quedan">Quedan: </string>
     <string name="iv_dias"> días</string>
     <string name="tv_sin_tareas">No hay tareas disponibles</string>
+    <string name="item_acerca">Acerca de…</string>
+    <string name="item_salir">Salir</string>
+    <string name="item_agregar">Añadir</string>
+    <string name="item_prioritarias">Prioritarias</string>
+    <string name="despedida_toast">¡Hasta pronto!</string>
+    <string name="mensaje_acerca">Desarrollado por Jackson, 2025</string>
+    <string name="boton_msg_acerca">Aceptar</string>
 </resources>
