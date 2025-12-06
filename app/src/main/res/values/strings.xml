@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">App-Gestion-Tareas</string>
+    <string name="app_actionbar_title">TrassTarea</string>
     <string name="app_slogan">Tus tareas, tu ritmo, tu éxito</string>
     <string name="bt_entrar_text">Entrar</string>
     <string name="iv_quedan">Quedan: </string>
@@ -12,4 +13,23 @@
     <string name="despedida_toast">¡Hasta pronto!</string>
     <string name="mensaje_acerca">Desarrollado por Jackson, 2025</string>
     <string name="boton_msg_acerca">Aceptar</string>
+    <string name="crear_tarea">Crear tarea</string>
+    <string name="btn_siguiente">Siguiente</string>
+    <string name="btn_volver">Volver</string>
+    <string name="btn_guardar">Guardar</string>
+    <string name="titulo_tarea">Título</string>
+    <string name="fecha_creacion_tarea">Fecha de creación</string>
+    <string name="fecha_objetivo_tarea">Fecha objetivo</string>
+    <string name="progreso_tarea">Progreso</string>
+    <string name="prioridad_tarea">Prioridad</string>
+    <string name="prioridad_texto_check">Sí/No</string>
+    <array name="entradasSpinner">
+        <item>No iniciada</item>
+        <item>Iniciada</item>
+        <item>Avanzada</item>
+        <item>Casi finalizada</item>
+        <item>Finalizada</item>
+    </array>
+    <string name="descripcion_tarea">Descripción</string>
+    <string name="descripcion_tarea_hint">Describe tu tarea...</string>
 </resources>
