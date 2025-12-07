@@ -2,6 +2,7 @@ package pmdm.jmh.app_gestion_tareas.modelo;
 
 import androidx.annotation.NonNull;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -12,11 +13,11 @@ public class Tarea {
 
     // Byte debido a que se usarán valores entre 0 y 100
     private byte progreso;
-    private LocalDateTime fechaCreacion;
-    private LocalDateTime fechaObjetivo;
+    private LocalDate fechaCreacion;
+    private LocalDate fechaObjetivo;
     private boolean prioritaria;
 
-    public Tarea(String titulo, LocalDateTime fechaCreacion, LocalDateTime fechaObjetivo, byte progreso, boolean prioritaria, String descripcion) {
+    public Tarea(String titulo, LocalDate fechaCreacion, LocalDate fechaObjetivo, byte progreso, boolean prioritaria, String descripcion) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.progreso = progreso;
@@ -49,19 +50,19 @@ public class Tarea {
         this.progreso = progreso;
     }
 
-    public LocalDateTime getFechaCreacion() {
+    public LocalDate getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+    public void setFechaCreacion(LocalDate fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public LocalDateTime getFechaObjetivo() {
+    public LocalDate getFechaObjetivo() {
         return fechaObjetivo;
     }
 
-    public void setFechaObjetivo(LocalDateTime fechaObjetivo) {
+    public void setFechaObjetivo(LocalDate fechaObjetivo) {
         this.fechaObjetivo = fechaObjetivo;
     }
 

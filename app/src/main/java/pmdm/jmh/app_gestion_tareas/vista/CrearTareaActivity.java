@@ -9,7 +9,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
+import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
 public class CrearTareaActivity extends AppCompatActivity implements
         FragmentoA.ComunicacionFragmentoA,
@@ -23,8 +28,10 @@ public class CrearTareaActivity extends AppCompatActivity implements
     private static final String ARG_PARAM5 = "prioridad";
     private static final String ARG_PARAM6 = "descripcion";
     private String titulo;
-    private String fechaInicio;
-    private String fechaObjetivo;
+    private String fechaInicioStr;
+    private String fechaObjetivoStr;
+    private LocalDate fechaInicioValue;
+    private LocalDate fechaObjetivoValue;
     private int progresoIndex;
     private byte progresoValue;
     private boolean prioridad;
@@ -55,12 +62,12 @@ public class CrearTareaActivity extends AppCompatActivity implements
     @Override
     public void onBotonSiguienteClicked() {
         titulo = fragmentoA.getTitulo();
-        fechaInicio = fragmentoA.getFechaInicio();
-        fechaObjetivo = fragmentoA.getFechaObjetivo();
+        fechaInicioStr = fragmentoA.getFechaInicio();
+        fechaObjetivoStr = fragmentoA.getFechaObjetivo();
         progresoIndex = fragmentoA.getProgresoIndex();
         prioridad = fragmentoA.isPrioridad();
 
-        fragmentoB = FragmentoB.newInstance(titulo, fechaInicio, fechaObjetivo, progresoIndex, prioridad, descripcion);
+        fragmentoB = FragmentoB.newInstance(titulo, fechaInicioStr, fechaObjetivoStr, progresoIndex, prioridad, descripcion);
         if (!fragmentoB.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoB).commit();
         }
@@ -70,7 +77,7 @@ public class CrearTareaActivity extends AppCompatActivity implements
     public void onBotonVolverClicked() {
         descripcion = fragmentoB.getDescripcion();
 
-        fragmentoA = FragmentoA.newInstance(titulo, fechaInicio, fechaObjetivo, progresoIndex, prioridad);
+        fragmentoA = FragmentoA.newInstance(titulo, fechaInicioStr, fechaObjetivoStr, progresoIndex, prioridad);
         if (!fragmentoA.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoA).commit();
         }
@@ -78,7 +85,20 @@ public class CrearTareaActivity extends AppCompatActivity implements
 
     @Override
     public void onBotonGuardarClicked() {
-        descripcion = fragmentoB.getDescripcion();
+        fechaInicioValue = HelperClass.stringToDate(fechaInicioStr);
+        fechaObjetivoValue = HelperClass.stringToDate(fechaObjetivoStr);
         progresoValue = (byte) (25 * progresoIndex);
+        descripcion = fragmentoB.getDescripcion();
+
+        Tarea nuevaTarea = new Tarea(
+                titulo,
+                fechaInicioValue,
+                fechaObjetivoValue,
+                progresoValue,
+                prioridad,
+                descripcion
+        );
+
+        HelperClass.showBasicAlertDialog(this, "Tarea creada", nuevaTarea.toString());
     }
 }

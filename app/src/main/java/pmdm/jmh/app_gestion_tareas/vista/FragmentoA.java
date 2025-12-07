@@ -1,5 +1,7 @@
 package pmdm.jmh.app_gestion_tareas.vista;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -15,11 +17,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -109,7 +115,7 @@ public class FragmentoA extends Fragment {
 
         // Adaptador
         ArrayAdapter<String> adaptadorStrings = new ArrayAdapter<>(
-                Objects.requireNonNull(super.getContext()),
+                Objects.requireNonNull(this.getContext()),
                 android.R.layout.simple_spinner_dropdown_item,
                 progresoItems
         );
@@ -117,6 +123,8 @@ public class FragmentoA extends Fragment {
 
         // Listeners
         btSiguiente.setOnClickListener(v -> comunicador.onBotonSiguienteClicked());
+        etFechaCreacion.setOnClickListener(v -> {});
+        etFechaObjetivo.setOnClickListener(v -> {});
 
         // Datos de la tarea (en caso de haber recibido datos)
         if (getArguments() != null) {

@@ -4,6 +4,11 @@ import android.content.Context;
 
 import androidx.appcompat.app.AlertDialog;
 
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import pmdm.jmh.app_gestion_tareas.R;
 
 public class HelperClass {
@@ -36,5 +41,14 @@ public class HelperClass {
                 .setPositiveButton(R.string.boton_alert_basico, (dialog, which) -> {});
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public static String getFormattedDate(LocalDate dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        return dateTime.format(formatter);
+    }
+
+    public static LocalDate stringToDate(String date) {
+        return LocalDate.parse(date);
     }
 }

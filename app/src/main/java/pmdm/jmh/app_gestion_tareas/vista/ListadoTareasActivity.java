@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,80 +124,80 @@ public class ListadoTareasActivity extends AppCompatActivity {
     private void crearTareas() {
         listaTareas.add(new Tarea(
                 "Comprar víveres",                     // título
-                LocalDateTime.now(),                  // fecha inicio
-                LocalDateTime.now().plusDays(1),      // fecha fin
+                LocalDate.now(),                  // fecha inicio
+                LocalDate.now().plusDays(1),      // fecha fin
                 (byte) 0,                             // progreso
                 false,                                // prioritaria
                 "Ir al supermercado y comprar pan, leche y huevos")); // descripción
 
         listaTareas.add(new Tarea(
                 "Entrega informe",
-                LocalDateTime.now().minusDays(3),
-                LocalDateTime.now().plusDays(2),
+                LocalDate.now().minusDays(3),
+                LocalDate.now().plusDays(2),
                 (byte) 45,
                 true,
                 "Redactar y enviar el informe mensual al jefe"));
 
         listaTareas.add(new Tarea(
                 "Ejercicio diario",
-                LocalDateTime.now().minusHours(5),
-                LocalDateTime.now().plusHours(19),
+                LocalDate.now().minusDays(5),
+                LocalDate.now().plusDays(19),
                 (byte) 20,
                 false,
                 "30 minutos de cardio"));
 
         listaTareas.add(new Tarea(
                 "Llamar al dentista",
-                LocalDateTime.now().minusDays(2),
-                LocalDateTime.now().plusWeeks(1),
+                LocalDate.now().minusDays(2),
+                LocalDate.now().plusWeeks(1),
                 (byte) 0,
                 true,
                 "Programar cita para revisión dental"));
 
         listaTareas.add(new Tarea(
                 "Leer libro",
-                LocalDateTime.now().minusWeeks(1),
-                LocalDateTime.now().plusWeeks(2),
+                LocalDate.now().minusWeeks(1),
+                LocalDate.now().plusWeeks(2),
                 (byte) 60,
                 false,
                 "Avanzar 50 páginas en 'Sapiens'"));
 
         listaTareas.add(new Tarea(
                 "Actualizar CV",
-                LocalDateTime.now().minusDays(4),
-                LocalDateTime.now().minusDays(3),
+                LocalDate.now().minusDays(4),
+                LocalDate.now().minusDays(3),
                 (byte) 30,
                 true,
                 "Incluir últimos proyectos y certificaciones"));
 
         listaTareas.add(new Tarea(
                 "Pagar facturas",
-                LocalDateTime.now().minusDays(1),
-                LocalDateTime.now().plusDays(5),
+                LocalDate.now().minusDays(1),
+                LocalDate.now().plusDays(5),
                 (byte) 10,
                 false,
                 "Luz, agua e internet"));
 
         listaTareas.add(new Tarea(
                 "Organizar escritorio",
-                LocalDateTime.now().minusHours(8),
-                LocalDateTime.now().plusHours(16),
+                LocalDate.now().minusDays(8),
+                LocalDate.now().plusDays(16),
                 (byte) 80,
                 false,
                 "Despejar papeles y ordenar cables"));
 
         listaTareas.add(new Tarea(
                 "Reunión de equipo",
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(1),
+                LocalDate.now(),
+                LocalDate.now().plusDays(1),
                 (byte) 0,
                 true,
                 "Planificar sprint de dos semanas"));
 
         listaTareas.add(new Tarea(
                 "Backup de datos",
-                LocalDateTime.now().minusDays(6),
-                LocalDateTime.now().plusDays(2),
+                LocalDate.now().minusDays(6),
+                LocalDate.now().plusDays(2),
                 (byte) 50,
                 false,
                 "Copiar documentos importantes a disco externo"));
