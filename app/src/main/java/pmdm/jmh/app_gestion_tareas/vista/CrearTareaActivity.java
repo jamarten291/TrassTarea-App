@@ -10,7 +10,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
 import pmdm.jmh.app_gestion_tareas.R;
-import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
 public class CrearTareaActivity extends AppCompatActivity implements
         FragmentoA.ComunicacionFragmentoA,
