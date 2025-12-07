@@ -30,14 +30,14 @@ public class FragmentoB extends Fragment {
     private static final String ARG_PARAM1 = "titulo";
     private static final String ARG_PARAM2 = "fechaInicio";
     private static final String ARG_PARAM3 = "fechaObjetivo";
-    private static final String ARG_PARAM4 = "progreso";
+    private static final String ARG_PARAM4 = "progresoIndex";
     private static final String ARG_PARAM5 = "prioridad";
     private static final String ARG_PARAM6 = "descripcion";
 
     private String titulo;
     private String fechaInicio;
     private String fechaObjetivo;
-    private byte progreso;
+    private int progresoIndex;
     private boolean prioridad;
     private String descripcion;
 
@@ -49,13 +49,13 @@ public class FragmentoB extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentoB newInstance(String param1, String param2, String param3, byte param4, boolean param5, String param6) {
+    public static FragmentoB newInstance(String param1, String param2, String param3, int param4, boolean param5, String param6) {
         FragmentoB fragment = new FragmentoB();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         args.putString(ARG_PARAM3, param3);
-        args.putByte(ARG_PARAM4, param4);
+        args.putInt(ARG_PARAM4, param4);
         args.putBoolean(ARG_PARAM5, param5);
         args.putString(ARG_PARAM6, param6);
         fragment.setArguments(args);
@@ -79,7 +79,7 @@ public class FragmentoB extends Fragment {
             titulo = getArguments().getString(ARG_PARAM1);
             fechaInicio = getArguments().getString(ARG_PARAM2);
             fechaObjetivo = getArguments().getString(ARG_PARAM3);
-            progreso = getArguments().getByte(ARG_PARAM4);
+            progresoIndex = getArguments().getInt(ARG_PARAM4);
             prioridad = getArguments().getBoolean(ARG_PARAM5);
             descripcion = getArguments().getString(ARG_PARAM6);
         }
@@ -123,11 +123,11 @@ public class FragmentoB extends Fragment {
         return fechaObjetivo;
     }
 
-    public byte getProgreso() {
-        return progreso;
-    }
-
     public boolean isPrioridad() {
         return prioridad;
+    }
+
+    public int getProgresoIndex() {
+        return progresoIndex;
     }
 }

@@ -25,7 +25,8 @@ public class CrearTareaActivity extends AppCompatActivity implements
     private String titulo;
     private String fechaInicio;
     private String fechaObjetivo;
-    private byte progreso;
+    private int progresoIndex;
+    private byte progresoValue;
     private boolean prioridad;
     private String descripcion;
     private FragmentoA fragmentoA;
@@ -56,10 +57,10 @@ public class CrearTareaActivity extends AppCompatActivity implements
         titulo = fragmentoA.getTitulo();
         fechaInicio = fragmentoA.getFechaInicio();
         fechaObjetivo = fragmentoA.getFechaObjetivo();
-        progreso = fragmentoA.getProgreso();
+        progresoIndex = fragmentoA.getProgresoIndex();
         prioridad = fragmentoA.isPrioridad();
 
-        fragmentoB = FragmentoB.newInstance(titulo, fechaInicio, fechaObjetivo, progreso, prioridad, descripcion);
+        fragmentoB = FragmentoB.newInstance(titulo, fechaInicio, fechaObjetivo, progresoIndex, prioridad, descripcion);
         if (!fragmentoB.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoB).commit();
         }
@@ -69,7 +70,7 @@ public class CrearTareaActivity extends AppCompatActivity implements
     public void onBotonVolverClicked() {
         descripcion = fragmentoB.getDescripcion();
 
-        fragmentoA = FragmentoA.newInstance(titulo, fechaInicio, fechaObjetivo, progreso, prioridad);
+        fragmentoA = FragmentoA.newInstance(titulo, fechaInicio, fechaObjetivo, progresoIndex, prioridad);
         if (!fragmentoA.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoA).commit();
         }
@@ -78,5 +79,6 @@ public class CrearTareaActivity extends AppCompatActivity implements
     @Override
     public void onBotonGuardarClicked() {
         descripcion = fragmentoB.getDescripcion();
+        progresoValue = (byte) (25 * progresoIndex);
     }
 }

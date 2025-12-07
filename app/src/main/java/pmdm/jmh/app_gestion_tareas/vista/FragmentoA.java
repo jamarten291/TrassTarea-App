@@ -9,10 +9,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import pmdm.jmh.app_gestion_tareas.R;
 
@@ -26,12 +31,13 @@ public class FragmentoA extends Fragment {
         void onBotonSiguienteClicked();
     }
     private ComunicacionFragmentoA comunicador;
+    private List<String> progresoItems = Arrays.asList("No iniciada", "Iniciada", "Avanzada", "Casi finalizada", "Finalizada");
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "titulo";
     private static final String ARG_PARAM2 = "fechaInicio";
     private static final String ARG_PARAM3 = "fechaObjetivo";
-    private static final String ARG_PARAM4 = "progreso";
+    private static final String ARG_PARAM4 = "progresoIndex";
     private static final String ARG_PARAM5 = "prioridad";
 
     // Elementos de la vista
@@ -46,20 +52,20 @@ public class FragmentoA extends Fragment {
     private String titulo;
     private String fechaInicio;
     private String fechaObjetivo;
-    private byte progreso;
+    private int progresoIndex;
     private boolean prioridad;
 
     public FragmentoA() {
         // Required empty public constructor
     }
 
-    public static FragmentoA newInstance(String param1, String param2, String param3, byte param4, boolean param5) {
+    public static FragmentoA newInstance(String param1, String param2, String param3, int param4, boolean param5) {
         FragmentoA fragment = new FragmentoA();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         args.putString(ARG_PARAM3, param3);
-        args.putByte(ARG_PARAM4, param4);
+        args.putInt(ARG_PARAM4, param4);
         args.putBoolean(ARG_PARAM5, param5);
         fragment.setArguments(args);
         return fragment;
@@ -82,7 +88,7 @@ public class FragmentoA extends Fragment {
             titulo = getArguments().getString(ARG_PARAM1);
             fechaInicio = getArguments().getString(ARG_PARAM2);
             fechaObjetivo = getArguments().getString(ARG_PARAM3);
-            progreso = getArguments().getByte(ARG_PARAM4);
+            progresoIndex = getArguments().getInt(ARG_PARAM4);
             prioridad = getArguments().getBoolean(ARG_PARAM5);
         }
     }
@@ -101,6 +107,14 @@ public class FragmentoA extends Fragment {
         cbPrioritaria = fragmentoA.findViewById(R.id.cb_prioridad);
         btSiguiente = fragmentoA.findViewById(R.id.bt_siguiente);
 
+        // Adaptador
+        ArrayAdapter<String> adaptadorStrings = new ArrayAdapter<>(
+                Objects.requireNonNull(super.getContext()),
+                android.R.layout.simple_spinner_dropdown_item,
+                progresoItems
+        );
+        spProgreso.setAdapter(adaptadorStrings);
+
         // Listeners
         btSiguiente.setOnClickListener(v -> comunicador.onBotonSiguienteClicked());
 
@@ -109,6 +123,7 @@ public class FragmentoA extends Fragment {
             etTitulo.setText(titulo);
             etFechaCreacion.setText(fechaInicio);
             etFechaObjetivo.setText(fechaObjetivo);
+            spProgreso.setSelection(progresoIndex);
             cbPrioritaria.setChecked(prioridad);
         }
 
@@ -128,8 +143,8 @@ public class FragmentoA extends Fragment {
         return etFechaObjetivo.getText().toString();
     }
 
-    public byte getProgreso() {
-        return progreso;
+    public int getProgresoIndex() {
+        return spProgreso.getSelectedItemPosition();
     }
 
     public boolean isPrioridad() {
