@@ -16,7 +16,7 @@ public class Tarea {
     private LocalDateTime fechaObjetivo;
     private boolean prioritaria;
 
-    public Tarea(String titulo, String descripcion, byte progreso, LocalDateTime fechaCreacion, LocalDateTime fechaObjetivo, boolean prioritaria) {
+    public Tarea(String titulo, LocalDateTime fechaCreacion, LocalDateTime fechaObjetivo, byte progreso, boolean prioritaria, String descripcion) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.progreso = progreso;
