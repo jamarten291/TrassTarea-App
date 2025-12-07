@@ -31,5 +31,5 @@
         <item>Finalizada</item>
     </array>
     <string name="descripcion_tarea">Descripción</string>
-    <string name="descripcion_tarea_hint">Describe tu tarea...</string>
+    <string name="descripcion_tarea_hint">Describe tu tarea…</string>
 </resources>

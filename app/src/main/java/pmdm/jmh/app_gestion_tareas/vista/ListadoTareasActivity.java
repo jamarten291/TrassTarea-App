@@ -90,9 +90,7 @@ public class ListadoTareasActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("TrassTarea")
                     .setMessage(R.string.mensaje_acerca)
-                    .setPositiveButton(R.string.boton_msg_acerca, (dialog, which) -> {
-
-                    });
+                    .setPositiveButton(R.string.boton_msg_acerca, (dialog, which) -> {});
             AlertDialog mensaje = builder.create();
             mensaje.show();
         } else if (id == R.id.item_agregar) {

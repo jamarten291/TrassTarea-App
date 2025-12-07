@@ -21,7 +21,10 @@
             android:id="@+id/tv_nombre_tarea"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableStart="@android:drawable/btn_star_big_off"
             android:text="TextView"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/progress_tarea"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,6 +34,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_fecha_limite"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,10 +45,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_quedan"
             app:layout_constraintEnd_toStartOf="@+id/tv_quedan"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/progress_tarea"
-            tools:layout_editor_absoluteY="45dp" />
+            app:layout_constraintStart_toEndOf="@+id/progress_tarea" />
 
         <TextView
             android:id="@+id/tv_quedan"
@@ -73,9 +77,9 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="@string/iv_dias"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tv_cant_dias"
-            tools:layout_editor_absoluteY="44dp" />
+            app:layout_constraintStart_toEndOf="@+id/tv_cant_dias" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

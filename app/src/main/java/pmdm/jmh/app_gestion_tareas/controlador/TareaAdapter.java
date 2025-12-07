@@ -1,5 +1,6 @@
 package pmdm.jmh.app_gestion_tareas.controlador;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -32,7 +35,8 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
 
     @Override
     public void onBindViewHolder(@NonNull TareaViewHolder holder, int position) {
-        holder.setTarea(adaptadorTarea.get(position));
+        Tarea tareaActual = adaptadorTarea.get(position);
+        holder.setTarea(tareaActual);
     }
 
     @Override
@@ -45,6 +49,8 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
         private ProgressBar progressTarea;
         private TextView tvFechaLimite;
         private TextView tvCantDias;
+        private Context c;
+        private Tarea tareaActual;
 
         public TareaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -52,6 +58,9 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
             progressTarea = itemView.findViewById(R.id.progress_tarea);
             tvFechaLimite = itemView.findViewById(R.id.tv_fecha_limite);
             tvCantDias = itemView.findViewById(R.id.tv_cant_dias);
+            c = itemView.getContext();
+
+            itemView.setOnClickListener(this::onClick);
         }
 
         public void setTarea(Tarea t) {
@@ -59,13 +68,59 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
             progressTarea.setProgress(t.getProgreso(), true);
             tvFechaLimite.setText(t.getFechaLimiteFormateada());
 
+            if (t.isPrioritaria()) {
+                // El operador | agrega otro flag sin perder los flags anteriores
+                tvNombreTarea.setPaintFlags(tvNombreTarea.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+
+                // Añado un drawable al inicio (left) y dependiendo de si es prioritaria o no, le asigno un ícono
+                tvNombreTarea.setCompoundDrawablesWithIntrinsicBounds(
+                        ContextCompat.getDrawable(c, android.R.drawable.btn_star_big_on),
+                        null,
+                        null,
+                        null
+                );
+            } else {
+                tvNombreTarea.setCompoundDrawablesWithIntrinsicBounds(
+                        ContextCompat.getDrawable(c, android.R.drawable.btn_star_big_off),
+                        null,
+                        null,
+                        null
+                );
+            }
+
+            // Comprueba si la tarea no ha sido completada antes de su fecha de entrega
             if (t.getDiasRestantes() < 0) {
                 tvCantDias.setText("0");
-                // El operador | agrega otro flag sin perder los flags anteriores
-                tvNombreTarea.setPaintFlags(tvCantDias.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 tvCantDias.setTextColor(Color.RED);
             } else {
                 tvCantDias.setText(String.valueOf(t.getDiasRestantes()));
+            }
+
+            // Comprueba si la tarea ha sido terminada
+            if (t.getProgreso() == 100) {
+                tvCantDias.setText("0");
+
+                // Esta flag tacha el TextView si el progreso es 100 (es decir, tarea terminada)
+                tvNombreTarea.setPaintFlags(tvCantDias.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            }
+
+            // Asigno la tarea actual al adaptador para que al dar click se acceda a sus propiedades
+            tareaActual = t;
+        }
+
+        public void onClick(View v) {
+            // Consigo la posición del adaptador para acceder a la tarea clickeada y mostrar su descripción
+            int pos = getBindingAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION) {
+                String titulo = tareaActual.getTitulo();
+                String descripcion = tareaActual.getDescripcion();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(c);
+                builder.setTitle(titulo)
+                        .setMessage(descripcion)
+                        .setPositiveButton(R.string.boton_msg_acerca, (dialog, which) -> {});
+                AlertDialog mensaje = builder.create();
+                mensaje.show();
             }
         }
     }
