@@ -3,6 +3,7 @@ package pmdm.jmh.app_gestion_tareas.vista;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.controlador.DatePickerFragment;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
@@ -71,6 +73,13 @@ public class CrearTareaActivity extends AppCompatActivity implements
         if (!fragmentoB.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoB).commit();
         }
+    }
+
+    @Override
+    public void onDatePickerClicked(@IdRes int viewId) {
+        // Creo una nueva instancia y le paso el id que referencia al edit text que lo llama
+        DatePickerFragment dateFragment = DatePickerFragment.newInstance(viewId);
+        dateFragment.show(fragmentManager, "datePicker");
     }
 
     @Override

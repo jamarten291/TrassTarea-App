@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Objects;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.controlador.DatePickerFragment;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 
 /**
@@ -35,6 +37,7 @@ import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 public class FragmentoA extends Fragment {
     public interface ComunicacionFragmentoA {
         void onBotonSiguienteClicked();
+        void onDatePickerClicked(@IdRes int viewId);
     }
     private ComunicacionFragmentoA comunicador;
     private List<String> progresoItems = Arrays.asList("No iniciada", "Iniciada", "Avanzada", "Casi finalizada", "Finalizada");
@@ -115,7 +118,7 @@ public class FragmentoA extends Fragment {
 
         // Adaptador
         ArrayAdapter<String> adaptadorStrings = new ArrayAdapter<>(
-                Objects.requireNonNull(this.getContext()),
+                Objects.requireNonNull(getActivity()),
                 android.R.layout.simple_spinner_dropdown_item,
                 progresoItems
         );
@@ -123,8 +126,9 @@ public class FragmentoA extends Fragment {
 
         // Listeners
         btSiguiente.setOnClickListener(v -> comunicador.onBotonSiguienteClicked());
-        etFechaCreacion.setOnClickListener(v -> {});
-        etFechaObjetivo.setOnClickListener(v -> {});
+        etFechaCreacion.setOnClickListener(v -> comunicador.onDatePickerClicked(R.id.et_fecha_inicio));
+        etFechaObjetivo.setOnClickListener(v -> comunicador.onDatePickerClicked(R.id.et_fecha_objetivo));
+        DatePickerFragment fragment = new DatePickerFragment();
 
         // Datos de la tarea (en caso de haber recibido datos)
         if (getArguments() != null) {

@@ -67,7 +67,7 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
         public void setTarea(Tarea t) {
             tvNombreTarea.setText(t.getTitulo());
             progressTarea.setProgress(t.getProgreso(), true);
-            tvFechaLimite.setText(t.getFechaLimiteFormateada());
+            tvFechaLimite.setText(HelperClass.getFormattedDate(t.getFechaLimite()));
 
             if (t.isPrioritaria()) {
                 // El operador | agrega otro flag sin perder los flags anteriores

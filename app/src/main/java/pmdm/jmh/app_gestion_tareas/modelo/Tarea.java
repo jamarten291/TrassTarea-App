@@ -3,7 +3,6 @@ package pmdm.jmh.app_gestion_tareas.modelo;
 import androidx.annotation.NonNull;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -77,12 +76,11 @@ public class Tarea {
     public long getDiasRestantes() {
         return ChronoUnit
                 .DAYS
-                .between(LocalDateTime.now(), this.fechaObjetivo);
+                .between(LocalDate.now(), this.fechaObjetivo);
     }
 
-    public String getFechaLimiteFormateada() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return this.fechaObjetivo.format(format);
+    public LocalDate getFechaLimite() {
+        return fechaObjetivo;
     }
 
     @NonNull
