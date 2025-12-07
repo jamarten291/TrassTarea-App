@@ -50,8 +50,6 @@ public class CrearTareaActivity extends AppCompatActivity implements
 
         if(savedInstanceState == null)
             fragmentManager.beginTransaction().add(R.id.frag_container, fragmentoA).commit();
-
-        descripcion = "";
     }
 
     @Override
@@ -63,7 +61,6 @@ public class CrearTareaActivity extends AppCompatActivity implements
         prioridad = fragmentoA.isPrioridad();
 
         fragmentoB = FragmentoB.newInstance(titulo, fechaInicio, fechaObjetivo, progreso, prioridad, descripcion);
-
         if (!fragmentoB.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoB).commit();
         }
@@ -72,8 +69,8 @@ public class CrearTareaActivity extends AppCompatActivity implements
     @Override
     public void onBotonVolverClicked() {
         descripcion = fragmentoB.getDescripcion();
-        fragmentoA = FragmentoA.newInstance(titulo, fechaInicio, fechaObjetivo, progreso, prioridad);
 
+        fragmentoA = FragmentoA.newInstance(titulo, fechaInicio, fechaObjetivo, progreso, prioridad);
         if (!fragmentoA.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoA).commit();
         }

@@ -48,7 +48,6 @@ public class FragmentoA extends Fragment {
     private String fechaObjetivo;
     private byte progreso;
     private boolean prioridad;
-    private Operacion operacion;
 
     public FragmentoA() {
         // Required empty public constructor
@@ -66,12 +65,6 @@ public class FragmentoA extends Fragment {
         return fragment;
     }
 
-    public static FragmentoA newInstance() {
-        FragmentoA fragment = new FragmentoA();
-        fragment.operacion = Operacion.CREACION;
-        return fragment;
-    }
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -85,7 +78,7 @@ public class FragmentoA extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null && operacion == Operacion.EDICION) {
+        if (getArguments() != null) {
             titulo = getArguments().getString(ARG_PARAM1);
             fechaInicio = getArguments().getString(ARG_PARAM2);
             fechaObjetivo = getArguments().getString(ARG_PARAM3);
@@ -112,7 +105,7 @@ public class FragmentoA extends Fragment {
         btSiguiente.setOnClickListener(v -> comunicador.onBotonSiguienteClicked());
 
         // Datos de la tarea (en caso de haber recibido datos)
-        if (operacion == Operacion.EDICION) {
+        if (getArguments() != null) {
             etTitulo.setText(titulo);
             etFechaCreacion.setText(fechaInicio);
             etFechaObjetivo.setText(fechaObjetivo);

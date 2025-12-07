@@ -100,10 +100,34 @@ public class FragmentoB extends Fragment {
         btGuardar.setOnClickListener(v -> comunicador.onBotonGuardarClicked());
         btVolver.setOnClickListener(v -> comunicador.onBotonVolverClicked());
 
+        // Datos de la descripción en caso de que hubiese una escrita
+        etDescripcion.setText(descripcion);
+
         return fragmentoB;
     }
 
     public String getDescripcion() {
         return etDescripcion.getText().toString();
+    }
+
+    // Getters para recuperar los datos desde la actividad (recupera las variables)
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public String getFechaObjetivo() {
+        return fechaObjetivo;
+    }
+
+    public byte getProgreso() {
+        return progreso;
+    }
+
+    public boolean isPrioridad() {
+        return prioridad;
     }
 }
