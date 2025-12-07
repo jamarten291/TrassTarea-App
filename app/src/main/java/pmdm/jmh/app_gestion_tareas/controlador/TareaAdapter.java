@@ -58,6 +58,8 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
             progressTarea = itemView.findViewById(R.id.progress_tarea);
             tvFechaLimite = itemView.findViewById(R.id.tv_fecha_limite);
             tvCantDias = itemView.findViewById(R.id.tv_cant_dias);
+
+            // Guarda el contexto del ItemView, desde el cual se podrá acceder a los recursos de la tarea
             c = itemView.getContext();
 
             itemView.setOnClickListener(this::onClick);
@@ -115,12 +117,7 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
                 String titulo = tareaActual.getTitulo();
                 String descripcion = tareaActual.getDescripcion();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(c);
-                builder.setTitle(titulo)
-                        .setMessage(descripcion)
-                        .setPositiveButton(R.string.boton_msg_acerca, (dialog, which) -> {});
-                AlertDialog mensaje = builder.create();
-                mensaje.show();
+                HelperClass.showBasicAlertDialog(c, titulo, descripcion);
             }
         }
     }

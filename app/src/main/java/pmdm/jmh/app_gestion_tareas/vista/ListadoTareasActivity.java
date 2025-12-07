@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.controlador.TareaAdapter;
 import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
@@ -87,12 +88,7 @@ public class ListadoTareasActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.item_acerca) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("TrassTarea")
-                    .setMessage(R.string.mensaje_acerca)
-                    .setPositiveButton(R.string.boton_msg_acerca, (dialog, which) -> {});
-            AlertDialog mensaje = builder.create();
-            mensaje.show();
+            HelperClass.showBasicAlertDialog(this, R.string.app_actionbar_title, R.string.mensaje_acerca);
         } else if (id == R.id.item_agregar) {
             Intent intent = new Intent(this, CrearTareaActivity.class);
             startActivity(intent);
@@ -100,13 +96,7 @@ public class ListadoTareasActivity extends AppCompatActivity {
         } else if (id == R.id.item_prioritarias) {
             if (!filtradoActualmente) {
                 // Si no está filtrado, crea un adaptador con la lista de tareas filtradas
-                ArrayList<Tarea> tareasFiltradas = (ArrayList<Tarea>) List.copyOf(listaTareas)
-                        .stream()
-                        .filter(Tarea::isPrioritaria)
-                        .collect(Collectors.toList());
-
-                TareaAdapter adaptadorFiltro = new TareaAdapter(tareasFiltradas);
-                rvTareas.setAdapter(adaptadorFiltro);
+                rvTareas.setAdapter(getAdaptadorTareasFiltradas());
                 filtradoActualmente = true;
             } else {
                 // Si está filtrado, establece el adaptador al adaptador original
@@ -119,6 +109,16 @@ public class ListadoTareasActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private TareaAdapter getAdaptadorTareasFiltradas() {
+        // Copia la lista de tareas, la filtra y construye un TareaAdapter con la lista filtrada
+        ArrayList<Tarea> tareasFiltradas = (ArrayList<Tarea>) List.copyOf(listaTareas)
+                .stream()
+                .filter(Tarea::isPrioritaria)
+                .collect(Collectors.toList());
+
+        return new TareaAdapter(tareasFiltradas);
     }
 
     private void crearTareas() {

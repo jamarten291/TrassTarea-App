@@ -12,7 +12,7 @@
     <string name="item_prioritarias">Prioritarias</string>
     <string name="despedida_toast">¡Hasta pronto!</string>
     <string name="mensaje_acerca">Desarrollado por Jackson, 2025</string>
-    <string name="boton_msg_acerca">Aceptar</string>
+    <string name="boton_alert_basico">Aceptar</string>
     <string name="crear_tarea">Crear tarea</string>
     <string name="btn_siguiente">Siguiente</string>
     <string name="btn_volver">Volver</string>
