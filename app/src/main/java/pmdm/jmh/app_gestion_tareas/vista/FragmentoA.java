@@ -1,7 +1,5 @@
 package pmdm.jmh.app_gestion_tareas.vista;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -18,16 +16,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.DatePickerFragment;
-import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,7 +31,6 @@ import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 public class FragmentoA extends Fragment {
     public interface ComunicacionFragmentoA {
         void onBotonSiguienteClicked();
-        void onDatePickerClicked(@IdRes int viewId);
     }
     private ComunicacionFragmentoA comunicador;
     private List<String> progresoItems = Arrays.asList("No iniciada", "Iniciada", "Avanzada", "Casi finalizada", "Finalizada");
@@ -126,9 +119,8 @@ public class FragmentoA extends Fragment {
 
         // Listeners
         btSiguiente.setOnClickListener(v -> comunicador.onBotonSiguienteClicked());
-        etFechaCreacion.setOnClickListener(v -> comunicador.onDatePickerClicked(R.id.et_fecha_inicio));
-        etFechaObjetivo.setOnClickListener(v -> comunicador.onDatePickerClicked(R.id.et_fecha_objetivo));
-        DatePickerFragment fragment = new DatePickerFragment();
+        etFechaCreacion.setOnClickListener(this::onDatePickerClicked);
+        etFechaObjetivo.setOnClickListener(this::onDatePickerClicked);
 
         // Datos de la tarea (en caso de haber recibido datos)
         if (getArguments() != null) {
@@ -140,6 +132,12 @@ public class FragmentoA extends Fragment {
         }
 
         return fragmentoA;
+    }
+
+    public void onDatePickerClicked(View view) {
+        // Creo una nueva instancia y le paso el id que referencia al edit text que lo llama
+        DatePickerFragment dateFragment = DatePickerFragment.newInstance(view.getId());
+        dateFragment.show(getParentFragmentManager(), "datePicker");
     }
 
     // Getters para recuperar los datos desde la actividad

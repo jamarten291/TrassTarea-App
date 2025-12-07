@@ -61,7 +61,7 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
             // Guarda el contexto del ItemView, desde el cual se podrá acceder a los recursos de la tarea
             c = itemView.getContext();
 
-            itemView.setOnClickListener(this::onClick);
+            itemView.setOnClickListener(this::onItemViewClick);
         }
 
         public void setTarea(Tarea t) {
@@ -109,7 +109,7 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
             tareaActual = t;
         }
 
-        public void onClick(View v) {
+        public void onItemViewClick(View v) {
             // Consigo la posición del adaptador para acceder a la tarea clickeada y mostrar su descripción
             int pos = getBindingAdapterPosition();
             if (pos != RecyclerView.NO_POSITION) {

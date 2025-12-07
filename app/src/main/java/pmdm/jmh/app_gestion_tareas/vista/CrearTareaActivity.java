@@ -76,13 +76,6 @@ public class CrearTareaActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDatePickerClicked(@IdRes int viewId) {
-        // Creo una nueva instancia y le paso el id que referencia al edit text que lo llama
-        DatePickerFragment dateFragment = DatePickerFragment.newInstance(viewId);
-        dateFragment.show(fragmentManager, "datePicker");
-    }
-
-    @Override
     public void onBotonVolverClicked() {
         descripcion = fragmentoB.getDescripcion();
 

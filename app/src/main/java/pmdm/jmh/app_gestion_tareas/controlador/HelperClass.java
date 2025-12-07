@@ -43,6 +43,11 @@ public class HelperClass {
         dialog.show();
     }
 
+    /**
+     * Devuelve una cadena de la fecha recibida por parámetro en formato ISO_LOCAL_DATE.
+     * @param dateTime Fecha a formatear
+     * @return Cadena que contiene la fecha en formato estándar
+     */
     public static String getFormattedDate(LocalDate dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         return dateTime.format(formatter);
