@@ -119,6 +119,13 @@ public class FragmentoA extends Fragment {
 
         // Listeners
         btSiguiente.setOnClickListener(v -> comunicador.onBotonSiguienteClicked());
+
+        // Para evitar dobles clicks
+        etFechaCreacion.setFocusable(false);
+        etFechaObjetivo.setFocusable(false);
+        etFechaCreacion.setClickable(true);
+        etFechaObjetivo.setClickable(true);
+
         etFechaCreacion.setOnClickListener(this::onDatePickerClicked);
         etFechaObjetivo.setOnClickListener(this::onDatePickerClicked);
 

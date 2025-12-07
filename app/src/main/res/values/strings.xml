@@ -18,18 +18,11 @@
     <string name="btn_volver">Volver</string>
     <string name="btn_guardar">Guardar</string>
     <string name="titulo_tarea">Título</string>
-    <string name="fecha_creacion_tarea">Fecha de creación</string>
+    <string name="fecha_creacion_tarea">Fecha inicio</string>
     <string name="fecha_objetivo_tarea">Fecha objetivo</string>
     <string name="progreso_tarea">Progreso</string>
     <string name="prioridad_tarea">Prioridad</string>
     <string name="prioridad_texto_check">Sí/No</string>
-    <array name="entradasSpinner">
-        <item>No iniciada</item>
-        <item>Iniciada</item>
-        <item>Avanzada</item>
-        <item>Casi finalizada</item>
-        <item>Finalizada</item>
-    </array>
     <string name="descripcion_tarea">Descripción</string>
     <string name="descripcion_tarea_hint">Describe tu tarea…</string>
     <!-- TODO: Remove or change this placeholder text -->
