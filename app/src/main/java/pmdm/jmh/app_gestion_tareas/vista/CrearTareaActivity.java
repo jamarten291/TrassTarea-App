@@ -83,6 +83,13 @@ public class CrearTareaActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onBotonSalirClicked() {
+        Intent intent = new Intent();
+        setResult(RESULT_CANCELED, intent);
+        finish();
+    }
+
+    @Override
     public void onBotonVolverClicked() {
         descripcion = fragmentoB.getDescripcion();
 

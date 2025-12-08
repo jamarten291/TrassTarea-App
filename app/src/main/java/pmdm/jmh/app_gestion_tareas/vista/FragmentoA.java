@@ -31,6 +31,7 @@ import pmdm.jmh.app_gestion_tareas.controlador.DatePickerFragment;
 public class FragmentoA extends Fragment {
     public interface ComunicacionFragmentoA {
         void onBotonSiguienteClicked();
+        void onBotonSalirClicked();
     }
     private ComunicacionFragmentoA comunicador;
     private List<String> progresoItems = Arrays.asList("No iniciada", "Iniciada", "Avanzada", "Casi finalizada", "Finalizada");
@@ -49,6 +50,7 @@ public class FragmentoA extends Fragment {
     private Spinner spProgreso;
     private CheckBox cbPrioritaria;
     private Button btSiguiente;
+    private Button btSalir;
 
     // Valores
     private String titulo;
@@ -108,6 +110,7 @@ public class FragmentoA extends Fragment {
         spProgreso = fragmentoA.findViewById(R.id.sp_progreso);
         cbPrioritaria = fragmentoA.findViewById(R.id.cb_prioridad);
         btSiguiente = fragmentoA.findViewById(R.id.bt_siguiente);
+        btSalir = fragmentoA.findViewById(R.id.bt_salir);
 
         // Adaptador
         ArrayAdapter<String> adaptadorStrings = new ArrayAdapter<>(
@@ -119,6 +122,7 @@ public class FragmentoA extends Fragment {
 
         // Listeners
         btSiguiente.setOnClickListener(v -> comunicador.onBotonSiguienteClicked());
+        btSalir.setOnClickListener(v -> comunicador.onBotonSalirClicked());
 
         // Para evitar dobles clicks
         etFechaCreacion.setFocusable(false);
