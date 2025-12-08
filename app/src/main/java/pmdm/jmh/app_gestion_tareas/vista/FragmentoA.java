@@ -111,7 +111,7 @@ public class FragmentoA extends Fragment {
 
         // Adaptador
         ArrayAdapter<String> adaptadorStrings = new ArrayAdapter<>(
-                Objects.requireNonNull(getActivity()),
+                requireActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
                 progresoItems
         );

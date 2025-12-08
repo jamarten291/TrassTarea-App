@@ -1,5 +1,6 @@
 package pmdm.jmh.app_gestion_tareas.vista;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -29,11 +32,27 @@ import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
 public class ListadoTareasActivity extends AppCompatActivity {
 
+    private final String ARG_TAREA = "tarea";
     private ArrayList<Tarea> listaTareas;
     private TareaAdapter adaptadorTarea;
     private RecyclerView rvTareas;
     private TextView tvSinTareas;
     private boolean filtradoActualmente = false;
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Intent data = result.getData();
+
+                    // getParcelable devuelve el objeto Tarea, que implementa Parcelable
+                    Tarea nuevaTarea = data.getParcelableExtra(ARG_TAREA);
+                    listaTareas.add(nuevaTarea);
+
+                    // Actualiza la vista del RecyclerView con la nueva tarea
+                    rvTareas.setAdapter(new TareaAdapter(listaTareas));
+                    Toast.makeText(this, "Tarea agregada con éxito", Toast.LENGTH_SHORT).show();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +110,7 @@ public class ListadoTareasActivity extends AppCompatActivity {
             HelperClass.showBasicAlertDialog(this, R.string.app_actionbar_title, R.string.mensaje_acerca);
         } else if (id == R.id.item_agregar) {
             Intent intent = new Intent(this, CrearTareaActivity.class);
-            startActivity(intent);
-            finish();
+            launcher.launch(intent);
         } else if (id == R.id.item_prioritarias) {
             if (!filtradoActualmente) {
                 // Si no está filtrado, crea un adaptador con la lista de tareas filtradas

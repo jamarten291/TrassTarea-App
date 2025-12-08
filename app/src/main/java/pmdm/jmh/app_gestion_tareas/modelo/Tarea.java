@@ -1,12 +1,17 @@
 package pmdm.jmh.app_gestion_tareas.modelo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-public class Tarea {
+import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
+
+public class Tarea implements Parcelable {
     private String titulo;
     private String descripcion;
 
@@ -95,4 +100,41 @@ public class Tarea {
                 ", prioritaria=" + prioritaria +
                 '}';
     }
+
+    // ---------- Parcelable ----------
+    protected Tarea(Parcel in) {
+        titulo = in.readString();
+        fechaCreacion = HelperClass.stringToDate(in.readString());
+        fechaObjetivo = HelperClass.stringToDate(in.readString());
+        progreso = in.readByte();
+        prioritaria = in.readBoolean();
+        descripcion = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(titulo);
+        dest.writeString(HelperClass.getFormattedDate(fechaCreacion));
+        dest.writeString(HelperClass.getFormattedDate(fechaObjetivo));
+        dest.writeByte(progreso);
+        dest.writeBoolean(prioritaria);
+        dest.writeString(descripcion);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Tarea> CREATOR = new Creator<Tarea>() {
+        @Override
+        public Tarea createFromParcel(Parcel in) {
+            return new Tarea(in);
+        }
+
+        @Override
+        public Tarea[] newArray(int size) {
+            return new Tarea[size];
+        }
+    };
 }

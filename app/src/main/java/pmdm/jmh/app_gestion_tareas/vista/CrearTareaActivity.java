@@ -1,8 +1,14 @@
 package pmdm.jmh.app_gestion_tareas.vista;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -23,6 +29,7 @@ public class CrearTareaActivity extends AppCompatActivity implements
         FragmentoB.ComunicacionFragmentoB
 {
 
+    private final String ARG_TAREA = "tarea";
     private static final String ARG_PARAM1 = "titulo";
     private static final String ARG_PARAM2 = "fechaInicio";
     private static final String ARG_PARAM3 = "fechaObjetivo";
@@ -101,6 +108,9 @@ public class CrearTareaActivity extends AppCompatActivity implements
                 descripcion
         );
 
-        HelperClass.showBasicAlertDialog(this, "Tarea creada", nuevaTarea.toString());
+        Intent intent = new Intent();
+        intent.putExtra(ARG_TAREA, nuevaTarea);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }
