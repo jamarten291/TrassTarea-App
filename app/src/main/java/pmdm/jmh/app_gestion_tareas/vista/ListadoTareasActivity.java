@@ -19,6 +19,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 public class ListadoTareasActivity extends AppCompatActivity {
 
     private final String ARG_TAREA = "tarea";
+    private final String ARG_OP = "operacion";
     private ArrayList<Tarea> listaTareas;
     private TareaAdapter adaptadorTarea;
     private RecyclerView rvTareas;
@@ -46,11 +49,25 @@ public class ListadoTareasActivity extends AppCompatActivity {
 
                     // getParcelable devuelve el objeto Tarea, que implementa Parcelable
                     Tarea nuevaTarea = data.getParcelableExtra(ARG_TAREA);
-                    listaTareas.add(nuevaTarea);
+                    int op = data.getIntExtra(ARG_OP, 0);
 
-                    // Actualiza la vista del RecyclerView con la nueva tarea
-                    rvTareas.setAdapter(new TareaAdapter(listaTareas));
-                    Toast.makeText(this, "Tarea agregada con éxito", Toast.LENGTH_SHORT).show();
+                    switch (op) {
+                        case 1:
+                            listaTareas.add(nuevaTarea);
+
+                            // Actualiza la vista del RecyclerView con la nueva tarea
+                            rvTareas.setAdapter(new TareaAdapter(listaTareas));
+                            Toast.makeText(this, "Tarea agregada con éxito", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 2:
+                            rvTareas.setAdapter(new TareaAdapter(listaTareas));
+                            Toast.makeText(this, "Tarea actualizada con éxito", Toast.LENGTH_SHORT).show();
+                        case 3:
+                            rvTareas.setAdapter(new TareaAdapter(listaTareas));
+                            Toast.makeText(this, "Tarea borrada con éxito", Toast.LENGTH_SHORT).show();
+                        default:
+                            Toast.makeText(this, "Error: No se ha podido realizar ninguna operación", Toast.LENGTH_SHORT);
+                    }
                 }
             });
 
@@ -68,6 +85,7 @@ public class ListadoTareasActivity extends AppCompatActivity {
         // Bindings
         rvTareas = findViewById(R.id.rv_tareas);
         tvSinTareas = findViewById(R.id.tv_sin_tareas);
+        registerForContextMenu(rvTareas);
 
         // Creación de tareas
         listaTareas = new ArrayList<>();
@@ -127,6 +145,17 @@ public class ListadoTareasActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.mc_editar) {
+            launcher.launch(new Intent(this, EditarTareaActivity.class));
+        } else if (itemId == R.id.mc_borrar) {
+            Toast.makeText(this, "Borrar", Toast.LENGTH_SHORT).show();
+        }
+        return super.onContextItemSelected(item);
     }
 
     private TareaAdapter getAdaptadorTareasFiltradas() {

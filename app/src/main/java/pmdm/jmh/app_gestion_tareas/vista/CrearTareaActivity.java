@@ -30,6 +30,7 @@ public class CrearTareaActivity extends AppCompatActivity implements
 {
 
     private final String ARG_TAREA = "tarea";
+    private final String ARG_OP = "operacion";
     private static final String ARG_PARAM1 = "titulo";
     private static final String ARG_PARAM2 = "fechaInicio";
     private static final String ARG_PARAM3 = "fechaObjetivo";
@@ -117,6 +118,7 @@ public class CrearTareaActivity extends AppCompatActivity implements
 
         Intent intent = new Intent();
         intent.putExtra(ARG_TAREA, nuevaTarea);
+        intent.putExtra(ARG_OP, 1);
         setResult(RESULT_OK, intent);
         finish();
     }

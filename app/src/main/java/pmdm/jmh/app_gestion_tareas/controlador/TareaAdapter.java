@@ -3,7 +3,10 @@ package pmdm.jmh.app_gestion_tareas.controlador;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -62,6 +65,12 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
             c = itemView.getContext();
 
             itemView.setOnClickListener(this::onItemViewClick);
+            itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                menu.add(Menu.NONE, R.id.mc_editar,
+                        Menu.NONE, R.string.mc_editar);
+                menu.add(Menu.NONE, R.id.mc_borrar,
+                        Menu.NONE, R.string.mc_borrar);
+            });
         }
 
         public void setTarea(Tarea t) {
