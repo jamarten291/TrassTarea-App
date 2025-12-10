@@ -94,7 +94,7 @@ public class CrearTareaActivity extends AppCompatActivity implements
     public void onBotonVolverClicked() {
         descripcion = fragmentoB.getDescripcion();
 
-        fragmentoA = FragmentoA.newInstance(titulo, fechaInicioStr, fechaObjetivoStr, progresoIndex, prioridad);
+        fragmentoA = FragmentoA.newInstance(titulo, fechaInicioStr, fechaObjetivoStr, progresoIndex, prioridad, descripcion);
         if (!fragmentoA.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoA).commit();
         }

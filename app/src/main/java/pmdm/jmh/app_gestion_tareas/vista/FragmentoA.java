@@ -22,6 +22,7 @@ import java.util.Objects;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.DatePickerFragment;
+import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,11 +38,14 @@ public class FragmentoA extends Fragment {
     private List<String> progresoItems = Arrays.asList("No iniciada", "Iniciada", "Avanzada", "Casi finalizada", "Finalizada");
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+    private static final String ARG_TAREA = "tarea";
     private static final String ARG_PARAM1 = "titulo";
     private static final String ARG_PARAM2 = "fechaInicio";
     private static final String ARG_PARAM3 = "fechaObjetivo";
     private static final String ARG_PARAM4 = "progresoIndex";
     private static final String ARG_PARAM5 = "prioridad";
+    private static final String ARG_PARAM6 = "descripcion";
 
     // Elementos de la vista
     private EditText etTitulo;
@@ -58,12 +62,13 @@ public class FragmentoA extends Fragment {
     private String fechaObjetivo;
     private int progresoIndex;
     private boolean prioridad;
+    private String descripcion;
 
     public FragmentoA() {
         // Required empty public constructor
     }
 
-    public static FragmentoA newInstance(String param1, String param2, String param3, int param4, boolean param5) {
+    public static FragmentoA newInstance(String param1, String param2, String param3, int param4, boolean param5, String param6) {
         FragmentoA fragment = new FragmentoA();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -71,6 +76,7 @@ public class FragmentoA extends Fragment {
         args.putString(ARG_PARAM3, param3);
         args.putInt(ARG_PARAM4, param4);
         args.putBoolean(ARG_PARAM5, param5);
+        args.putString(ARG_PARAM6, param6);
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,6 +100,7 @@ public class FragmentoA extends Fragment {
             fechaObjetivo = getArguments().getString(ARG_PARAM3);
             progresoIndex = getArguments().getInt(ARG_PARAM4);
             prioridad = getArguments().getBoolean(ARG_PARAM5);
+            descripcion = getArguments().getString(ARG_PARAM6);
         }
     }
 
@@ -166,6 +173,9 @@ public class FragmentoA extends Fragment {
 
     public int getProgresoIndex() {
         return spProgreso.getSelectedItemPosition();
+    }
+    public String getDescripcion() {
+        return descripcion;
     }
 
     public boolean isPrioridad() {

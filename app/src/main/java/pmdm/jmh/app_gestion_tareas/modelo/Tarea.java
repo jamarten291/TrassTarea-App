@@ -12,6 +12,8 @@ import java.time.temporal.ChronoUnit;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 
 public class Tarea implements Parcelable {
+    private static int contId = 0;
+    private final int id;
     private String titulo;
     private String descripcion;
 
@@ -28,6 +30,8 @@ public class Tarea implements Parcelable {
         this.fechaCreacion = fechaCreacion;
         this.fechaObjetivo = fechaObjetivo;
         this.prioritaria = prioritaria;
+
+        this.id = contId++;
     }
 
     public String getTitulo() {
@@ -78,6 +82,10 @@ public class Tarea implements Parcelable {
         this.prioritaria = prioritaria;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public long getDiasRestantes() {
         return ChronoUnit
                 .DAYS
@@ -103,6 +111,7 @@ public class Tarea implements Parcelable {
 
     // ---------- Parcelable ----------
     protected Tarea(Parcel in) {
+        id = in.readInt();
         titulo = in.readString();
         fechaCreacion = HelperClass.stringToDate(in.readString());
         fechaObjetivo = HelperClass.stringToDate(in.readString());
@@ -113,6 +122,7 @@ public class Tarea implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(titulo);
         dest.writeString(HelperClass.getFormattedDate(fechaCreacion));
         dest.writeString(HelperClass.getFormattedDate(fechaObjetivo));

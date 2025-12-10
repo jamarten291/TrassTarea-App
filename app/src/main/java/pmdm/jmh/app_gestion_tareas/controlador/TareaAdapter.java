@@ -3,10 +3,8 @@ package pmdm.jmh.app_gestion_tareas.controlador;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -46,13 +44,14 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
         return adaptadorTarea.size();
     }
 
-    static class TareaViewHolder extends RecyclerView.ViewHolder {
+    public static class TareaViewHolder extends RecyclerView.ViewHolder {
         private TextView tvNombreTarea;
         private ProgressBar progressTarea;
         private TextView tvFechaLimite;
         private TextView tvCantDias;
         private Context c;
         private Tarea tareaActual;
+        private int position;
 
         public TareaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,6 +65,10 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
 
             itemView.setOnClickListener(this::onItemViewClick);
             itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                this.position = getBindingAdapterPosition();
+
+                if (position == RecyclerView.NO_POSITION) return;
+
                 menu.add(Menu.NONE, R.id.mc_editar,
                         Menu.NONE, R.string.mc_editar);
                 menu.add(Menu.NONE, R.id.mc_borrar,
@@ -127,6 +130,10 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
 
                 HelperClass.showBasicAlertDialog(c, titulo, descripcion);
             }
+        }
+
+        public int getBindingPosition() {
+            return this.position;
         }
     }
 }

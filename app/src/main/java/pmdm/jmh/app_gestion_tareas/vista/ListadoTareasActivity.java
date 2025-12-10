@@ -1,6 +1,5 @@
 package pmdm.jmh.app_gestion_tareas.vista;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +11,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,10 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -149,11 +146,36 @@ public class ListadoTareasActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
+        // getGroupId devuelve el id del view holder que contiene el menu item
+        int position = item.getGroupId();
+
+          // Posición del item actual
         int itemId = item.getItemId();
+
+        if (position == RecyclerView.NO_POSITION) {
+            return super.onContextItemSelected(item);
+        }
+
         if (itemId == R.id.mc_editar) {
-            launcher.launch(new Intent(this, EditarTareaActivity.class));
+            Intent intent = new Intent(this, EditarTareaActivity.class);
+            intent.putExtra(ARG_TAREA, position);
+            launcher.launch(intent);
+            return true;
         } else if (itemId == R.id.mc_borrar) {
-            Toast.makeText(this, "Borrar", Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Eliminar una tarea")
+                    .setMessage("¿Estás seguro de que quieres borrar esta tarea?")
+                    .setPositiveButton(R.string.boton_alert_basico, (dialog, which) -> {
+                        listaTareas.remove(position);
+
+                        // Notifico que ha habido una operación de borrado
+                        adaptadorTarea.notifyItemRemoved(position);
+                        Toast.makeText(this, "Tarea borrada con éxito", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancelar", (dialog, which) -> {});
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            return true;
         }
         return super.onContextItemSelected(item);
     }
