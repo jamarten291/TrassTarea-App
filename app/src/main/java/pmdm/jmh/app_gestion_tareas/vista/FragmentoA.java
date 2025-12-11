@@ -22,6 +22,7 @@ import java.util.Objects;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.DatePickerFragment;
+import pmdm.jmh.app_gestion_tareas.modelo.DataArguments;
 import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
 /**
@@ -29,7 +30,7 @@ import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
  * Use the {@link FragmentoA#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentoA extends Fragment {
+public class FragmentoA extends Fragment implements DataArguments {
     public interface ComunicacionFragmentoA {
         void onBotonSiguienteClicked();
         void onBotonSalirClicked();
@@ -38,14 +39,7 @@ public class FragmentoA extends Fragment {
     private List<String> progresoItems = Arrays.asList("No iniciada", "Iniciada", "Avanzada", "Casi finalizada", "Finalizada");
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-    private static final String ARG_TAREA = "tarea";
-    private static final String ARG_PARAM1 = "titulo";
-    private static final String ARG_PARAM2 = "fechaInicio";
-    private static final String ARG_PARAM3 = "fechaObjetivo";
-    private static final String ARG_PARAM4 = "progresoIndex";
-    private static final String ARG_PARAM5 = "prioridad";
-    private static final String ARG_PARAM6 = "descripcion";
+    // Implementados en la interfaz
 
     // Elementos de la vista
     private EditText etTitulo;
@@ -62,7 +56,6 @@ public class FragmentoA extends Fragment {
     private String fechaObjetivo;
     private int progresoIndex;
     private boolean prioridad;
-    private String descripcion;
 
     public FragmentoA() {
         // Required empty public constructor
@@ -99,7 +92,6 @@ public class FragmentoA extends Fragment {
             fechaObjetivo = getArguments().getString(ARG_PARAM3);
             progresoIndex = getArguments().getInt(ARG_PARAM4);
             prioridad = getArguments().getBoolean(ARG_PARAM5);
-            descripcion = getArguments().getString(ARG_PARAM6);
         }
     }
 

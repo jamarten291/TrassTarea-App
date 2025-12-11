@@ -27,20 +27,10 @@ import java.util.stream.Collectors;
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.controlador.TareaAdapter;
+import pmdm.jmh.app_gestion_tareas.modelo.DataArguments;
 import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
-public class ListadoTareasActivity extends AppCompatActivity {
-
-    private final String ARG_TAREA = "tarea";
-    private final String ARG_ID_TAREA = "idTarea";
-    private final String ARG_OP = "operacion";
-
-    private static final String ARG_PARAM1 = "titulo";
-    private static final String ARG_PARAM2 = "fechaInicio";
-    private static final String ARG_PARAM3 = "fechaObjetivo";
-    private static final String ARG_PARAM4 = "progreso";
-    private static final String ARG_PARAM5 = "prioridad";
-    private static final String ARG_PARAM6 = "descripcion";
+public class ListadoTareasActivity extends AppCompatActivity implements DataArguments {
     private ArrayList<Tarea> listaTareas;
     private TareaAdapter adaptadorTarea;
     private RecyclerView rvTareas;

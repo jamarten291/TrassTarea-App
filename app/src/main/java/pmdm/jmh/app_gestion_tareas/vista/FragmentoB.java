@@ -13,13 +13,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.modelo.DataArguments;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link FragmentoB#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentoB extends Fragment {
+public class FragmentoB extends Fragment implements DataArguments {
     public interface ComunicacionFragmentoB {
         void onBotonVolverClicked();
         void onBotonGuardarClicked();
@@ -27,12 +28,7 @@ public class FragmentoB extends Fragment {
     private ComunicacionFragmentoB comunicador;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "titulo";
-    private static final String ARG_PARAM2 = "fechaInicio";
-    private static final String ARG_PARAM3 = "fechaObjetivo";
-    private static final String ARG_PARAM4 = "progresoIndex";
-    private static final String ARG_PARAM5 = "prioridad";
-    private static final String ARG_PARAM6 = "descripcion";
+    // Implementado en la interfaz
 
     private String titulo;
     private String fechaInicio;

@@ -14,25 +14,18 @@ import java.time.LocalDate;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
+import pmdm.jmh.app_gestion_tareas.modelo.DataArguments;
 import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
 public class EditarTareaActivity extends AppCompatActivity implements
         FragmentoA.ComunicacionFragmentoA,
-        FragmentoB.ComunicacionFragmentoB
+        FragmentoB.ComunicacionFragmentoB,
+        DataArguments
 {
 
-    private final String ARG_TAREA = "tarea";
-    private final String ARG_ID_TAREA = "idTarea";
     private int idTarea;
     private Tarea tarea;
-    private final String ARG_OP = "operacion";
     private final int OPERACION_ACTUAL = 2;
-    private static final String ARG_PARAM1 = "titulo";
-    private static final String ARG_PARAM2 = "fechaInicio";
-    private static final String ARG_PARAM3 = "fechaObjetivo";
-    private static final String ARG_PARAM4 = "progreso";
-    private static final String ARG_PARAM5 = "prioridad";
-    private static final String ARG_PARAM6 = "descripcion";
     private String titulo;
     private String fechaInicioStr;
     private String fechaObjetivoStr;
