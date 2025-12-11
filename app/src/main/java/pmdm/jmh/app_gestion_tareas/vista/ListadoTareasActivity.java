@@ -177,6 +177,7 @@ public class ListadoTareasActivity extends AppCompatActivity {
         if (itemId == R.id.mc_editar) {
             Intent intent = new Intent(this, EditarTareaActivity.class);
             intent.putExtra(ARG_ID_TAREA, position);
+            intent.putExtra(ARG_TAREA, listaTareas.get(position));
             launcher.launch(intent);
             return true;
         } else if (itemId == R.id.mc_borrar) {

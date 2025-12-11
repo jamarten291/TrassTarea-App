@@ -14,14 +14,17 @@ import java.time.LocalDate;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
+import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
 public class EditarTareaActivity extends AppCompatActivity implements
         FragmentoA.ComunicacionFragmentoA,
         FragmentoB.ComunicacionFragmentoB
 {
 
+    private final String ARG_TAREA = "tarea";
     private final String ARG_ID_TAREA = "idTarea";
     private int idTarea;
+    private Tarea tarea;
     private final String ARG_OP = "operacion";
     private final int OPERACION_ACTUAL = 2;
     private static final String ARG_PARAM1 = "titulo";
@@ -58,7 +61,9 @@ public class EditarTareaActivity extends AppCompatActivity implements
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
+            // TODO add persistence
             idTarea = extras.getInt(ARG_ID_TAREA);
+            tarea = extras.getParcelable(ARG_TAREA);
 
             fragmentoA = new FragmentoA();
 
