@@ -56,7 +56,7 @@ public class EditarTareaActivity extends AppCompatActivity implements
         if (extras != null) {
             // TODO add persistence
             idTarea = extras.getInt(ARG_ID_TAREA);
-            tarea = extras.getParcelable(ARG_TAREA);
+            tarea = extras.getParcelable(ARG_TAREA, Tarea.class);
 
             descripcion = tarea.getDescripcion();
             fragmentoA = FragmentoA.newInstance(

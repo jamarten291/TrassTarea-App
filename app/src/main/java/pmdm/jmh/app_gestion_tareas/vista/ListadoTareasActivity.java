@@ -46,7 +46,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                     switch (op) {
                         case 1:
                             // getParcelable devuelve el objeto Tarea, que implementa Parcelable
-                            Tarea nuevaTarea = data.getParcelableExtra(ARG_TAREA);
+                            Tarea nuevaTarea = data.getParcelableExtra(ARG_TAREA, Tarea.class);
                             listaTareas.add(nuevaTarea);
 
                             // Actualiza la vista del RecyclerView con la nueva tarea
