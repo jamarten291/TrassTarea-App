@@ -51,7 +51,6 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
         private TextView tvCantDias;
         private Context c;
         private Tarea tareaActual;
-        private int position;
 
         public TareaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,13 +64,14 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
 
             itemView.setOnClickListener(this::onItemViewClick);
             itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
-                this.position = getBindingAdapterPosition();
+                int position = getBindingAdapterPosition();
 
                 if (position == RecyclerView.NO_POSITION) return;
 
-                menu.add(Menu.NONE, R.id.mc_editar,
+                // Asigno como groupId el valor de la posición actual en el adaptador
+                menu.add(position, R.id.mc_editar,
                         Menu.NONE, R.string.mc_editar);
-                menu.add(Menu.NONE, R.id.mc_borrar,
+                menu.add(position, R.id.mc_borrar,
                         Menu.NONE, R.string.mc_borrar);
             });
         }
@@ -130,10 +130,6 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
 
                 HelperClass.showBasicAlertDialog(c, titulo, descripcion);
             }
-        }
-
-        public int getBindingPosition() {
-            return this.position;
         }
     }
 }

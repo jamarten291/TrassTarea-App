@@ -146,10 +146,10 @@ public class ListadoTareasActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        // getGroupId devuelve el id del view holder que contiene el menu item
+        // Recupero la posición actual del adaptador accediendo al id del grupo
         int position = item.getGroupId();
 
-          // Posición del item actual
+        // Identificador del elemento del menú seleccionado que indica si se trata de editado o borrado
         int itemId = item.getItemId();
 
         if (position == RecyclerView.NO_POSITION) {
