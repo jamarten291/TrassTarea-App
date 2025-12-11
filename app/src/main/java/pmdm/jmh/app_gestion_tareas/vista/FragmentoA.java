@@ -68,7 +68,7 @@ public class FragmentoA extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentoA newInstance(String param1, String param2, String param3, int param4, boolean param5, String param6) {
+    public static FragmentoA newInstance(String param1, String param2, String param3, int param4, boolean param5) {
         FragmentoA fragment = new FragmentoA();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -76,7 +76,6 @@ public class FragmentoA extends Fragment {
         args.putString(ARG_PARAM3, param3);
         args.putInt(ARG_PARAM4, param4);
         args.putBoolean(ARG_PARAM5, param5);
-        args.putString(ARG_PARAM6, param6);
         fragment.setArguments(args);
         return fragment;
     }
@@ -173,9 +172,6 @@ public class FragmentoA extends Fragment {
 
     public int getProgresoIndex() {
         return spProgreso.getSelectedItemPosition();
-    }
-    public String getDescripcion() {
-        return descripcion;
     }
 
     public boolean isPrioridad() {

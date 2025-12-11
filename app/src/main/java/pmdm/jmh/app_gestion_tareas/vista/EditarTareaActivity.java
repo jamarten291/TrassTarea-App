@@ -65,7 +65,14 @@ public class EditarTareaActivity extends AppCompatActivity implements
             idTarea = extras.getInt(ARG_ID_TAREA);
             tarea = extras.getParcelable(ARG_TAREA);
 
-            fragmentoA = new FragmentoA();
+            descripcion = tarea.getDescripcion();
+            fragmentoA = FragmentoA.newInstance(
+                    tarea.getTitulo(),
+                    HelperClass.getFormattedDate(tarea.getFechaCreacion()),
+                    HelperClass.getFormattedDate(tarea.getFechaLimite()),
+                    tarea.getProgreso(),
+                    tarea.isPrioritaria()
+            );
 
             fragmentManager = getSupportFragmentManager();
             if(savedInstanceState == null)
@@ -83,7 +90,6 @@ public class EditarTareaActivity extends AppCompatActivity implements
         fechaObjetivoStr = fragmentoA.getFechaObjetivo();
         progresoIndex = fragmentoA.getProgresoIndex();
         prioridad = fragmentoA.isPrioridad();
-        descripcion = fragmentoA.getDescripcion();
 
         fragmentoB = FragmentoB.newInstance(titulo, fechaInicioStr, fechaObjetivoStr, progresoIndex, prioridad, descripcion);
         if (!fragmentoB.isAdded()) {
@@ -102,7 +108,7 @@ public class EditarTareaActivity extends AppCompatActivity implements
     public void onBotonVolverClicked() {
         descripcion = fragmentoB.getDescripcion();
 
-        fragmentoA = FragmentoA.newInstance(titulo, fechaInicioStr, fechaObjetivoStr, progresoIndex, prioridad, descripcion);
+        fragmentoA = FragmentoA.newInstance(titulo, fechaInicioStr, fechaObjetivoStr, progresoIndex, prioridad);
         if (!fragmentoA.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoA).commit();
         }

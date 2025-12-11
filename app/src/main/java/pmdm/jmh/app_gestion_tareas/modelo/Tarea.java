@@ -66,10 +66,6 @@ public class Tarea implements Parcelable {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public LocalDate getFechaObjetivo() {
-        return fechaObjetivo;
-    }
-
     public void setFechaObjetivo(LocalDate fechaObjetivo) {
         this.fechaObjetivo = fechaObjetivo;
     }
