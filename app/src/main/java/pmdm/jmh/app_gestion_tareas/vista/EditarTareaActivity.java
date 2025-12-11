@@ -13,14 +13,17 @@ import androidx.fragment.app.FragmentManager;
 import java.time.LocalDate;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 
 public class EditarTareaActivity extends AppCompatActivity implements
         FragmentoA.ComunicacionFragmentoA,
         FragmentoB.ComunicacionFragmentoB
 {
 
-    private final String ARG_TAREA = "tarea";
+    private final String ARG_ID_TAREA = "idTarea";
+    private int idTarea;
     private final String ARG_OP = "operacion";
+    private final int OPERACION_ACTUAL = 2;
     private static final String ARG_PARAM1 = "titulo";
     private static final String ARG_PARAM2 = "fechaInicio";
     private static final String ARG_PARAM3 = "fechaObjetivo";
@@ -51,12 +54,21 @@ public class EditarTareaActivity extends AppCompatActivity implements
             return insets;
         });
 
-        fragmentoA = new FragmentoA();
+        // Recupero los datos lanzados desde la actividad ListadoTareas
+        Bundle extras = getIntent().getExtras();
 
-        fragmentManager = getSupportFragmentManager();
+        if (extras != null) {
+            idTarea = extras.getInt(ARG_ID_TAREA);
 
-        if(savedInstanceState == null)
-            fragmentManager.beginTransaction().add(R.id.frag_container, fragmentoA).commit();
+            fragmentoA = new FragmentoA();
+
+            fragmentManager = getSupportFragmentManager();
+            if(savedInstanceState == null)
+                fragmentManager.beginTransaction().add(R.id.frag_container, fragmentoA).commit();
+        } else {
+            finish();
+        }
+
     }
 
     @Override
@@ -93,6 +105,22 @@ public class EditarTareaActivity extends AppCompatActivity implements
 
     @Override
     public void onBotonGuardarClicked() {
+        Intent intent = new Intent();
 
+        fechaInicioValue = HelperClass.stringToDate(fechaInicioStr);
+        fechaObjetivoValue = HelperClass.stringToDate(fechaObjetivoStr);
+        progresoValue = (byte) (25 * progresoIndex);
+        descripcion = fragmentoB.getDescripcion();
+
+        intent.putExtra(ARG_OP, OPERACION_ACTUAL);
+        intent.putExtra(ARG_ID_TAREA, idTarea);
+        intent.putExtra(ARG_PARAM1, titulo);
+        intent.putExtra(ARG_PARAM2, fechaInicioValue);
+        intent.putExtra(ARG_PARAM3, fechaObjetivoValue);
+        intent.putExtra(ARG_PARAM4, progresoValue);
+        intent.putExtra(ARG_PARAM5, prioridad);
+        intent.putExtra(ARG_PARAM6, descripcion);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

@@ -63,17 +63,18 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
             c = itemView.getContext();
 
             itemView.setOnClickListener(this::onItemViewClick);
-            itemView.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
-                int position = getBindingAdapterPosition();
+            itemView.setOnCreateContextMenuListener(
+                    (menu, v, menuInfo) -> {
+                        int position = getBindingAdapterPosition();
 
-                if (position == RecyclerView.NO_POSITION) return;
+                        if (position == RecyclerView.NO_POSITION) return;
 
-                // Asigno como groupId el valor de la posición actual en el adaptador
-                menu.add(position, R.id.mc_editar,
-                        Menu.NONE, R.string.mc_editar);
-                menu.add(position, R.id.mc_borrar,
-                        Menu.NONE, R.string.mc_borrar);
-            });
+                        // Asigno como groupId el valor de la posición actual en el adaptador
+                        menu.add(position, R.id.mc_editar,
+                                Menu.NONE, R.string.mc_editar);
+                        menu.add(position, R.id.mc_borrar,
+                                Menu.NONE, R.string.mc_borrar);
+                    });
         }
 
         public void setTarea(Tarea t) {

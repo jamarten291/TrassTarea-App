@@ -32,7 +32,15 @@ import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 public class ListadoTareasActivity extends AppCompatActivity {
 
     private final String ARG_TAREA = "tarea";
+    private final String ARG_ID_TAREA = "idTarea";
     private final String ARG_OP = "operacion";
+
+    private static final String ARG_PARAM1 = "titulo";
+    private static final String ARG_PARAM2 = "fechaInicio";
+    private static final String ARG_PARAM3 = "fechaObjetivo";
+    private static final String ARG_PARAM4 = "progreso";
+    private static final String ARG_PARAM5 = "prioridad";
+    private static final String ARG_PARAM6 = "descripcion";
     private ArrayList<Tarea> listaTareas;
     private TareaAdapter adaptadorTarea;
     private RecyclerView rvTareas;
@@ -44,12 +52,11 @@ public class ListadoTareasActivity extends AppCompatActivity {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     Intent data = result.getData();
 
-                    // getParcelable devuelve el objeto Tarea, que implementa Parcelable
-                    Tarea nuevaTarea = data.getParcelableExtra(ARG_TAREA);
                     int op = data.getIntExtra(ARG_OP, 0);
-
                     switch (op) {
                         case 1:
+                            // getParcelable devuelve el objeto Tarea, que implementa Parcelable
+                            Tarea nuevaTarea = data.getParcelableExtra(ARG_TAREA);
                             listaTareas.add(nuevaTarea);
 
                             // Actualiza la vista del RecyclerView con la nueva tarea
@@ -57,11 +64,22 @@ public class ListadoTareasActivity extends AppCompatActivity {
                             Toast.makeText(this, "Tarea agregada con éxito", Toast.LENGTH_SHORT).show();
                             break;
                         case 2:
-                            rvTareas.setAdapter(new TareaAdapter(listaTareas));
-                            Toast.makeText(this, "Tarea actualizada con éxito", Toast.LENGTH_SHORT).show();
-                        case 3:
-                            rvTareas.setAdapter(new TareaAdapter(listaTareas));
-                            Toast.makeText(this, "Tarea borrada con éxito", Toast.LENGTH_SHORT).show();
+                            int idTarea = data.getIntExtra(ARG_ID_TAREA, -1);
+
+                            if (idTarea != -1) {
+                                Tarea tareaEditada = listaTareas.get(idTarea);
+
+                                tareaEditada.setTitulo(data.getStringExtra(ARG_PARAM1));
+                                tareaEditada.setFechaCreacion(data.getParcelableExtra(ARG_PARAM2, LocalDate.class));
+                                tareaEditada.setFechaObjetivo(data.getParcelableExtra(ARG_PARAM3, LocalDate.class));
+                                tareaEditada.setProgreso(data.getByteExtra(ARG_PARAM4, (byte) 0));
+                                tareaEditada.setPrioritaria(data.getBooleanExtra(ARG_PARAM5, false));
+                                tareaEditada.setDescripcion(data.getStringExtra(ARG_PARAM6));
+
+                                adaptadorTarea.notifyItemChanged(idTarea);
+                                Toast.makeText(this, "Tarea actualizada con éxito", Toast.LENGTH_SHORT).show();
+                            }
+
                         default:
                             Toast.makeText(this, "Error: No se ha podido realizar ninguna operación", Toast.LENGTH_SHORT);
                     }
@@ -158,21 +176,22 @@ public class ListadoTareasActivity extends AppCompatActivity {
 
         if (itemId == R.id.mc_editar) {
             Intent intent = new Intent(this, EditarTareaActivity.class);
-            intent.putExtra(ARG_TAREA, position);
+            intent.putExtra(ARG_ID_TAREA, position);
             launcher.launch(intent);
             return true;
         } else if (itemId == R.id.mc_borrar) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Eliminar una tarea")
                     .setMessage("¿Estás seguro de que quieres borrar esta tarea?")
-                    .setPositiveButton(R.string.boton_alert_basico, (dialog, which) -> {
-                        listaTareas.remove(position);
+                    .setPositiveButton(R.string.boton_alert_basico,
+                            (dialog, which) -> {
+                                listaTareas.remove(position);
 
-                        // Notifico que ha habido una operación de borrado
-                        adaptadorTarea.notifyItemRemoved(position);
-                        Toast.makeText(this, "Tarea borrada con éxito", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("Cancelar", (dialog, which) -> {});
+                                // Notifico que ha habido una operación de borrado
+                                adaptadorTarea.notifyItemRemoved(position);
+                                Toast.makeText(this, "Tarea borrada con éxito", Toast.LENGTH_SHORT).show();
+                            })
+                    .setNegativeButton("Cancelar", null);
             AlertDialog dialog = builder.create();
             dialog.show();
             return true;
