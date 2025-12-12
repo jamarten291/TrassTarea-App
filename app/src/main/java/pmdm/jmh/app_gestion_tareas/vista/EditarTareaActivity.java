@@ -55,8 +55,10 @@ public class EditarTareaActivity extends AppCompatActivity implements
 
         if (extras != null) {
             // TODO add persistence
-            idTarea = extras.getInt(ARG_ID_TAREA);
             tarea = extras.getParcelable(ARG_TAREA, Tarea.class);
+
+            // Identificador estático de la tarea
+            idTarea = tarea.getId();
 
             descripcion = tarea.getDescripcion();
             fragmentoA = FragmentoA.newInstance(
@@ -73,7 +75,6 @@ public class EditarTareaActivity extends AppCompatActivity implements
         } else {
             finish();
         }
-
     }
 
     @Override

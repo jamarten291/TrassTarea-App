@@ -36,7 +36,6 @@ public class FragmentoA extends Fragment implements DataArguments {
         void onBotonSalirClicked();
     }
     private ComunicacionFragmentoA comunicador;
-    private List<String> progresoItems = Arrays.asList("No iniciada", "Iniciada", "Avanzada", "Casi finalizada", "Finalizada");
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     // Implementados en la interfaz
@@ -111,10 +110,11 @@ public class FragmentoA extends Fragment implements DataArguments {
         btSalir = fragmentoA.findViewById(R.id.bt_salir);
 
         // Adaptador
+        String[] strings = requireActivity().getResources().getStringArray(R.string.progreso_tarea);
         ArrayAdapter<String> adaptadorStrings = new ArrayAdapter<>(
                 requireActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
-                progresoItems
+                List.of(strings)
         );
         spProgreso.setAdapter(adaptadorStrings);
 

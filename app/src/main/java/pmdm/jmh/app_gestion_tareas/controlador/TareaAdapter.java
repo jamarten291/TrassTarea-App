@@ -70,10 +70,10 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
                         if (position == RecyclerView.NO_POSITION) return;
 
                         // Asigno como groupId el valor de la posición actual en el adaptador
-                        menu.add(position, R.id.mc_editar,
-                                Menu.NONE, R.string.mc_editar);
-                        menu.add(position, R.id.mc_borrar,
-                                Menu.NONE, R.string.mc_borrar);
+                        menu.add(Menu.NONE, R.id.mc_editar,
+                                position, R.string.mc_editar);
+                        menu.add(Menu.NONE, R.id.mc_borrar,
+                                position, R.string.mc_borrar);
                     });
         }
 

@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import pmdm.jmh.app_gestion_tareas.R;
@@ -57,19 +58,26 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                             int idTarea = data.getIntExtra(ARG_ID_TAREA, -1);
 
                             if (idTarea != -1) {
-                                Tarea tareaEditada = listaTareas.get(idTarea);
+                                // Optional devuelve un objeto que puede o no existir
+                                Optional<Tarea> tareaOptional = listaTareas.stream()
+                                        .filter(t -> t.getId() == idTarea)
+                                        .findFirst();
 
-                                tareaEditada.setTitulo(data.getStringExtra(ARG_PARAM1));
-                                tareaEditada.setFechaCreacion(data.getParcelableExtra(ARG_PARAM2, LocalDate.class));
-                                tareaEditada.setFechaObjetivo(data.getParcelableExtra(ARG_PARAM3, LocalDate.class));
-                                tareaEditada.setProgreso(data.getByteExtra(ARG_PARAM4, (byte) 0));
-                                tareaEditada.setPrioritaria(data.getBooleanExtra(ARG_PARAM5, false));
-                                tareaEditada.setDescripcion(data.getStringExtra(ARG_PARAM6));
+                                // isPresent devuelve true si el objeto existe
+                                if (tareaOptional.isPresent()) {
+                                    Tarea tareaEditada = tareaOptional.get();
 
-                                adaptadorTarea.notifyItemChanged(idTarea);
-                                Toast.makeText(this, "Tarea actualizada con éxito", Toast.LENGTH_SHORT).show();
+                                    tareaEditada.setTitulo(data.getStringExtra(ARG_PARAM1));
+                                    tareaEditada.setFechaCreacion(data.getParcelableExtra(ARG_PARAM2, LocalDate.class));
+                                    tareaEditada.setFechaObjetivo(data.getParcelableExtra(ARG_PARAM3, LocalDate.class));
+                                    tareaEditada.setProgreso(data.getByteExtra(ARG_PARAM4, (byte) 0));
+                                    tareaEditada.setPrioritaria(data.getBooleanExtra(ARG_PARAM5, false));
+                                    tareaEditada.setDescripcion(data.getStringExtra(ARG_PARAM6));
+
+                                    adaptadorTarea.notifyItemChanged(idTarea);
+                                    Toast.makeText(this, "Tarea actualizada con éxito", Toast.LENGTH_SHORT).show();
+                                }
                             }
-
                         default:
                             Toast.makeText(this, "Error: No se ha podido realizar ninguna operación", Toast.LENGTH_SHORT);
                     }
@@ -155,7 +163,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         // Recupero la posición actual del adaptador accediendo al id del grupo
-        int position = item.getGroupId();
+        int position = item.getOrder();
 
         // Identificador del elemento del menú seleccionado que indica si se trata de editado o borrado
         int itemId = item.getItemId();
@@ -166,7 +174,6 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
 
         if (itemId == R.id.mc_editar) {
             Intent intent = new Intent(this, EditarTareaActivity.class);
-            intent.putExtra(ARG_ID_TAREA, position);
             intent.putExtra(ARG_TAREA, listaTareas.get(position));
             launcher.launch(intent);
             return true;

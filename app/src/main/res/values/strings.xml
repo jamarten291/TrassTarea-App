@@ -25,9 +25,15 @@
     <string name="prioridad_texto_check">Sí/No</string>
     <string name="descripcion_tarea">Descripción</string>
     <string name="descripcion_tarea_hint">Describe tu tarea…</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="mc_borrar">Borrar</string>
     <string name="mc_editar">Editar</string>
     <string name="editar_tarea">Editar tarea</string>
+    <array name="progreso_tarea">
+        <item>No iniciada</item>
+        <item>Iniciada</item>
+        <item>Avanzada</item>
+        <item>Casi finalizada</item>
+        <item>Finalizada</item>
+    </array>
 </resources>
