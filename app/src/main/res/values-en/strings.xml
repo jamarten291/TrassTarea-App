@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">App-Gestion-Tareas</string>
+    <string name="app_name">TrassTarea</string>
     <string name="app_actionbar_title">TrassTarea</string>
     <string name="app_slogan">Your tasks, your pace, your success</string>
     <string name="bt_entrar_text">Enter</string>
