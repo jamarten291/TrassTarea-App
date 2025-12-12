@@ -12,7 +12,14 @@
     <string name="item_prioritarias">Prioritarias</string>
     <string name="despedida_toast">¡Hasta pronto!</string>
     <string name="mensaje_acerca">Desarrollado por Jackson, 2025</string>
-    <string name="boton_alert_basico">Aceptar</string>
+    <string name="alert_aceptar">Aceptar</string>
+    <string name="alert_cancelar">Cancelar</string>
+    <string name="titulo_dialog_borrar">Eliminar una tarea</string>
+    <string name="mensaje_dialog_borrar">¿Estás seguro de que quieres borrar esta tarea?</string>
+    <string name="operacion_error">"Error: No se ha podido realizar ninguna operación"</string>
+    <string name="operacion_actualizar">"Tarea actualizada con éxito"</string>
+    <string name="operacion_agregar">Tarea agregada con éxito</string>
+    <string name="operacion_borrar">Tarea borrada con éxito</string>
     <string name="crear_tarea">Crear tarea</string>
     <string name="btn_siguiente">Siguiente</string>
     <string name="btn_volver">Volver</string>
@@ -29,11 +36,11 @@
     <string name="mc_borrar">Borrar</string>
     <string name="mc_editar">Editar</string>
     <string name="editar_tarea">Editar tarea</string>
-    <array name="progreso_tarea">
+    <string-array name="items_progreso_tarea">
         <item>No iniciada</item>
         <item>Iniciada</item>
         <item>Avanzada</item>
         <item>Casi finalizada</item>
         <item>Finalizada</item>
-    </array>
+    </string-array>
 </resources>

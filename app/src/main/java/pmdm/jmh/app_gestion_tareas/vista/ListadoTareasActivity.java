@@ -52,7 +52,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
 
                             // Actualiza la vista del RecyclerView con la nueva tarea
                             rvTareas.setAdapter(new TareaAdapter(listaTareas));
-                            Toast.makeText(this, "Tarea agregada con éxito", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, R.string.operacion_agregar, Toast.LENGTH_SHORT).show();
                             break;
                         case 2:
                             int idTarea = data.getIntExtra(ARG_ID_TAREA, -1);
@@ -75,11 +75,11 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                                     tareaEditada.setDescripcion(data.getStringExtra(ARG_PARAM6));
 
                                     adaptadorTarea.notifyItemChanged(idTarea);
-                                    Toast.makeText(this, "Tarea actualizada con éxito", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, R.string.operacion_actualizar, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         default:
-                            Toast.makeText(this, "Error: No se ha podido realizar ninguna operación", Toast.LENGTH_SHORT);
+                            Toast.makeText(this, R.string.operacion_error, Toast.LENGTH_SHORT);
                     }
                 }
             });
@@ -179,17 +179,17 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
             return true;
         } else if (itemId == R.id.mc_borrar) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Eliminar una tarea")
-                    .setMessage("¿Estás seguro de que quieres borrar esta tarea?")
-                    .setPositiveButton(R.string.boton_alert_basico,
+            builder.setTitle(R.string.titulo_dialog_borrar)
+                    .setMessage(R.string.mensaje_dialog_borrar)
+                    .setPositiveButton(R.string.alert_aceptar,
                             (dialog, which) -> {
                                 listaTareas.remove(position);
 
                                 // Notifico que ha habido una operación de borrado
                                 adaptadorTarea.notifyItemRemoved(position);
-                                Toast.makeText(this, "Tarea borrada con éxito", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, R.string.operacion_borrar, Toast.LENGTH_SHORT).show();
                             })
-                    .setNegativeButton("Cancelar", null);
+                    .setNegativeButton(R.string.alert_cancelar, null);
             AlertDialog dialog = builder.create();
             dialog.show();
             return true;

@@ -110,9 +110,11 @@ public class FragmentoA extends Fragment implements DataArguments {
         btSalir = fragmentoA.findViewById(R.id.bt_salir);
 
         // Adaptador
-        String[] strings = requireActivity().getResources().getStringArray(R.string.progreso_tarea);
+        String[] strings = requireContext()
+                .getResources()
+                .getStringArray(R.array.items_progreso_tarea);
         ArrayAdapter<String> adaptadorStrings = new ArrayAdapter<>(
-                requireActivity(),
+                requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 List.of(strings)
         );

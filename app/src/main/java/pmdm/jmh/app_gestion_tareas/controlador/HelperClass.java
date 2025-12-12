@@ -1,21 +1,13 @@
 package pmdm.jmh.app_gestion_tareas.controlador;
 
 import android.content.Context;
-import android.content.Intent;
-import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import pmdm.jmh.app_gestion_tareas.R;
-import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
-import pmdm.jmh.app_gestion_tareas.vista.CrearTareaActivity;
 
 public class HelperClass {
 
@@ -29,7 +21,7 @@ public class HelperClass {
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(R.string.boton_alert_basico, (dialog, which) -> {});
+                .setPositiveButton(R.string.alert_aceptar, (dialog, which) -> {});
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -44,7 +36,7 @@ public class HelperClass {
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
         builder.setTitle(resId1)
                 .setMessage(resId2)
-                .setPositiveButton(R.string.boton_alert_basico, (dialog, which) -> {});
+                .setPositiveButton(R.string.alert_aceptar, (dialog, which) -> {});
         AlertDialog dialog = builder.create();
         dialog.show();
     }

@@ -5,7 +5,7 @@
     <color name="white">#FF000000</color>               <!-- negro en modo night -->
     <color name="frosted_blue">#496487</color>          <!-- azul grisáceo oscuro -->
     <color name="light_cyan">#2C3E50</color>            <!-- cian oscuro -->
-    <color name="dark_blue">#02033B</color>             <!-- azul claro -->
+    <color name="dark_blue">#edeff0</color>             <!-- azul claro -->
     <color name="blue_green">#005F7F</color>            <!-- verde‑azul más claro -->
     <color name="bright_teal_blue">#00456A</color>      <!-- teal más tenue -->
 </resources>

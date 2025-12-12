@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">App-Gestion-Tareas</string>
+    <string name="app_actionbar_title">TrassTarea</string>
+    <string name="app_slogan">Your tasks, your pace, your success</string>
+    <string name="bt_entrar_text">Enter</string>
+    <string name="iv_quedan">Remaining: </string>
+    <string name="iv_dias"> days</string>
+    <string name="tv_sin_tareas">No tasks available</string>
+    <string name="item_acerca">About…</string>
+    <string name="item_salir">Exit</string>
+    <string name="item_agregar">Add</string>
+    <string name="item_prioritarias">Prioritized</string>
+    <string name="despedida_toast">See you soon!</string>
+    <string name="mensaje_acerca">Developed by Jackson, 2025</string>
+    <string name="alert_aceptar">Accept</string>
+    <string name="alert_cancelar">Cancel</string>
+    <string name="titulo_dialog_borrar">Delete a task</string>
+    <string name="mensaje_dialog_borrar">Are you sure you want to delete this task?</string>
+    <string name="operacion_error">Error: No operation could be performed</string>
+    <string name="operacion_actualizar">Task updated successfully</string>
+    <string name="operacion_agregar">Task added successfully</string>
+    <string name="operacion_borrar">Task deleted successfully</string>
+    <string name="crear_tarea">Create task</string>
+    <string name="btn_siguiente">Next</string>
+    <string name="btn_volver">Back</string>
+    <string name="btn_guardar">Save</string>
+    <string name="titulo_tarea">Title</string>
+    <string name="fecha_creacion_tarea">Start date</string>
+    <string name="fecha_objetivo_tarea">Target date</string>
+    <string name="progreso_tarea">Progress</string>
+    <string name="prioridad_tarea">Priority</string>
+    <string name="prioridad_texto_check">Yes/No</string>
+    <string name="descripcion_tarea">Description</string>
+    <string name="descripcion_tarea_hint">Describe your task…</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mc_borrar">Delete</string>
+    <string name="mc_editar">Edit</string>
+    <string name="editar_tarea">Edit task</string>
+
+    <string-array name="items_progreso_tarea">
+        <item>Not started</item>
+        <item>Started</item>
+        <item>In progress</item>
+        <item>Almost finished</item>
+        <item>Completed</item>
+    </string-array>
+
+</resources>
