@@ -111,6 +111,8 @@ public class EditarTareaActivity extends AppCompatActivity implements
 
     @Override
     public void onBotonGuardarClicked() {
+        descripcion = fragmentoB.getDescripcion();
+
         if (titulo.isEmpty() || fechaInicioStr.isEmpty() || fechaObjetivoStr.isEmpty() ||
                 progresoIndex == Spinner.INVALID_POSITION || descripcion.isEmpty()) {
             HelperClass.showBasicAlertDialog(this, R.string.error, R.string.invalid_input_error);
@@ -120,7 +122,6 @@ public class EditarTareaActivity extends AppCompatActivity implements
             fechaInicioValue = HelperClass.stringToDate(fechaInicioStr);
             fechaObjetivoValue = HelperClass.stringToDate(fechaObjetivoStr);
             progresoValue = (byte) (25 * progresoIndex);
-            descripcion = fragmentoB.getDescripcion();
 
             intent.putExtra(ARG_OP, OPERACION_ACTUAL);
             intent.putExtra(ARG_ID_TAREA, idTarea);

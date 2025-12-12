@@ -23,15 +23,15 @@ import java.time.LocalDateTime;
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.DatePickerFragment;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
+import pmdm.jmh.app_gestion_tareas.modelo.DataArguments;
 import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
 public class CrearTareaActivity extends AppCompatActivity implements
         FragmentoA.ComunicacionFragmentoA,
-        FragmentoB.ComunicacionFragmentoB
+        FragmentoB.ComunicacionFragmentoB,
+        DataArguments
 {
 
-    private final String ARG_TAREA = "tarea";
-    private final String ARG_OP = "operacion";
     private final int OPERACION_ACTUAL = 1;
     private String titulo;
     private String fechaInicioStr;
@@ -98,6 +98,8 @@ public class CrearTareaActivity extends AppCompatActivity implements
 
     @Override
     public void onBotonGuardarClicked() {
+        descripcion = fragmentoB.getDescripcion();
+
         if (titulo.isEmpty() || fechaInicioStr.isEmpty() || fechaObjetivoStr.isEmpty() ||
             progresoIndex == Spinner.INVALID_POSITION || descripcion.isEmpty()) {
             HelperClass.showBasicAlertDialog(this, R.string.error, R.string.invalid_input_error);
@@ -105,7 +107,6 @@ public class CrearTareaActivity extends AppCompatActivity implements
             fechaInicioValue = HelperClass.stringToDate(fechaInicioStr);
             fechaObjetivoValue = HelperClass.stringToDate(fechaObjetivoStr);
             progresoValue = (byte) (25 * progresoIndex);
-            descripcion = fragmentoB.getDescripcion();
 
             Tarea nuevaTarea = new Tarea(
                     titulo,
