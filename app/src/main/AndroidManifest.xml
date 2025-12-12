@@ -13,10 +13,12 @@
         android:theme="@style/Theme.AppGestionTareas">
         <activity
             android:name=".vista.EditarTareaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Base.Theme.AppGestionTareas.NoActionBar"/>
         <activity
             android:name=".vista.CrearTareaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Base.Theme.AppGestionTareas.NoActionBar"/>
         <activity
             android:name=".vista.ListadoTareasActivity"
             android:exported="false" />

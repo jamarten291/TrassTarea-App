@@ -37,6 +37,8 @@
     <string name="mc_borrar">Delete</string>
     <string name="mc_editar">Edit</string>
     <string name="editar_tarea">Edit task</string>
+    <string name="error">Error</string>
+    <string name="invalid_input_error">You must fill all fields</string>
 
     <string-array name="items_progreso_tarea">
         <item>Not started</item>

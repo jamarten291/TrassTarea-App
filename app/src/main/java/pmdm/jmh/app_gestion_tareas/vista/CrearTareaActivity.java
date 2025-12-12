@@ -3,6 +3,7 @@ package pmdm.jmh.app_gestion_tareas.vista;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -32,12 +33,6 @@ public class CrearTareaActivity extends AppCompatActivity implements
     private final String ARG_TAREA = "tarea";
     private final String ARG_OP = "operacion";
     private final int OPERACION_ACTUAL = 1;
-    private static final String ARG_PARAM1 = "titulo";
-    private static final String ARG_PARAM2 = "fechaInicio";
-    private static final String ARG_PARAM3 = "fechaObjetivo";
-    private static final String ARG_PARAM4 = "progreso";
-    private static final String ARG_PARAM5 = "prioridad";
-    private static final String ARG_PARAM6 = "descripcion";
     private String titulo;
     private String fechaInicioStr;
     private String fechaObjetivoStr;
@@ -103,24 +98,29 @@ public class CrearTareaActivity extends AppCompatActivity implements
 
     @Override
     public void onBotonGuardarClicked() {
-        fechaInicioValue = HelperClass.stringToDate(fechaInicioStr);
-        fechaObjetivoValue = HelperClass.stringToDate(fechaObjetivoStr);
-        progresoValue = (byte) (25 * progresoIndex);
-        descripcion = fragmentoB.getDescripcion();
+        if (titulo.isEmpty() || fechaInicioStr.isEmpty() || fechaObjetivoStr.isEmpty() ||
+            progresoIndex == Spinner.INVALID_POSITION || descripcion.isEmpty()) {
+            HelperClass.showBasicAlertDialog(this, R.string.error, R.string.invalid_input_error);
+        } else {
+            fechaInicioValue = HelperClass.stringToDate(fechaInicioStr);
+            fechaObjetivoValue = HelperClass.stringToDate(fechaObjetivoStr);
+            progresoValue = (byte) (25 * progresoIndex);
+            descripcion = fragmentoB.getDescripcion();
 
-        Tarea nuevaTarea = new Tarea(
-                titulo,
-                fechaInicioValue,
-                fechaObjetivoValue,
-                progresoValue,
-                prioridad,
-                descripcion
-        );
+            Tarea nuevaTarea = new Tarea(
+                    titulo,
+                    fechaInicioValue,
+                    fechaObjetivoValue,
+                    progresoValue,
+                    prioridad,
+                    descripcion
+            );
 
-        Intent intent = new Intent();
-        intent.putExtra(ARG_OP, OPERACION_ACTUAL);
-        intent.putExtra(ARG_TAREA, nuevaTarea);
-        setResult(RESULT_OK, intent);
-        finish();
+            Intent intent = new Intent();
+            intent.putExtra(ARG_OP, OPERACION_ACTUAL);
+            intent.putExtra(ARG_TAREA, nuevaTarea);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
 }

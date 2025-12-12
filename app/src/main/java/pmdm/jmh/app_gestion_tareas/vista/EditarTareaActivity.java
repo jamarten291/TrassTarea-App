@@ -2,6 +2,7 @@ package pmdm.jmh.app_gestion_tareas.vista;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -110,22 +111,27 @@ public class EditarTareaActivity extends AppCompatActivity implements
 
     @Override
     public void onBotonGuardarClicked() {
-        Intent intent = new Intent();
+        if (titulo.isEmpty() || fechaInicioStr.isEmpty() || fechaObjetivoStr.isEmpty() ||
+                progresoIndex == Spinner.INVALID_POSITION || descripcion.isEmpty()) {
+            HelperClass.showBasicAlertDialog(this, R.string.error, R.string.invalid_input_error);
+        } else {
+            Intent intent = new Intent();
 
-        fechaInicioValue = HelperClass.stringToDate(fechaInicioStr);
-        fechaObjetivoValue = HelperClass.stringToDate(fechaObjetivoStr);
-        progresoValue = (byte) (25 * progresoIndex);
-        descripcion = fragmentoB.getDescripcion();
+            fechaInicioValue = HelperClass.stringToDate(fechaInicioStr);
+            fechaObjetivoValue = HelperClass.stringToDate(fechaObjetivoStr);
+            progresoValue = (byte) (25 * progresoIndex);
+            descripcion = fragmentoB.getDescripcion();
 
-        intent.putExtra(ARG_OP, OPERACION_ACTUAL);
-        intent.putExtra(ARG_ID_TAREA, idTarea);
-        intent.putExtra(ARG_PARAM1, titulo);
-        intent.putExtra(ARG_PARAM2, fechaInicioValue);
-        intent.putExtra(ARG_PARAM3, fechaObjetivoValue);
-        intent.putExtra(ARG_PARAM4, progresoValue);
-        intent.putExtra(ARG_PARAM5, prioridad);
-        intent.putExtra(ARG_PARAM6, descripcion);
-        setResult(RESULT_OK, intent);
-        finish();
+            intent.putExtra(ARG_OP, OPERACION_ACTUAL);
+            intent.putExtra(ARG_ID_TAREA, idTarea);
+            intent.putExtra(ARG_PARAM1, titulo);
+            intent.putExtra(ARG_PARAM2, fechaInicioValue);
+            intent.putExtra(ARG_PARAM3, fechaObjetivoValue);
+            intent.putExtra(ARG_PARAM4, progresoValue);
+            intent.putExtra(ARG_PARAM5, prioridad);
+            intent.putExtra(ARG_PARAM6, descripcion);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
 }

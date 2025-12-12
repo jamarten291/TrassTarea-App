@@ -36,6 +36,9 @@
     <string name="mc_borrar">Borrar</string>
     <string name="mc_editar">Editar</string>
     <string name="editar_tarea">Editar tarea</string>
+    <string name="error">Error</string>
+    <string name="invalid_input_error">Debes rellenar todos los campos</string>
+
     <string-array name="items_progreso_tarea">
         <item>No iniciada</item>
         <item>Iniciada</item>
@@ -43,4 +46,5 @@
         <item>Casi finalizada</item>
         <item>Finalizada</item>
     </string-array>
+
 </resources>
