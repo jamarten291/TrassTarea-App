@@ -59,7 +59,7 @@ public class EditarTareaActivity extends AppCompatActivity implements
             tarea = extras.getParcelable(ARG_TAREA, Tarea.class);
 
             // Identificador estático de la tarea
-            idTarea = tarea.getId();
+            idTarea = tarea.getIdTarea();
 
             descripcion = tarea.getDescripcion();
             fragmentoA = FragmentoA.newInstance(

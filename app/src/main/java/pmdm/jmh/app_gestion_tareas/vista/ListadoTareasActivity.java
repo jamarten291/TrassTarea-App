@@ -21,8 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import pmdm.jmh.app_gestion_tareas.R;
@@ -58,28 +58,21 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                             int idTarea = data.getIntExtra(ARG_ID_TAREA, -1);
 
                             if (idTarea != -1) {
-                                // Optional devuelve un objeto que puede o no existir
-                                Optional<Tarea> tareaOptional = listaTareas.stream()
-                                        .filter(t -> t.getId() == idTarea)
-                                        .findFirst();
+                                Tarea tareaEditada = new Tarea(idTarea);
+                                tareaEditada.setTitulo(data.getStringExtra(ARG_PARAM1));
+                                tareaEditada.setFechaCreacion(data.getParcelableExtra(ARG_PARAM2, LocalDate.class));
+                                tareaEditada.setFechaObjetivo(data.getParcelableExtra(ARG_PARAM3, LocalDate.class));
+                                tareaEditada.setProgreso(data.getByteExtra(ARG_PARAM4, (byte) 0));
+                                tareaEditada.setPrioritaria(data.getBooleanExtra(ARG_PARAM5, false));
+                                tareaEditada.setDescripcion(data.getStringExtra(ARG_PARAM6));
 
-                                // isPresent devuelve true si el objeto existe
-                                if (tareaOptional.isPresent()) {
-                                    Tarea tareaEditada = tareaOptional.get();
-
-                                    tareaEditada.setTitulo(data.getStringExtra(ARG_PARAM1));
-                                    tareaEditada.setFechaCreacion(data.getParcelableExtra(ARG_PARAM2, LocalDate.class));
-                                    tareaEditada.setFechaObjetivo(data.getParcelableExtra(ARG_PARAM3, LocalDate.class));
-                                    tareaEditada.setProgreso(data.getByteExtra(ARG_PARAM4, (byte) 0));
-                                    tareaEditada.setPrioritaria(data.getBooleanExtra(ARG_PARAM5, false));
-                                    tareaEditada.setDescripcion(data.getStringExtra(ARG_PARAM6));
-
-                                    adaptadorTarea.notifyItemChanged(idTarea);
-                                    Toast.makeText(this, R.string.operacion_actualizar, Toast.LENGTH_SHORT).show();
-                                }
+                                actualizarTarea(tareaEditada);
+                                adaptadorTarea.notifyDataSetChanged();
+                                Toast.makeText(this, R.string.operacion_actualizar, Toast.LENGTH_SHORT).show();
                             }
+                            break;
                         default:
-                            Toast.makeText(this, R.string.operacion_error, Toast.LENGTH_SHORT);
+                            Toast.makeText(this, R.string.operacion_error, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -183,11 +176,12 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                     .setMessage(R.string.mensaje_dialog_borrar)
                     .setPositiveButton(R.string.alert_aceptar,
                             (dialog, which) -> {
-                                listaTareas.remove(position);
-
-                                // Notifico que ha habido una operación de borrado
-                                adaptadorTarea.notifyItemRemoved(position);
-                                Toast.makeText(this, R.string.operacion_borrar, Toast.LENGTH_SHORT).show();
+                                int id = listaTareas.get(position).getIdTarea();
+                                if (eliminarTarea(id)) {
+                                    // Notifico que ha habido una operación de borrado
+                                    adaptadorTarea.notifyItemRemoved(position);
+                                    Toast.makeText(this, R.string.operacion_borrar, Toast.LENGTH_SHORT).show();
+                                }
                             })
                     .setNegativeButton(R.string.alert_cancelar, null);
             AlertDialog dialog = builder.create();
@@ -205,6 +199,30 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                 .collect(Collectors.toList());
 
         return new TareaAdapter(tareasFiltradas);
+    }
+
+    private boolean eliminarTarea(int id) {
+        Iterator<Tarea> it = listaTareas.iterator();
+
+        while (it.hasNext()) {
+            if (it.next().getIdTarea() == id) {
+                it.remove();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean actualizarTarea(Tarea updated) {
+        for (int i = 0; i < listaTareas.size(); i++) {
+            if (listaTareas.get(i).equals(updated)) {
+                listaTareas.set(i, updated);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void crearTareas() {

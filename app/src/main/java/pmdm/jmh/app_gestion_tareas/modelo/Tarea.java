@@ -6,8 +6,8 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 
@@ -32,6 +32,10 @@ public class Tarea implements Parcelable {
         this.prioritaria = prioritaria;
 
         this.id = contId++;
+    }
+
+    public Tarea(int id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -88,8 +92,8 @@ public class Tarea implements Parcelable {
         return fechaObjetivo;
     }
 
-    public int getId() {
-        return id;
+    public int getIdTarea() {
+        return this.id;
     }
 
     @NonNull
@@ -103,6 +107,18 @@ public class Tarea implements Parcelable {
                 ", fechaObjetivo=" + fechaObjetivo +
                 ", prioritaria=" + prioritaria +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Tarea tarea = (Tarea) o;
+        return id == tarea.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     // ---------- Parcelable ----------
