@@ -138,7 +138,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         int id = item.getItemId();
 
         if (id == R.id.item_acerca) {
-            HelperClass.showBasicAlertDialog(this, R.string.app_actionbar_title, R.string.mensaje_acerca);
+            HelperClass.showBasicAlertDialog(this, R.string.app_name, R.string.mensaje_acerca);
         } else if (id == R.id.item_agregar) {
             Intent intent = new Intent(this, CrearTareaActivity.class);
             launcher.launch(intent);

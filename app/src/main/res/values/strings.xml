@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">TrassTarea</string>
-    <string name="app_actionbar_title">TrassTarea</string>
+    <string name="app_name" translatable="false">TrassTarea</string>
     <string name="app_slogan">Tus tareas, tu ritmo, tu éxito</string>
     <string name="bt_entrar_text">Entrar</string>
     <string name="iv_quedan">Quedan: </string>
