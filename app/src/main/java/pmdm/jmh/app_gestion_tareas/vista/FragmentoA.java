@@ -3,7 +3,6 @@ package pmdm.jmh.app_gestion_tareas.vista;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -16,14 +15,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.DatePickerFragment;
 import pmdm.jmh.app_gestion_tareas.modelo.DataArguments;
-import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
 
 /**
  * A simple {@link Fragment} subclass.
