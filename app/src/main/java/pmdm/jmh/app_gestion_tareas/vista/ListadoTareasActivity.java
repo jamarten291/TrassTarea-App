@@ -132,7 +132,15 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                         : AppCompatDelegate.MODE_NIGHT_YES
         );
 
-        String tamanioLetra = userDetails.getString("fuente", "2");
+        String fuente = userDetails.getString("fuente", "2");
+        if (fuente.equals("1")) {
+            setTheme(R.style.Theme_App_SmallText);
+        } else if (fuente.equals("3")) {
+            setTheme(R.style.Theme_App_LargeText);
+        } else {
+            setTheme(R.style.Theme_App_NormalText);
+        }
+
         String criterioOrden = userDetails.getString("criterio", "2");
         boolean ordenAsc = userDetails.getBoolean("orden", true);
         boolean almacenamientoSd = userDetails.getBoolean("sd", false);

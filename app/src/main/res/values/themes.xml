@@ -4,9 +4,19 @@
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
         <item name="title">@string/app_name</item>
+        <item name="android:textSize">@dimen/font_body_medium</item>
+        <item name="android:textViewStyle">@style/AppTextView</item>
+    </style>
+
+    <style name="AppTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/font_body_medium</item>
     </style>
 
     <style name="Base.Theme.AppGestionTareas.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar"/>
 
     <style name="Theme.AppGestionTareas" parent="Base.Theme.AppGestionTareas.WithActionBar" />
+
+    <style name="Theme.App.SmallText" parent="Base.Theme.AppGestionTareas.WithActionBar" />
+    <style name="Theme.App.NormalText" parent="Base.Theme.AppGestionTareas.WithActionBar" />
+    <style name="Theme.App.LargeText" parent="Base.Theme.AppGestionTareas.WithActionBar" />
 </resources>

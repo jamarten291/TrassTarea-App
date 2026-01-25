@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Body -->
+    <dimen name="font_body_small">18sp</dimen>
+    <dimen name="font_body_medium">20sp</dimen>
+    <dimen name="font_body_large">24sp</dimen>
+
+    <!-- Title -->
+    <dimen name="font_title_small">22sp</dimen>
+    <dimen name="font_title_medium">26sp</dimen>
+    <dimen name="font_title_large">30sp</dimen>
+</resources>
+
