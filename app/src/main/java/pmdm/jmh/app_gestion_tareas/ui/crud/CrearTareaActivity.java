@@ -135,7 +135,7 @@ public class CrearTareaActivity extends AppCompatActivity implements
 
     @Override
     public void onBotonAdjuntarArchivoClicked() {
-
+        // TODO add file attachments
     }
 
     class CrearTarea implements Runnable {

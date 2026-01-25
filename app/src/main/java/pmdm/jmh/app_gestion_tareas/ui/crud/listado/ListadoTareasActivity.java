@@ -176,14 +176,12 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
             Intent intent = new Intent(this, CrearTareaActivity.class);
             launcher.launch(intent);
         } else if (id == R.id.item_prioritarias) {
-            if (!filtradoActualmente) {
-                // TODO implement filter
-                filtradoActualmente = true;
-            } else {
-                // Si está filtrado, establece el adaptador al adaptador original
-                rvTareas.setAdapter(adaptadorTarea);
-                filtradoActualmente = false;
-            }
+            // TODO implement filter
+//            if (!filtradoActualmente) {
+//                filtradoActualmente = true;
+//            } else {
+//                filtradoActualmente = false;
+//            }
         } else if (id == R.id.item_preferencias) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.item_salir) {
