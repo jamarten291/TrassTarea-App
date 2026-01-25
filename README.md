@@ -76,8 +76,6 @@ Ajusta esta lista si tu proyecto ya integra otras dependencias específicas.
 - build.gradle — configuraciones de Gradle (project y módulo)
 - README.md — este archivo
 
-Ajusta según la estructura real de tu proyecto.
-
 ---
 
 ## Buenas prácticas realizadas
