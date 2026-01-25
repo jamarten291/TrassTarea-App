@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -122,7 +123,15 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
     protected void onResume() {
         super.onResume();
         SharedPreferences userDetails = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Se aplican las preferencias
         boolean temaClaro = userDetails.getBoolean("tema", true);
+        AppCompatDelegate.setDefaultNightMode(
+                temaClaro
+                        ? AppCompatDelegate.MODE_NIGHT_NO
+                        : AppCompatDelegate.MODE_NIGHT_YES
+        );
+
         String tamanioLetra = userDetails.getString("fuente", "2");
         String criterioOrden = userDetails.getString("criterio", "2");
         boolean ordenAsc = userDetails.getBoolean("orden", true);
