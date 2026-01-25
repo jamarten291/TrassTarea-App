@@ -135,4 +135,9 @@ public class EditarTareaActivity extends AppCompatActivity implements
             finish();
         }
     }
+
+    @Override
+    public void onBotonAdjuntarArchivoClicked() {
+
+    }
 }

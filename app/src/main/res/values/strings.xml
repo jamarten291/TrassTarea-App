@@ -55,5 +55,6 @@
     <string name="settings_criterio">Criterio</string>
     <string name="settings_orden">Orden</string>
     <string name="settings_sd">Almacenamiento en tarjeta SD</string>
+    <string name="tv_add_file">Adjunta un archivo</string>
 
 </resources>

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.modelo.DataArguments;
@@ -24,6 +25,7 @@ public class FragmentoB extends Fragment implements DataArguments {
     public interface ComunicacionFragmentoB {
         void onBotonVolverClicked();
         void onBotonGuardarClicked();
+        void onBotonAdjuntarArchivoClicked();
     }
     private ComunicacionFragmentoB comunicador;
 
@@ -38,8 +40,8 @@ public class FragmentoB extends Fragment implements DataArguments {
     private String descripcion;
 
     private EditText etDescripcion;
-    private Button btVolver;
-    private Button btGuardar;
+    private Button btVolver, btGuardar;
+    private ImageButton btAdjImagen, btAdjVideo, btAdjDocumento, btAdjAudio;
 
     public FragmentoB() {
         // Required empty public constructor
@@ -92,9 +94,19 @@ public class FragmentoB extends Fragment implements DataArguments {
         btGuardar = fragmentoB.findViewById(R.id.bt_guardar);
         btVolver = fragmentoB.findViewById(R.id.bt_volver);
 
+        btAdjImagen = fragmentoB.findViewById(R.id.bt_imagen);
+        btAdjVideo = fragmentoB.findViewById(R.id.bt_video);
+        btAdjAudio = fragmentoB.findViewById(R.id.bt_audio);
+        btAdjDocumento = fragmentoB.findViewById(R.id.bt_documento);
+
         // Listeners
         btGuardar.setOnClickListener(v -> comunicador.onBotonGuardarClicked());
         btVolver.setOnClickListener(v -> comunicador.onBotonVolverClicked());
+
+        btAdjImagen.setOnClickListener(v -> comunicador.onBotonAdjuntarArchivoClicked());
+        btAdjVideo.setOnClickListener(v -> comunicador.onBotonAdjuntarArchivoClicked());
+        btAdjAudio.setOnClickListener(v -> comunicador.onBotonAdjuntarArchivoClicked());
+        btAdjDocumento.setOnClickListener(v -> comunicador.onBotonAdjuntarArchivoClicked());
 
         // Datos de la descripción en caso de que hubiese una escrita
         etDescripcion.setText(descripcion);

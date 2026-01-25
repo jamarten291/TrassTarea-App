@@ -69,5 +69,6 @@
         <item>Remaining days</item>
         <item>Progress</item>
     </string-array>
+    <string name="tv_add_file">Attach a file</string>
 
 </resources>
