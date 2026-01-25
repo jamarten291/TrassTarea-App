@@ -28,10 +28,10 @@ public class Tarea implements Parcelable {
     private byte progreso;
 
     @NonNull
-    private LocalDate fechaCreacion = LocalDate.now();
+    private String fechaCreacion = HelperClass.dateToString(LocalDate.now());
 
     @NonNull
-    private LocalDate fechaObjetivo = LocalDate.now();
+    private String fechaObjetivo = HelperClass.dateToString(LocalDate.now());
 
     @ColumnInfo(defaultValue = "0")
     private boolean prioritaria;
@@ -45,8 +45,8 @@ public class Tarea implements Parcelable {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.progreso = progreso;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaObjetivo = fechaObjetivo;
+        this.fechaCreacion = HelperClass.dateToString(fechaCreacion);
+        this.fechaObjetivo = HelperClass.dateToString(fechaObjetivo);
         this.prioritaria = prioritaria;
     }
 
@@ -54,8 +54,8 @@ public class Tarea implements Parcelable {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.progreso = progreso;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaObjetivo = fechaObjetivo;
+        this.fechaCreacion = HelperClass.dateToString(fechaCreacion);
+        this.fechaObjetivo = HelperClass.dateToString(fechaObjetivo);
         this.prioritaria = prioritaria;
         this.URL_doc = URL_doc;
         this.URL_img = URL_img;
@@ -92,16 +92,22 @@ public class Tarea implements Parcelable {
         this.progreso = progreso;
     }
 
-    public LocalDate getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(LocalDate fechaCreacion) {
+    public void setFechaCreacion(@NonNull String fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public void setFechaObjetivo(LocalDate fechaObjetivo) {
+    public void setFechaObjetivo(@NonNull String fechaObjetivo) {
         this.fechaObjetivo = fechaObjetivo;
+    }
+
+    @NonNull
+    public String getFechaCreacion() {
+        return this.fechaCreacion;
+    }
+
+    @NonNull
+    public String getFechaObjetivo() {
+        return fechaObjetivo;
     }
 
     public boolean isPrioritaria() {
@@ -113,13 +119,23 @@ public class Tarea implements Parcelable {
     }
 
     public long getDiasRestantes() {
+        LocalDate fechaObjetivo = HelperClass.stringToDate(this.fechaObjetivo);
+
         return ChronoUnit
                 .DAYS
-                .between(LocalDate.now(), this.fechaObjetivo);
+                .between(LocalDate.now(), fechaObjetivo);
     }
 
     public LocalDate getFechaLimite() {
-        return fechaObjetivo;
+        return HelperClass.stringToDate(this.fechaObjetivo);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getIdTarea() {
@@ -188,8 +204,8 @@ public class Tarea implements Parcelable {
     protected Tarea(Parcel in) {
         id = in.readInt();
         titulo = in.readString();
-        fechaCreacion = HelperClass.stringToDate(in.readString());
-        fechaObjetivo = HelperClass.stringToDate(in.readString());
+        fechaCreacion = in.readString();
+        fechaObjetivo = in.readString();
         progreso = in.readByte();
         prioritaria = in.readBoolean();
         descripcion = in.readString();
@@ -199,8 +215,8 @@ public class Tarea implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(titulo);
-        dest.writeString(HelperClass.getFormattedDate(fechaCreacion));
-        dest.writeString(HelperClass.getFormattedDate(fechaObjetivo));
+        dest.writeString(fechaCreacion);
+        dest.writeString(fechaObjetivo);
         dest.writeByte(progreso);
         dest.writeBoolean(prioritaria);
         dest.writeString(descripcion);

@@ -46,7 +46,7 @@ public class HelperClass {
      * @param dateTime Fecha a formatear
      * @return Cadena que contiene la fecha en formato estándar
      */
-    public static String getFormattedDate(LocalDate dateTime) {
+    public static String dateToString(LocalDate dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         return dateTime.format(formatter);
     }

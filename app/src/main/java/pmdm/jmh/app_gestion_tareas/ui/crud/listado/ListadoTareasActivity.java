@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.ui.crud;
+package pmdm.jmh.app_gestion_tareas.ui.crud.listado;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,21 +27,28 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.adaptadores.TareaAdapter;
 import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
+import pmdm.jmh.app_gestion_tareas.ui.crud.CrearTareaActivity;
+import pmdm.jmh.app_gestion_tareas.ui.crud.EditarTareaActivity;
 import pmdm.jmh.app_gestion_tareas.ui.prefs.SettingsActivity;
 
 public class ListadoTareasActivity extends AppCompatActivity implements DataArguments {
-    private ArrayList<Tarea> listaTareas;
+    private List<Tarea> listaTareas = new ArrayList<>();
     private TareaAdapter adaptadorTarea;
     private RecyclerView rvTareas;
     private TextView tvSinTareas;
     private boolean filtradoActualmente = false;
+    private DatabaseApp databaseApp;
+    private ListadoTareasViewModel viewModel;
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -50,30 +58,10 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                     int op = data.getIntExtra(ARG_OP, 0);
                     switch (op) {
                         case 1:
-                            // getParcelable devuelve el objeto Tarea, que implementa Parcelable
-                            Tarea nuevaTarea = data.getParcelableExtra(ARG_TAREA, Tarea.class);
-                            listaTareas.add(nuevaTarea);
-
-                            // Actualiza la vista del RecyclerView con la nueva tarea
-                            rvTareas.setAdapter(new TareaAdapter(listaTareas));
                             Toast.makeText(this, R.string.operacion_agregar, Toast.LENGTH_SHORT).show();
                             break;
                         case 2:
-                            int idTarea = data.getIntExtra(ARG_ID_TAREA, -1);
-
-                            if (idTarea != -1) {
-                                Tarea tareaEditada = new Tarea(idTarea);
-                                tareaEditada.setTitulo(data.getStringExtra(ARG_PARAM1));
-                                tareaEditada.setFechaCreacion(data.getParcelableExtra(ARG_PARAM2, LocalDate.class));
-                                tareaEditada.setFechaObjetivo(data.getParcelableExtra(ARG_PARAM3, LocalDate.class));
-                                tareaEditada.setProgreso(data.getByteExtra(ARG_PARAM4, (byte) 0));
-                                tareaEditada.setPrioritaria(data.getBooleanExtra(ARG_PARAM5, false));
-                                tareaEditada.setDescripcion(data.getStringExtra(ARG_PARAM6));
-
-                                actualizarTarea(tareaEditada);
-                                adaptadorTarea.notifyDataSetChanged();
-                                Toast.makeText(this, R.string.operacion_actualizar, Toast.LENGTH_SHORT).show();
-                            }
+                            // TODO implement edit functionality
                             break;
                         default:
                             Toast.makeText(this, R.string.operacion_error, Toast.LENGTH_SHORT).show();
@@ -97,18 +85,8 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         tvSinTareas = findViewById(R.id.tv_sin_tareas);
         registerForContextMenu(rvTareas);
 
-        // Creación de tareas
-        listaTareas = new ArrayList<>();
-        crearTareas();
-
-        // Visibilidad según haya notas o no
-        rvTareas.setVisibility(listaTareas.isEmpty() ?
-                RecyclerView.INVISIBLE :
-                RecyclerView.VISIBLE);
-
-        tvSinTareas.setVisibility(listaTareas.isEmpty() ?
-                TextView.VISIBLE :
-                TextView.INVISIBLE);
+        // Se instancia un DatabaseApp
+        databaseApp = DatabaseApp.getInstance(getApplicationContext());
 
         // Inicialización de adaptador del RecyclerView
         adaptadorTarea = new TareaAdapter(listaTareas);
@@ -118,6 +96,36 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                         LinearLayoutManager.VERTICAL,
                         false)
         );
+
+        // Se inicia el ViewModel para poder ver los cambios de los datos en tiempo real
+        viewModel = new ViewModelProvider(this).get(ListadoTareasViewModel.class);
+        viewModel.getTareas().observe(this, v -> {
+            // Se actualiza la lista del RecyclerView
+            adaptadorTarea.setDatos(v);
+
+            // Se actualiza la lista actual
+            listaTareas.clear();
+            listaTareas.addAll(v);
+
+            // Visibilidad según haya notas o no
+            rvTareas.setVisibility(v.isEmpty() ?
+                    RecyclerView.INVISIBLE :
+                    RecyclerView.VISIBLE
+            );
+            tvSinTareas.setVisibility(v.isEmpty() ?
+                    TextView.VISIBLE :
+                    TextView.INVISIBLE
+            );
+        });
+
+
+        if (adaptadorTarea.getDatos().isEmpty()) {
+            rvTareas.setVisibility(RecyclerView.INVISIBLE);
+            tvSinTareas.setVisibility(TextView.VISIBLE);
+        } else {
+            rvTareas.setVisibility(RecyclerView.VISIBLE);
+            tvSinTareas.setVisibility(TextView.INVISIBLE);
+        }
     }
 
     @Override
@@ -169,8 +177,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
             launcher.launch(intent);
         } else if (id == R.id.item_prioritarias) {
             if (!filtradoActualmente) {
-                // Si no está filtrado, crea un adaptador con la lista de tareas filtradas
-                rvTareas.setAdapter(getAdaptadorTareasFiltradas());
+                // TODO implement filter
                 filtradoActualmente = true;
             } else {
                 // Si está filtrado, establece el adaptador al adaptador original
@@ -189,19 +196,23 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        // Recupero la posición actual del adaptador accediendo al id del grupo
-        int position = item.getOrder();
-
         // Identificador del elemento del menú seleccionado que indica si se trata de editado o borrado
         int itemId = item.getItemId();
 
-        if (position == RecyclerView.NO_POSITION) {
+        // Se intenta obtener la posición de la tarea seleccionada
+        int posicion = -1;
+        try {
+            posicion = adaptadorTarea.getPosicion();
+        } catch (Exception e) {
             return super.onContextItemSelected(item);
         }
 
+        // Se instancia un objeto que representa la tarea seleccionada actualmente
+        Tarea tareaSeleccionada = adaptadorTarea.getDatos().get(posicion);
+
         if (itemId == R.id.mc_editar) {
             Intent intent = new Intent(this, EditarTareaActivity.class);
-            intent.putExtra(ARG_TAREA, listaTareas.get(position));
+            intent.putExtra(ARG_TAREA, tareaSeleccionada);
             launcher.launch(intent);
             return true;
         } else if (itemId == R.id.mc_borrar) {
@@ -210,12 +221,8 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                     .setMessage(R.string.mensaje_dialog_borrar)
                     .setPositiveButton(R.string.alert_aceptar,
                             (dialog, which) -> {
-                                int id = listaTareas.get(position).getIdTarea();
-                                if (eliminarTarea(id)) {
-                                    // Notifico que ha habido una operación de borrado
-                                    adaptadorTarea.notifyItemRemoved(position);
-                                    Toast.makeText(this, R.string.operacion_borrar, Toast.LENGTH_SHORT).show();
-                                }
+                                Executor executor = Executors.newSingleThreadExecutor();
+                                executor.execute(new EliminarTarea(tareaSeleccionada));
                             })
                     .setNegativeButton(R.string.alert_cancelar, null);
             AlertDialog dialog = builder.create();
@@ -225,120 +232,24 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         return super.onContextItemSelected(item);
     }
 
-    private TareaAdapter getAdaptadorTareasFiltradas() {
-        // Copia la lista de tareas, la filtra y construye un TareaAdapter con la lista filtrada
-        ArrayList<Tarea> tareasFiltradas = (ArrayList<Tarea>) List.copyOf(listaTareas)
-                .stream()
-                .filter(Tarea::isPrioritaria)
-                .collect(Collectors.toList());
+    class EliminarTarea implements Runnable {
+        private Tarea tarea;
 
-        return new TareaAdapter(tareasFiltradas);
-    }
-
-    private boolean eliminarTarea(int id) {
-        Iterator<Tarea> it = listaTareas.iterator();
-
-        while (it.hasNext()) {
-            if (it.next().getIdTarea() == id) {
-                it.remove();
-                return true;
-            }
+        public EliminarTarea(Tarea tarea) {
+            this.tarea = tarea;
         }
 
-        return false;
-    }
-
-    private boolean actualizarTarea(Tarea updated) {
-        for (int i = 0; i < listaTareas.size(); i++) {
-            if (listaTareas.get(i).equals(updated)) {
-                listaTareas.set(i, updated);
-                return true;
-            }
+        public EliminarTarea(int id) {
+            // Busca por id y devuelve la primera ocurrencia
+            this.tarea = databaseApp
+                    .tareaDAO()
+                    .loadAllByIds(new int[] {id})
+                    .get(0);
         }
 
-        return false;
+        @Override
+        public void run() {
+            databaseApp.tareaDAO().delete(this.tarea);
+        }
     }
-
-    private void crearTareas() {
-        listaTareas.add(new Tarea(
-                "Comprar víveres",                     // título
-                LocalDate.now(),                  // fecha inicio
-                LocalDate.now().plusDays(1),      // fecha fin
-                (byte) 0,                             // progreso
-                false,                                // prioritaria
-                "Ir al supermercado y comprar pan, leche y huevos")); // descripción
-
-        listaTareas.add(new Tarea(
-                "Entrega informe",
-                LocalDate.now().minusDays(3),
-                LocalDate.now().plusDays(2),
-                (byte) 45,
-                true,
-                "Redactar y enviar el informe mensual al jefe"));
-
-        listaTareas.add(new Tarea(
-                "Ejercicio diario",
-                LocalDate.now().minusDays(5),
-                LocalDate.now().plusDays(19),
-                (byte) 20,
-                false,
-                "30 minutos de cardio"));
-
-        listaTareas.add(new Tarea(
-                "Llamar al dentista",
-                LocalDate.now().minusDays(2),
-                LocalDate.now().plusWeeks(1),
-                (byte) 0,
-                true,
-                "Programar cita para revisión dental"));
-
-        listaTareas.add(new Tarea(
-                "Leer libro",
-                LocalDate.now().minusWeeks(1),
-                LocalDate.now().plusWeeks(2),
-                (byte) 60,
-                false,
-                "Avanzar 50 páginas en 'Sapiens'"));
-
-        listaTareas.add(new Tarea(
-                "Actualizar CV",
-                LocalDate.now().minusDays(4),
-                LocalDate.now().minusDays(3),
-                (byte) 30,
-                true,
-                "Incluir últimos proyectos y certificaciones"));
-
-        listaTareas.add(new Tarea(
-                "Pagar facturas",
-                LocalDate.now().minusDays(1),
-                LocalDate.now().plusDays(5),
-                (byte) 10,
-                false,
-                "Luz, agua e internet"));
-
-        listaTareas.add(new Tarea(
-                "Organizar escritorio",
-                LocalDate.now().minusDays(8),
-                LocalDate.now().plusDays(16),
-                (byte) 80,
-                false,
-                "Despejar papeles y ordenar cables"));
-
-        listaTareas.add(new Tarea(
-                "Reunión de equipo",
-                LocalDate.now(),
-                LocalDate.now().plusDays(1),
-                (byte) 0,
-                true,
-                "Planificar sprint de dos semanas"));
-
-        listaTareas.add(new Tarea(
-                "Backup de datos",
-                LocalDate.now().minusDays(6),
-                LocalDate.now().plusDays(2),
-                (byte) 50,
-                false,
-                "Copiar documentos importantes a disco externo"));
-    }
-
 }

@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import java.time.LocalDate;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
@@ -41,6 +42,7 @@ public class EditarTareaActivity extends AppCompatActivity implements
     private FragmentoA fragmentoA;
     private FragmentoB fragmentoB;
     private FragmentManager fragmentManager;
+    private DatabaseApp databaseApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +68,15 @@ public class EditarTareaActivity extends AppCompatActivity implements
             descripcion = tarea.getDescripcion();
             fragmentoA = FragmentoA.newInstance(
                     tarea.getTitulo(),
-                    HelperClass.getFormattedDate(tarea.getFechaCreacion()),
-                    HelperClass.getFormattedDate(tarea.getFechaLimite()),
+                    tarea.getFechaCreacion(),
+                    tarea.getFechaObjetivo(),
                     tarea.getProgreso(),
                     tarea.isPrioritaria()
             );
 
             fragmentManager = getSupportFragmentManager();
+
+            databaseApp = DatabaseApp.getInstance(getApplicationContext());
             if(savedInstanceState == null)
                 fragmentManager.beginTransaction().add(R.id.frag_container, fragmentoA).commit();
         } else {

@@ -12,8 +12,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
 import java.time.LocalDate;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
@@ -39,6 +42,7 @@ public class CrearTareaActivity extends AppCompatActivity implements
     private FragmentoA fragmentoA;
     private FragmentoB fragmentoB;
     private FragmentManager fragmentManager;
+    private DatabaseApp databaseApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +56,9 @@ public class CrearTareaActivity extends AppCompatActivity implements
         });
 
         fragmentoA = new FragmentoA();
-
         fragmentManager = getSupportFragmentManager();
+
+        databaseApp = DatabaseApp.getInstance(getApplicationContext());
 
         if(savedInstanceState == null)
             fragmentManager.beginTransaction().add(R.id.frag_container, fragmentoA).commit();
@@ -112,15 +117,37 @@ public class CrearTareaActivity extends AppCompatActivity implements
             );
 
             Intent intent = new Intent();
-            intent.putExtra(ARG_OP, OPERACION_ACTUAL);
-            intent.putExtra(ARG_TAREA, nuevaTarea);
-            setResult(RESULT_OK, intent);
-            finish();
+
+            // Indicador de operación de inserción
+            intent.putExtra(ARG_OP, 1);
+
+            try {
+                Executor executor = Executors.newSingleThreadExecutor();
+                executor.execute(new CrearTarea(nuevaTarea));
+                setResult(RESULT_OK, intent);
+            } catch (Exception e) {
+                setResult(RESULT_CANCELED, intent);
+            } finally {
+                finish();
+            }
         }
     }
 
     @Override
     public void onBotonAdjuntarArchivoClicked() {
 
+    }
+
+    class CrearTarea implements Runnable {
+        private Tarea tarea;
+
+        public CrearTarea(Tarea tarea) {
+            this.tarea = tarea;
+        }
+
+        @Override
+        public void run() {
+            databaseApp.tareaDAO().insertAll(this.tarea);
+        }
     }
 }

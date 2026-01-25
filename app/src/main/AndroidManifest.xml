@@ -24,7 +24,7 @@
             android:exported="false"
             android:theme="@style/Base.Theme.AppGestionTareas.NoActionBar" />
         <activity
-            android:name=".ui.crud.ListadoTareasActivity"
+            android:name=".ui.crud.listado.ListadoTareasActivity"
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"

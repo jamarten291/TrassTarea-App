@@ -14,17 +14,35 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
 
 public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHolder> {
-    private final ArrayList<Tarea> adaptadorTarea;
+    private List<Tarea> adaptadorTarea;
+    private int posicion;
 
-    public TareaAdapter(ArrayList<Tarea> adaptadorTarea) {
+    public TareaAdapter(List<Tarea> adaptadorTarea) {
         this.adaptadorTarea = adaptadorTarea;
+    }
+
+    public List<Tarea> getDatos() {
+        return adaptadorTarea;
+    }
+
+    public void setDatos(List<Tarea> datos) {
+        this.adaptadorTarea = datos;
+        notifyDataSetChanged();
+    }
+
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
     }
 
     @NonNull
@@ -38,6 +56,14 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
     public void onBindViewHolder(@NonNull TareaViewHolder holder, int position) {
         Tarea tareaActual = adaptadorTarea.get(position);
         holder.setTarea(tareaActual);
+
+        //Si detectamos un click, hacemos que el atributo "posicion" del Adaptador
+        //sea igual a la posición del elemento del RecyclerView donde se haga el click largo.
+        //Así conseguimos guardar el elemento sobre el que tenemos que actuar.
+        holder.itemView.setOnLongClickListener(v -> {
+            setPosicion(holder.getBindingAdapterPosition());
+            return false;
+        });
     }
 
     @Override
@@ -81,7 +107,7 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
         public void setTarea(Tarea t) {
             tvNombreTarea.setText(t.getTitulo());
             progressTarea.setProgress(t.getProgreso(), true);
-            tvFechaLimite.setText(HelperClass.getFormattedDate(t.getFechaLimite()));
+            tvFechaLimite.setText(HelperClass.dateToString(t.getFechaLimite()));
 
             if (t.isPrioritaria()) {
                 // El operador | agrega otro flag sin perder los flags anteriores

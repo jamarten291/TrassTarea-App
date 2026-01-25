@@ -44,7 +44,7 @@ public class DatePickerFragment extends DialogFragment
         month += 1;
 
         LocalDate datePicked = LocalDate.of(year, month, day);
-        String formattedDate = HelperClass.getFormattedDate(datePicked);
+        String formattedDate = HelperClass.dateToString(datePicked);
 
         if (getArguments() != null) {
             int resId = getArguments().getInt(ARG_ET_ID);
