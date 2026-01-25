@@ -45,5 +45,15 @@
         <item>Casi finalizada</item>
         <item>Finalizada</item>
     </string-array>
+    <string name="title_activity_settings" translatable="false">SettingsActivity</string>
+    <string name="item_preferencias">Preferencias</string>
+    <string name="settings_cat_visualizacion">Visualización</string>
+    <string name="settings_cat_ordenacion">Ordenación</string>
+    <string name="settings_cat_almacenamiento">Almacenamiento</string>
+    <string name="settings_tema">Tema</string>
+    <string name="settings_fuente">Tamaño de la letra</string>
+    <string name="settings_criterio">Criterio</string>
+    <string name="settings_orden">Orden</string>
+    <string name="settings_sd">Almacenamiento en tarjeta SD</string>
 
 </resources>

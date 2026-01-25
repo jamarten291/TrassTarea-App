@@ -37,6 +37,7 @@
     <string name="editar_tarea">Edit task</string>
     <string name="error">Error</string>
     <string name="invalid_input_error">You must fill all fields</string>
+    <string name="item_preferencias">Preferences</string>
 
     <string-array name="items_progreso_tarea">
         <item>Not started</item>
@@ -44,6 +45,29 @@
         <item>In progress</item>
         <item>Almost finished</item>
         <item>Completed</item>
+    </string-array>
+
+    <string name="settings_cat_visualizacion">Visualization</string>
+    <string name="settings_cat_ordenacion">Ordering</string>
+    <string name="settings_cat_almacenamiento">Storage</string>
+    <string name="settings_tema">Theme</string>
+    <string name="settings_fuente">Font size</string>
+    <string name="settings_criterio">Criteria</string>
+    <string name="settings_orden">Order</string>
+    <string name="settings_sd">SD storage</string>
+
+    <!-- Settings arrays translation -->
+    <string-array name="size_entries">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Big</item>
+    </string-array>
+
+    <string-array name="criteria_entries">
+        <item>Alphabetical</item>
+        <item>Date of creation</item>
+        <item>Remaining days</item>
+        <item>Progress</item>
     </string-array>
 
 </resources>

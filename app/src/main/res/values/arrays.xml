@@ -1,0 +1,29 @@
+<resources>
+    <!-- Font Preference -->
+    <string-array name="size_entries">
+        <item>Pequeña</item>
+        <item>Mediana</item>
+        <item>Grande</item>
+    </string-array>
+
+    <string-array name="size_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <!-- Font Preference -->
+    <string-array name="criteria_entries">
+        <item>Alfabético</item>
+        <item>Fecha de creación</item>
+        <item>Días restantes</item>
+        <item>Progreso</item>
+    </string-array>
+
+    <string-array name="criteria_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+</resources>

@@ -17,6 +17,9 @@
             android:id="@+id/item_acerca"
             android:title="@string/item_acerca" />
         <item
+            android:id="@+id/item_preferencias"
+            android:title="@string/item_preferencias" />
+        <item
             android:id="@+id/item_salir"
             android:title="@string/item_salir" />
     </group>

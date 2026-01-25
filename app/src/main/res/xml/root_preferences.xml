@@ -1,0 +1,40 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/settings_cat_visualizacion">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="tema"
+            app:title="@string/settings_tema" />
+        <ListPreference
+            android:defaultValue="2"
+            android:key="fuente"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            app:entries="@array/size_entries"
+            app:entryValues="@array/size_values"
+            app:title="@string/settings_fuente" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/settings_cat_ordenacion">
+        <ListPreference
+            android:defaultValue="2"
+            android:key="criterio"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            app:entries="@array/criteria_entries"
+            app:entryValues="@array/criteria_values"
+            app:title="@string/settings_criterio" />
+        <SwitchPreference
+            android:defaultValue="true"
+            app:key="orden"
+            app:title="@string/settings_orden" />
+
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/settings_cat_almacenamiento">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="sd"
+            app:title="@string/settings_sd" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,6 +1,7 @@
 package pmdm.jmh.app_gestion_tareas.vista;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -117,11 +119,23 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences userDetails = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean temaClaro = userDetails.getBoolean("tema", true);
+        String tamanioLetra = userDetails.getString("fuente", "2");
+        String criterioOrden = userDetails.getString("criterio", "2");
+        boolean ordenAsc = userDetails.getBoolean("orden", true);
+        boolean almacenamientoSd = userDetails.getBoolean("sd", false);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_principal, menu);
         menu.setGroupVisible(R.id.item_acerca, true);
         menu.setGroupVisible(R.id.item_agregar, true);
         menu.setGroupVisible(R.id.item_prioritarias, true);
+        menu.setGroupVisible(R.id.item_preferencias, true);
         menu.setGroupVisible(R.id.item_salir, true);
         return super.onCreateOptionsMenu(menu);
     }
@@ -145,6 +159,8 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                 rvTareas.setAdapter(adaptadorTarea);
                 filtradoActualmente = false;
             }
+        } else if (id == R.id.item_preferencias) {
+            startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.item_salir) {
             Toast.makeText(this, R.string.despedida_toast, Toast.LENGTH_SHORT).show();
             finishAffinity();
