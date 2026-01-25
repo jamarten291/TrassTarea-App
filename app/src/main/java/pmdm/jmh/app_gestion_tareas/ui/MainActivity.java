@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.vista;
+package pmdm.jmh.app_gestion_tareas.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.ui.crud.ListadoTareasActivity;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.vista;
+package pmdm.jmh.app_gestion_tareas.ui.crud;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +15,10 @@ import java.time.LocalDate;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
-import pmdm.jmh.app_gestion_tareas.modelo.DataArguments;
-import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
+import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
+import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
+import pmdm.jmh.app_gestion_tareas.ui.fragmentos.FragmentoA;
+import pmdm.jmh.app_gestion_tareas.ui.fragmentos.FragmentoB;
 
 public class CrearTareaActivity extends AppCompatActivity implements
         FragmentoA.ComunicacionFragmentoA,

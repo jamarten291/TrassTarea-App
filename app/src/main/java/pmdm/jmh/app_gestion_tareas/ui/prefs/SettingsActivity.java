@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.vista;
+package pmdm.jmh.app_gestion_tareas.ui.prefs;
 
 import android.os.Bundle;
 import android.view.MenuItem;

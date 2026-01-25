@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.vista;
+package pmdm.jmh.app_gestion_tareas.ui.crud;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,9 +30,10 @@ import java.util.stream.Collectors;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
-import pmdm.jmh.app_gestion_tareas.controlador.TareaAdapter;
-import pmdm.jmh.app_gestion_tareas.modelo.DataArguments;
-import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
+import pmdm.jmh.app_gestion_tareas.adaptadores.TareaAdapter;
+import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
+import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
+import pmdm.jmh.app_gestion_tareas.ui.prefs.SettingsActivity;
 
 public class ListadoTareasActivity extends AppCompatActivity implements DataArguments {
     private ArrayList<Tarea> listaTareas;

@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.controlador;
+package pmdm.jmh.app_gestion_tareas.ui.fragmentos;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -12,6 +12,8 @@ import androidx.fragment.app.DialogFragment;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+
+import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {

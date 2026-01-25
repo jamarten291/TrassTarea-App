@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/activity_main_gradient"
     android:backgroundTintMode="src_in"
-    tools:context=".vista.MainActivity">
+    tools:context=".ui.MainActivity">
 
     <TextView
         android:id="@+id/tv_slogan"

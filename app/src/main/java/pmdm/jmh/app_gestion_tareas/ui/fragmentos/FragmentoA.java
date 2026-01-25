@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.vista;
+package pmdm.jmh.app_gestion_tareas.ui.fragmentos;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,8 +18,7 @@ import android.widget.Spinner;
 import java.util.List;
 
 import pmdm.jmh.app_gestion_tareas.R;
-import pmdm.jmh.app_gestion_tareas.controlador.DatePickerFragment;
-import pmdm.jmh.app_gestion_tareas.modelo.DataArguments;
+import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
 
 /**
  * A simple {@link Fragment} subclass.

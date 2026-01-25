@@ -12,22 +12,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppGestionTareas">
         <activity
-            android:name=".vista.SettingsActivity"
+            android:name=".ui.prefs.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".vista.EditarTareaActivity"
+            android:name=".ui.crud.EditarTareaActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.AppGestionTareas.NoActionBar" />
         <activity
-            android:name=".vista.CrearTareaActivity"
+            android:name=".ui.crud.CrearTareaActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.AppGestionTareas.NoActionBar" />
         <activity
-            android:name=".vista.ListadoTareasActivity"
+            android:name=".ui.crud.ListadoTareasActivity"
             android:exported="false" />
         <activity
-            android:name=".vista.MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"
             android:theme="@style/Base.Theme.AppGestionTareas.NoActionBar">
             <intent-filter>

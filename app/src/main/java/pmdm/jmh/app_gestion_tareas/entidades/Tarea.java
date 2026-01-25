@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.modelo;
+package pmdm.jmh.app_gestion_tareas.entidades;
 
 import android.os.Parcel;
 import android.os.Parcelable;

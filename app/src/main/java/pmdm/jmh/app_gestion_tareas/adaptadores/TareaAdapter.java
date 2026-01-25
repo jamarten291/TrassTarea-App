@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.controlador;
+package pmdm.jmh.app_gestion_tareas.adaptadores;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -17,7 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import pmdm.jmh.app_gestion_tareas.R;
-import pmdm.jmh.app_gestion_tareas.modelo.Tarea;
+import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
+import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
 
 public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHolder> {
     private final ArrayList<Tarea> adaptadorTarea;
