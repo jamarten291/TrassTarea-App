@@ -7,13 +7,16 @@ import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.webkit.MimeTypeMap;
 
+import pmdm.jmh.app_gestion_tareas.ui.crud.TipoArchivo;
+
 public class FilePickerUtils {
-    public static String classifyUri(Uri uri, Context context) {
-        if (uri == null) return "unknown";
+    // Method que clasifica una URI según su tipo
+    public static TipoArchivo classifyUri(Uri uri, Context context) {
+        if (uri == null) return TipoArchivo.DESCONOCIDO;
 
         String mime = context.getContentResolver().getType(uri);
 
-        // 2) Si no hay MIME, obtener nombre y extraer extensión
+        // Si no hay MIME, obtener nombre y extraer extensión
         String name = null;
         try (Cursor cursor = context.getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
             if (cursor != null && cursor.moveToFirst()) {
@@ -25,14 +28,15 @@ public class FilePickerUtils {
 
         String extension = null;
         if (mime == null && name != null && name.contains(".")) {
+            // Obtiene la extensión haciendo un substring
             extension = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
             mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
 
         if (mime != null) {
-            if (mime.startsWith("image/")) return "imagen";
-            if (mime.startsWith("video/")) return "video";
-            if (mime.startsWith("audio/")) return "audio";
+            if (mime.startsWith("image/")) return TipoArchivo.IMAGEN;
+            if (mime.startsWith("video/")) return TipoArchivo.VIDEO;
+            if (mime.startsWith("audio/")) return TipoArchivo.AUDIO;
             // documentos comunes
             switch (mime) {
                 case "application/pdf":
@@ -44,14 +48,15 @@ public class FilePickerUtils {
                 case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
                 case "text/plain":
                 case "text/html":
-                    return "documento";
+                    return TipoArchivo.DOCUMENTO;
                 default:
-                    return "otro";
+                    return TipoArchivo.DESCONOCIDO;
             }
         }
-        return "unknown";
+        return TipoArchivo.DESCONOCIDO;
     }
 
+    // Crea una intención para escoger un archivo de tipo especificado por parámetro
     public static Intent createFilePickerIntent(String file) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);

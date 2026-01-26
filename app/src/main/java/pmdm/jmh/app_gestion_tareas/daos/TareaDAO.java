@@ -20,25 +20,25 @@ public interface TareaDAO {
 
     //Anotación que permite realizar una consulta para las tareas con unos ids determinados
     @Query("SELECT * FROM tarea WHERE _id IN (:tareaIds)")
-    //Método que realiza la consulta anterior
+    //Method que realiza la consulta anterior
     List<Tarea> loadAllByIds(int[] tareaIds);
 
     //Anotación que permite realizar una consulta para un producto para un nombre determinado
     @Query("SELECT * FROM tarea WHERE titulo LIKE :tarea LIMIT 1")
-    //Método que realiza la consulta anterior
+    //Method que realiza la consulta anterior
     Tarea findByTarea(String tarea);
 
     //Anotación que permite realizar la inserción de una relación de productos
     @Insert
-    //Método que realiza la inserción anterior
+    //Method que realiza la inserción anterior
     void insertAll(Tarea... tareas);
 
     //Anotación que permite realizar el borrado de un producto
     @Delete
-    //Método que realiza el borrado anterior
+    //Method que realiza el borrado anterior
     void delete(Tarea tarea);
 
     @Update
-    // Método que realiza una operación de actualización
+    // Method que realiza una operación de actualización
     void update(Tarea tarea);
 }

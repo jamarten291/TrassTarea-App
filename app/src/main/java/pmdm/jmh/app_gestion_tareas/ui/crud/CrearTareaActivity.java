@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -19,7 +17,7 @@ import java.util.concurrent.Executors;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
-import pmdm.jmh.app_gestion_tareas.controlador.FilePickerUtils;
+import pmdm.jmh.app_gestion_tareas.controlador.BaseFilePickerActivity;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
@@ -60,25 +58,6 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
 
         if(savedInstanceState == null)
             fragmentManager.beginTransaction().add(R.id.frag_container, fragmentoA).commit();
-    }
-
-    @Override
-    protected void onFilePicked(Uri uri, String tipo) {
-        switch (tipo) {
-            case "img":
-                URL_img = uri.getPath();
-                break;
-            case "vid":
-                URL_vid = uri.getPath();
-                break;
-            case "aud":
-                URL_aud = uri.getPath();
-                break;
-            case "doc":
-                URL_doc = uri.getPath();
-                break;
-            default:
-        }
     }
 
     @Override
@@ -150,11 +129,39 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     }
 
     @Override
+    protected void onFilePicked(Uri uri, TipoArchivo tipo) {
+        // Dependiendo del tipo de archivo seleccionado, se guarda su path en una determinada variable
+        switch (tipo) {
+            case IMAGEN:
+                URL_img = uri.getPath();
+                break;
+            case VIDEO:
+                URL_vid = uri.getPath();
+                break;
+            case AUDIO:
+                URL_aud = uri.getPath();
+                break;
+            case DOCUMENTO:
+                URL_doc = uri.getPath();
+                break;
+            default:
+        }
+    }
+
+    @Override
     public void onFilePickerClicked(View view) {
         int id = view.getId();
 
+        // Dependiendo del botón pulsado, se lanza un FilePicker con un MIME type específico
+        // Se usa el method heredado de la superclase para lanzar el FilePicker
         if (id == R.id.bt_imagen) {
             launchFilePicker("image");
+        } else if (id == R.id.bt_video) {
+            launchFilePicker("video");
+        } else if (id == R.id.bt_audio) {
+            launchFilePicker("audio");
+        } else if (id == R.id.bt_documento) {
+            launchFilePicker("text/plain");
         }
     }
 

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppGestionTareas">
         <activity
-            android:name=".ui.crud.BaseFilePickerActivity"
+            android:name=".controlador.BaseFilePickerActivity"
             android:exported="false" />
         <activity
             android:name=".ui.prefs.SettingsActivity"

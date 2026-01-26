@@ -168,11 +168,6 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
             launcher.launch(intent);
         } else if (id == R.id.item_prioritarias) {
             // TODO implement filter
-//            if (!filtradoActualmente) {
-//                filtradoActualmente = true;
-//            } else {
-//                filtradoActualmente = false;
-//            }
         } else if (id == R.id.item_preferencias) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.item_salir) {
