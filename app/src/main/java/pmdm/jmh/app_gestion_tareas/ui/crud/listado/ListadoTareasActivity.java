@@ -117,15 +117,6 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                     TextView.INVISIBLE
             );
         });
-
-
-        if (adaptadorTarea.getDatos().isEmpty()) {
-            rvTareas.setVisibility(RecyclerView.INVISIBLE);
-            tvSinTareas.setVisibility(TextView.VISIBLE);
-        } else {
-            rvTareas.setVisibility(RecyclerView.VISIBLE);
-            tvSinTareas.setVisibility(TextView.INVISIBLE);
-        }
     }
 
     @Override

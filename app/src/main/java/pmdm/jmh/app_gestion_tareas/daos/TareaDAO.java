@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -36,4 +37,8 @@ public interface TareaDAO {
     @Delete
     //Método que realiza el borrado anterior
     void delete(Tarea tarea);
+
+    @Update
+    // Método que realiza una operación de actualización
+    void update(Tarea tarea);
 }

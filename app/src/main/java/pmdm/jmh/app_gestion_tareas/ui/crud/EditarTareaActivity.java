@@ -12,6 +12,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
 import java.time.LocalDate;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
@@ -129,14 +131,29 @@ public class EditarTareaActivity extends AppCompatActivity implements
             fechaObjetivoValue = HelperClass.stringToDate(fechaObjetivoStr);
             progresoValue = (byte) (25 * progresoIndex);
 
+            Tarea tareaEditada = new Tarea(
+                    titulo,
+                    fechaInicioValue,
+                    fechaObjetivoValue,
+                    progresoValue,
+                    prioridad,
+                    descripcion
+            );
+            tareaEditada.setId(idTarea);
+
             intent.putExtra(ARG_OP, OPERACION_ACTUAL);
-            intent.putExtra(ARG_ID_TAREA, idTarea);
-            intent.putExtra(ARG_PARAM1, titulo);
-            intent.putExtra(ARG_PARAM2, fechaInicioValue);
-            intent.putExtra(ARG_PARAM3, fechaObjetivoValue);
-            intent.putExtra(ARG_PARAM4, progresoValue);
-            intent.putExtra(ARG_PARAM5, prioridad);
-            intent.putExtra(ARG_PARAM6, descripcion);
+            try {
+                Executor executor = Executors.newSingleThreadExecutor();
+                executor.execute(new EditarTarea(tareaEditada));
+                setResult(RESULT_OK, intent);
+            } catch (Exception e) {
+                setResult(RESULT_CANCELED, intent);
+            } finally {
+                finish();
+            }
+
+            // TODO fix exception here
+
             setResult(RESULT_OK, intent);
             finish();
         }
@@ -145,5 +162,18 @@ public class EditarTareaActivity extends AppCompatActivity implements
     @Override
     public void onBotonAdjuntarArchivoClicked() {
 
+    }
+
+    class EditarTarea implements Runnable {
+        private Tarea tarea;
+
+        public EditarTarea(Tarea tarea) {
+            this.tarea = tarea;
+        }
+
+        @Override
+        public void run() {
+            databaseApp.tareaDAO().update(this.tarea);
+        }
     }
 }

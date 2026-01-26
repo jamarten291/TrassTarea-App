@@ -118,9 +118,7 @@ public class CrearTareaActivity extends AppCompatActivity implements
 
             Intent intent = new Intent();
 
-            // Indicador de operación de inserción
-            intent.putExtra(ARG_OP, 1);
-
+            intent.putExtra(ARG_OP, OPERACION_ACTUAL);
             try {
                 Executor executor = Executors.newSingleThreadExecutor();
                 executor.execute(new CrearTarea(nuevaTarea));
