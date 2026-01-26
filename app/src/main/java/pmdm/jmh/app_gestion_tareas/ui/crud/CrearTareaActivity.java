@@ -3,31 +3,30 @@ package pmdm.jmh.app_gestion_tareas.ui.crud;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
-import java.time.LocalDate;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
+import pmdm.jmh.app_gestion_tareas.controlador.FilePickerUtils;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
 import pmdm.jmh.app_gestion_tareas.ui.fragmentos.FragmentoA;
 import pmdm.jmh.app_gestion_tareas.ui.fragmentos.FragmentoB;
 
-public class CrearTareaActivity extends AppCompatActivity implements
+public class CrearTareaActivity extends BaseFilePickerActivity implements
         FragmentoA.ComunicacionFragmentoA,
         FragmentoB.ComunicacionFragmentoB,
         DataArguments
@@ -42,24 +41,6 @@ public class CrearTareaActivity extends AppCompatActivity implements
     private FragmentoB fragmentoB;
     private FragmentManager fragmentManager;
     private DatabaseApp databaseApp;
-
-    // TODO implement file picker
-    private final ActivityResultLauncher<Intent> openDocumentLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    Uri uri = result.getData().getData();
-                    if (uri != null) {
-                        // Usa el URI (leer contenido, persistir permiso, etc.)
-                        getContentResolver().takePersistableUriPermission(
-                                uri,
-                                Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                        );
-                        Toast.makeText(this, "Archivo seleccionado: " + uri.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +60,25 @@ public class CrearTareaActivity extends AppCompatActivity implements
 
         if(savedInstanceState == null)
             fragmentManager.beginTransaction().add(R.id.frag_container, fragmentoA).commit();
+    }
+
+    @Override
+    protected void onFilePicked(Uri uri, String tipo) {
+        switch (tipo) {
+            case "img":
+                URL_img = uri.getPath();
+                break;
+            case "vid":
+                URL_vid = uri.getPath();
+                break;
+            case "aud":
+                URL_aud = uri.getPath();
+                break;
+            case "doc":
+                URL_doc = uri.getPath();
+                break;
+            default:
+        }
     }
 
     @Override
@@ -130,10 +130,10 @@ public class CrearTareaActivity extends AppCompatActivity implements
                     fechaInicio,
                     fechaObjetivo,
                     prioridad,
-                    null,
-                    null,
-                    null,
-                    null
+                    URL_doc,
+                    URL_img,
+                    URL_aud,
+                    URL_vid
             );
 
             intent.putExtra(ARG_OP, OPERACION_ACTUAL);
@@ -150,11 +150,12 @@ public class CrearTareaActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFilePickerClicked(String file) {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType(file + "/*");
-        openDocumentLauncher.launch(intent);
+    public void onFilePickerClicked(View view) {
+        int id = view.getId();
+
+        if (id == R.id.bt_imagen) {
+            launchFilePicker("image");
+        }
     }
 
     class CrearTarea implements Runnable {

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.controlador.FilePickerUtils;
 import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
 
 /**
@@ -25,7 +26,7 @@ public class FragmentoB extends Fragment implements DataArguments {
     public interface ComunicacionFragmentoB {
         void onBotonVolverClicked();
         void onBotonGuardarClicked();
-        void onFilePickerClicked(String file);
+        void onFilePickerClicked(View view);
     }
     private ComunicacionFragmentoB comunicador;
 
@@ -92,10 +93,10 @@ public class FragmentoB extends Fragment implements DataArguments {
         btGuardar.setOnClickListener(v -> comunicador.onBotonGuardarClicked());
         btVolver.setOnClickListener(v -> comunicador.onBotonVolverClicked());
 
-        btAdjImagen.setOnClickListener(v -> comunicador.onFilePickerClicked("image"));
-        btAdjVideo.setOnClickListener(v -> comunicador.onFilePickerClicked("video"));
-        btAdjAudio.setOnClickListener(v -> comunicador.onFilePickerClicked("audio"));
-        btAdjDocumento.setOnClickListener(v -> comunicador.onFilePickerClicked("document"));
+        btAdjImagen.setOnClickListener(v -> comunicador.onFilePickerClicked(v));
+        btAdjVideo.setOnClickListener(v -> comunicador.onFilePickerClicked(v));
+        btAdjAudio.setOnClickListener(v -> comunicador.onFilePickerClicked(v));
+        btAdjDocumento.setOnClickListener(v -> comunicador.onFilePickerClicked(v));
 
         // Datos de la descripción en caso de que hubiese una escrita
         etDescripcion.setText(descripcion);

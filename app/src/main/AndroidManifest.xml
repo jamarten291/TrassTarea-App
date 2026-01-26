@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppGestionTareas">
         <activity
+            android:name=".ui.crud.BaseFilePickerActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.prefs.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />
