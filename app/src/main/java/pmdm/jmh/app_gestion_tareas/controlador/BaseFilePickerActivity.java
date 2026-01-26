@@ -3,6 +3,7 @@ package pmdm.jmh.app_gestion_tareas.controlador;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -27,6 +28,8 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
 
                             // Llama a un method abstracto para hacer algo con el archivo
                             onFilePicked(uri, tipo);
+
+                            // TODO give information to the user after file attachment via text fields
                         }
                     }
                 }

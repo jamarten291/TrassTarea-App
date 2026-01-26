@@ -23,13 +23,10 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
@@ -42,7 +39,6 @@ import pmdm.jmh.app_gestion_tareas.ui.crud.EditarTareaActivity;
 import pmdm.jmh.app_gestion_tareas.ui.prefs.SettingsActivity;
 
 public class ListadoTareasActivity extends AppCompatActivity implements DataArguments {
-    private List<Tarea> listaTareas = new ArrayList<>();
     private TareaAdapter adaptadorTarea;
     private RecyclerView rvTareas;
     private TextView tvSinTareas;
@@ -89,7 +85,10 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         databaseApp = DatabaseApp.getInstance(getApplicationContext());
 
         // Inicialización de adaptador del RecyclerView
-        adaptadorTarea = new TareaAdapter(listaTareas);
+        adaptadorTarea = new TareaAdapter(
+                // Se inicializa con lista vacía
+                new ArrayList<>()
+        );
         rvTareas.setAdapter(adaptadorTarea);
         rvTareas.setLayoutManager(
                 new LinearLayoutManager(this,
@@ -102,10 +101,6 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         viewModel.getTareas().observe(this, v -> {
             // Se actualiza la lista del RecyclerView
             adaptadorTarea.setDatos(v);
-
-            // Se actualiza la lista actual
-            listaTareas.clear();
-            listaTareas.addAll(v);
 
             // Visibilidad según haya notas o no
             rvTareas.setVisibility(v.isEmpty() ?
@@ -184,7 +179,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         int itemId = item.getItemId();
 
         // Se intenta obtener la posición de la tarea seleccionada
-        int posicion = -1;
+        int posicion;
         try {
             posicion = adaptadorTarea.getPosicion();
         } catch (Exception e) {
