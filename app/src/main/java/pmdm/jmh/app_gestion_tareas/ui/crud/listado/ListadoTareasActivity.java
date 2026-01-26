@@ -61,7 +61,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                             Toast.makeText(this, R.string.operacion_agregar, Toast.LENGTH_SHORT).show();
                             break;
                         case 2:
-                            // TODO implement edit functionality
+                            Toast.makeText(this, R.string.operacion_actualizar, Toast.LENGTH_SHORT).show();
                             break;
                         default:
                             Toast.makeText(this, R.string.operacion_error, Toast.LENGTH_SHORT).show();
@@ -226,14 +226,6 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
 
         public EliminarTarea(Tarea tarea) {
             this.tarea = tarea;
-        }
-
-        public EliminarTarea(int id) {
-            // Busca por id y devuelve la primera ocurrencia
-            this.tarea = databaseApp
-                    .tareaDAO()
-                    .loadAllByIds(new int[] {id})
-                    .get(0);
         }
 
         @Override

@@ -31,10 +31,8 @@ public class CrearTareaActivity extends AppCompatActivity implements
 
     private final int OPERACION_ACTUAL = 1;
     private String titulo;
-    private String fechaInicioStr;
-    private String fechaObjetivoStr;
-    private LocalDate fechaInicioValue;
-    private LocalDate fechaObjetivoValue;
+    private String fechaInicio;
+    private String fechaObjetivo;
     private int progresoIndex;
     private byte progresoValue;
     private boolean prioridad;
@@ -67,12 +65,12 @@ public class CrearTareaActivity extends AppCompatActivity implements
     @Override
     public void onBotonSiguienteClicked() {
         titulo = fragmentoA.getTitulo();
-        fechaInicioStr = fragmentoA.getFechaInicio();
-        fechaObjetivoStr = fragmentoA.getFechaObjetivo();
+        fechaInicio = fragmentoA.getFechaInicio();
+        fechaObjetivo = fragmentoA.getFechaObjetivo();
         progresoIndex = fragmentoA.getProgresoIndex();
         prioridad = fragmentoA.isPrioridad();
 
-        fragmentoB = FragmentoB.newInstance(titulo, fechaInicioStr, fechaObjetivoStr, progresoIndex, prioridad, descripcion);
+        fragmentoB = FragmentoB.newInstance(titulo, fechaInicio, fechaObjetivo, progresoIndex, prioridad, descripcion);
         if (!fragmentoB.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoB).commit();
         }
@@ -89,7 +87,7 @@ public class CrearTareaActivity extends AppCompatActivity implements
     public void onBotonVolverClicked() {
         descripcion = fragmentoB.getDescripcion();
 
-        fragmentoA = FragmentoA.newInstance(titulo, fechaInicioStr, fechaObjetivoStr, progresoIndex, prioridad);
+        fragmentoA = FragmentoA.newInstance(titulo, fechaInicio, fechaObjetivo, progresoIndex, prioridad);
         if (!fragmentoA.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoA).commit();
         }
@@ -99,24 +97,25 @@ public class CrearTareaActivity extends AppCompatActivity implements
     public void onBotonGuardarClicked() {
         descripcion = fragmentoB.getDescripcion();
 
-        if (titulo.isEmpty() || fechaInicioStr.isEmpty() || fechaObjetivoStr.isEmpty() ||
+        if (titulo.isEmpty() || fechaInicio.isEmpty() || fechaObjetivo.isEmpty() ||
             progresoIndex == Spinner.INVALID_POSITION || descripcion.isEmpty()) {
             HelperClass.showBasicAlertDialog(this, R.string.error, R.string.invalid_input_error);
         } else {
-            fechaInicioValue = HelperClass.stringToDate(fechaInicioStr);
-            fechaObjetivoValue = HelperClass.stringToDate(fechaObjetivoStr);
-            progresoValue = (byte) (25 * progresoIndex);
+            Intent intent = new Intent();
 
+            progresoValue = (byte) (25 * progresoIndex);
             Tarea nuevaTarea = new Tarea(
                     titulo,
-                    fechaInicioValue,
-                    fechaObjetivoValue,
+                    descripcion,
                     progresoValue,
+                    fechaInicio,
+                    fechaObjetivo,
                     prioridad,
-                    descripcion
+                    null,
+                    null,
+                    null,
+                    null
             );
-
-            Intent intent = new Intent();
 
             intent.putExtra(ARG_OP, OPERACION_ACTUAL);
             try {

@@ -41,31 +41,17 @@ public class Tarea implements Parcelable {
     private String URL_aud;
     private String URL_vid;
 
-    public Tarea(String titulo, LocalDate fechaCreacion, LocalDate fechaObjetivo, byte progreso, boolean prioritaria, String descripcion) {
+    public Tarea(@NonNull String titulo, String descripcion, byte progreso, @NonNull String fechaCreacion, @NonNull String fechaObjetivo, boolean prioritaria, String URL_doc, String URL_img, String URL_aud, String URL_vid) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.progreso = progreso;
-        this.fechaCreacion = HelperClass.dateToString(fechaCreacion);
-        this.fechaObjetivo = HelperClass.dateToString(fechaObjetivo);
-        this.prioritaria = prioritaria;
-    }
-
-    public Tarea(@NonNull String titulo, String descripcion, byte progreso, @NonNull LocalDate fechaCreacion, @NonNull LocalDate fechaObjetivo, boolean prioritaria, String URL_doc, String URL_img, String URL_aud, String URL_vid) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.progreso = progreso;
-        this.fechaCreacion = HelperClass.dateToString(fechaCreacion);
-        this.fechaObjetivo = HelperClass.dateToString(fechaObjetivo);
+        this.fechaCreacion = fechaCreacion;
+        this.fechaObjetivo = fechaObjetivo;
         this.prioritaria = prioritaria;
         this.URL_doc = URL_doc;
         this.URL_img = URL_img;
         this.URL_aud = URL_aud;
         this.URL_vid = URL_vid;
-    }
-
-    public Tarea(int id) {
-        this.id = id;
-        titulo = "";
     }
 
     public String getTitulo() {
