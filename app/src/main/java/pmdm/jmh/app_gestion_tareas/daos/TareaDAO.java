@@ -23,6 +23,10 @@ public interface TareaDAO {
     //Method que realiza la consulta anterior
     List<Tarea> loadAllByIds(int[] tareaIds);
 
+    // Anotación que permite encontrar tareas por identificador
+    @Query("SELECT * FROM tarea WHERE _id LIKE :id LIMIT 1")
+    LiveData<Tarea> findById(int id);
+
     //Anotación que permite realizar una consulta para un producto para un nombre determinado
     @Query("SELECT * FROM tarea WHERE titulo LIKE :tarea LIMIT 1")
     //Method que realiza la consulta anterior

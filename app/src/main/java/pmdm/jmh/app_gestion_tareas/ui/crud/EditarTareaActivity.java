@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -20,7 +18,6 @@ import java.util.concurrent.Executors;
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
 import pmdm.jmh.app_gestion_tareas.controlador.BaseFilePickerActivity;
-import pmdm.jmh.app_gestion_tareas.controlador.FilePickerUtils;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
@@ -32,9 +29,7 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
         FragmentoB.ComunicacionFragmentoB,
         DataArguments
 {
-
-    private int idTarea;
-    private Tarea tarea;
+    private Tarea tareaPorEditar;
     private final int OPERACION_ACTUAL = 2;
     private String titulo, fechaInicio, fechaObjetivo, descripcion;
     private String URL_img, URL_aud, URL_vid, URL_doc;
@@ -57,27 +52,28 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
             return insets;
         });
 
+        // Instancio un DatabaseApp
+        databaseApp = DatabaseApp.getInstance(getApplicationContext());
+
         // Recupero los datos lanzados desde la actividad ListadoTareas
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            tarea = extras.getParcelable(ARG_TAREA, Tarea.class);
+            // Almaceno la tarea mandada en la intención en una variable
+            tareaPorEditar = extras.getParcelable(ARG_TAREA, Tarea.class);
 
-            // Identificador estático de la tarea
-            idTarea = tarea.getIdTarea();
-
-            descripcion = tarea.getDescripcion();
+            // Se actualizan los datos con la tarea encontrada
+            descripcion = tareaPorEditar.getDescripcion();
             fragmentoA = FragmentoA.newInstance(
-                    tarea.getTitulo(),
-                    tarea.getFechaCreacion(),
-                    tarea.getFechaObjetivo(),
-                    tarea.getProgreso(),
-                    tarea.isPrioritaria()
+                    tareaPorEditar.getTitulo(),
+                    tareaPorEditar.getFechaCreacion(),
+                    tareaPorEditar.getFechaObjetivo(),
+                    tareaPorEditar.getProgreso(),
+                    tareaPorEditar.isPrioritaria()
             );
 
+            // Se inicializan los fragmentos
             fragmentManager = getSupportFragmentManager();
-
-            databaseApp = DatabaseApp.getInstance(getApplicationContext());
             if(savedInstanceState == null)
                 fragmentManager.beginTransaction().add(R.id.frag_container, fragmentoA).commit();
         } else {
@@ -139,7 +135,7 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
                     URL_aud,
                     URL_vid
             );
-            tareaEditada.setId(idTarea);
+            tareaEditada.setId(tareaPorEditar.getId());
 
             intent.putExtra(ARG_OP, OPERACION_ACTUAL);
             try {

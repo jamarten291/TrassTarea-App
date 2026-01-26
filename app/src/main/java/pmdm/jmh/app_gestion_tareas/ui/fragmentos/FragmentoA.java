@@ -84,7 +84,12 @@ public class FragmentoA extends Fragment implements DataArguments {
             titulo = getArguments().getString(ARG_PARAM1);
             fechaInicio = getArguments().getString(ARG_PARAM2);
             fechaObjetivo = getArguments().getString(ARG_PARAM3);
-            progresoIndex = getArguments().getInt(ARG_PARAM4);
+
+            // El valor de progreso de una tarea es un número del 1 al 100
+            // Se divide el valor de progreso de la tarea para obtener el índice del spinner
+            int progresoValue = getArguments().getInt(ARG_PARAM4);
+            progresoIndex = progresoValue / 25;
+
             prioridad = getArguments().getBoolean(ARG_PARAM5);
         }
     }
