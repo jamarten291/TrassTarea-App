@@ -1,10 +1,14 @@
 package pmdm.jmh.app_gestion_tareas.ui.crud;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -28,19 +32,34 @@ public class CrearTareaActivity extends AppCompatActivity implements
         FragmentoB.ComunicacionFragmentoB,
         DataArguments
 {
-
     private final int OPERACION_ACTUAL = 1;
-    private String titulo;
-    private String fechaInicio;
-    private String fechaObjetivo;
+    private String titulo, fechaInicio, fechaObjetivo, descripcion;
+    private String URL_img, URL_aud, URL_vid, URL_doc;
     private int progresoIndex;
     private byte progresoValue;
     private boolean prioridad;
-    private String descripcion;
     private FragmentoA fragmentoA;
     private FragmentoB fragmentoB;
     private FragmentManager fragmentManager;
     private DatabaseApp databaseApp;
+
+    // TODO implement file picker
+    private final ActivityResultLauncher<Intent> openDocumentLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Uri uri = result.getData().getData();
+                    if (uri != null) {
+                        // Usa el URI (leer contenido, persistir permiso, etc.)
+                        getContentResolver().takePersistableUriPermission(
+                                uri,
+                                Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                        );
+                        Toast.makeText(this, "Archivo seleccionado: " + uri.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,8 +150,11 @@ public class CrearTareaActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onBotonAdjuntarArchivoClicked() {
-        // TODO add file attachments
+    public void onFilePickerClicked(String file) {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType(file + "/*");
+        openDocumentLauncher.launch(intent);
     }
 
     class CrearTarea implements Runnable {

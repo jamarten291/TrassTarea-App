@@ -25,18 +25,12 @@ public class FragmentoB extends Fragment implements DataArguments {
     public interface ComunicacionFragmentoB {
         void onBotonVolverClicked();
         void onBotonGuardarClicked();
-        void onBotonAdjuntarArchivoClicked();
+        void onFilePickerClicked(String file);
     }
     private ComunicacionFragmentoB comunicador;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     // Implementado en la interfaz
-
-    private String titulo;
-    private String fechaInicio;
-    private String fechaObjetivo;
-    private int progresoIndex;
-    private boolean prioridad;
     private String descripcion;
 
     private EditText etDescripcion;
@@ -74,11 +68,6 @@ public class FragmentoB extends Fragment implements DataArguments {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            titulo = getArguments().getString(ARG_PARAM1);
-            fechaInicio = getArguments().getString(ARG_PARAM2);
-            fechaObjetivo = getArguments().getString(ARG_PARAM3);
-            progresoIndex = getArguments().getInt(ARG_PARAM4);
-            prioridad = getArguments().getBoolean(ARG_PARAM5);
             descripcion = getArguments().getString(ARG_PARAM6);
         }
     }
@@ -103,10 +92,10 @@ public class FragmentoB extends Fragment implements DataArguments {
         btGuardar.setOnClickListener(v -> comunicador.onBotonGuardarClicked());
         btVolver.setOnClickListener(v -> comunicador.onBotonVolverClicked());
 
-        btAdjImagen.setOnClickListener(v -> comunicador.onBotonAdjuntarArchivoClicked());
-        btAdjVideo.setOnClickListener(v -> comunicador.onBotonAdjuntarArchivoClicked());
-        btAdjAudio.setOnClickListener(v -> comunicador.onBotonAdjuntarArchivoClicked());
-        btAdjDocumento.setOnClickListener(v -> comunicador.onBotonAdjuntarArchivoClicked());
+        btAdjImagen.setOnClickListener(v -> comunicador.onFilePickerClicked("image"));
+        btAdjVideo.setOnClickListener(v -> comunicador.onFilePickerClicked("video"));
+        btAdjAudio.setOnClickListener(v -> comunicador.onFilePickerClicked("audio"));
+        btAdjDocumento.setOnClickListener(v -> comunicador.onFilePickerClicked("document"));
 
         // Datos de la descripción en caso de que hubiese una escrita
         etDescripcion.setText(descripcion);
@@ -114,28 +103,8 @@ public class FragmentoB extends Fragment implements DataArguments {
         return fragmentoB;
     }
 
+    // Getters para recuperar la descripción y los enlaces a los archivos
     public String getDescripcion() {
         return etDescripcion.getText().toString();
-    }
-
-    // Getters para recuperar los datos desde la actividad (recupera las variables)
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public String getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public String getFechaObjetivo() {
-        return fechaObjetivo;
-    }
-
-    public boolean isPrioridad() {
-        return prioridad;
-    }
-
-    public int getProgresoIndex() {
-        return progresoIndex;
     }
 }
