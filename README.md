@@ -1,4 +1,4 @@
-# App Gestión de Tareas
+# TrassTarea
 
 App de Android desarrollada en Java para crear, organizar y hacer seguimiento de tareas personales o de equipo. Proporciona una interfaz sencilla basada en Material Design para gestionar tareas con prioridades, fechas de vencimiento y estados (pendiente/completada).
 
@@ -29,8 +29,6 @@ App de Android desarrollada en Java para crear, organizar y hacer seguimiento de
 - Arquitectura: ViewModel, LiveData
 - Tests: JUnit, Espresso
 - Control de versiones: Git / GitHub
-
-Ajusta esta lista si tu proyecto ya integra otras dependencias específicas.
 
 ---
 
