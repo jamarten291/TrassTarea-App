@@ -96,6 +96,14 @@ public class Tarea implements Parcelable {
         return fechaObjetivo;
     }
 
+    public LocalDate getFechaCreacionLocalDate() {
+        return HelperClass.stringToDate(this.fechaCreacion);
+    }
+
+    public LocalDate getFechaObjetivoLocalDate() {
+        return HelperClass.stringToDate(this.fechaObjetivo);
+    }
+
     public boolean isPrioritaria() {
         return prioritaria;
     }

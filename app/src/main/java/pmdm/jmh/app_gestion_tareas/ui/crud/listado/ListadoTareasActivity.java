@@ -2,6 +2,7 @@ package pmdm.jmh.app_gestion_tareas.ui.crud.listado;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +24,11 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -42,9 +47,14 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
     private TareaAdapter adaptadorTarea;
     private RecyclerView rvTareas;
     private TextView tvSinTareas;
-    private boolean filtradoActualmente = false;
     private DatabaseApp databaseApp;
     private ListadoTareasViewModel viewModel;
+
+    // Preferencias
+    private boolean filtradoActualmente = false;
+    private String criterioOrden;
+    private boolean ordenAsc;
+
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -136,9 +146,36 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
             setTheme(R.style.Theme_App_NormalText);
         }
 
-        String criterioOrden = userDetails.getString("criterio", "2");
-        boolean ordenAsc = userDetails.getBoolean("orden", true);
+        criterioOrden = userDetails.getString("criterio", "2");
+        ordenAsc = userDetails.getBoolean("orden", true);
         boolean almacenamientoSd = userDetails.getBoolean("sd", false);
+    }
+
+    private void ordenarSegunPreferencias(ArrayList<Tarea> listaDesordenada) {
+        switch (criterioOrden) {
+            case "1":
+                listaDesordenada.sort(
+                        Comparator.comparingInt(t -> t.getTitulo().charAt(0))
+                );
+                break;
+            case "2":
+                listaDesordenada.sort(
+                        Comparator.comparingLong(t ->
+                                t.getFechaCreacionLocalDate().get(ChronoField.INSTANT_SECONDS))
+                );
+                break;
+            case "3":
+                break;
+            case "4":
+                listaDesordenada.sort(
+                        Comparator.comparingInt(Tarea::getProgreso)
+                );
+                break;
+        }
+
+        if (!ordenAsc) {
+            Collections.reverse(listaDesordenada);
+        }
     }
 
     @Override
@@ -162,7 +199,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
             Intent intent = new Intent(this, CrearTareaActivity.class);
             launcher.launch(intent);
         } else if (id == R.id.item_prioritarias) {
-            // TODO implement filter
+            filtradoActualmente = !filtradoActualmente;
         } else if (id == R.id.item_preferencias) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.item_salir) {
