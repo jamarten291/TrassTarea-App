@@ -1,6 +1,7 @@
 package pmdm.jmh.app_gestion_tareas.adaptadores;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -19,8 +20,11 @@ import java.util.List;
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
+import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
+import pmdm.jmh.app_gestion_tareas.ui.crud.DescripcionActivity;
 
-public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHolder> {
+public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHolder>
+    implements DataArguments {
     private List<Tarea> adaptadorTarea;
     private int posicion;
 
@@ -153,10 +157,13 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
             // Consigo la posición del adaptador para acceder a la tarea clickeada y mostrar su descripción
             int pos = getBindingAdapterPosition();
             if (pos != RecyclerView.NO_POSITION) {
-                String titulo = tareaActual.getTitulo();
-                String descripcion = tareaActual.getDescripcion();
-
-                HelperClass.showBasicAlertDialog(c, titulo, descripcion);
+                Intent intent = new Intent(c, DescripcionActivity.class);
+                intent.putExtra(ARG_PARAM6, tareaActual.getDescripcion());
+                intent.putExtra(ARG_IMAGEN, tareaActual.getURL_img());
+                intent.putExtra(ARG_VIDEO, tareaActual.getURL_vid());
+                intent.putExtra(ARG_AUDIO, tareaActual.getURL_aud());
+                intent.putExtra(ARG_DOC, tareaActual.getURL_doc());
+                c.startActivity(intent);
             }
         }
     }

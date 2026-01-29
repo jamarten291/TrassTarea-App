@@ -70,5 +70,6 @@
         <item>Progress</item>
     </string-array>
     <string name="tv_add_file">Attach a file</string>
+    <string name="descripcion">Description</string>
 
 </resources>

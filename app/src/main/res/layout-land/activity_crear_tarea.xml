@@ -9,7 +9,7 @@
     tools:context=".ui.crud.CrearTareaActivity">
 
     <TextView
-        android:id="@+id/tv_titulo"
+        android:id="@+id/tv_detalles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -28,6 +28,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_titulo"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tv_detalles"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,5 +10,9 @@ public interface DataArguments {
     String ARG_TAREA = "tarea";
     String ARG_ID_TAREA = "idTarea";
     String ARG_OP = "operacion";
+    String ARG_IMAGEN = "uri_imagen";
+    String ARG_VIDEO = "uri_video";
+    String ARG_AUDIO = "uri_audio";
+    String ARG_DOC = "uri_documento";
 
 }
