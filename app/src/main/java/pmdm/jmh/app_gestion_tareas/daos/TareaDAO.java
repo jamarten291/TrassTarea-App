@@ -5,7 +5,9 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Update;
+import androidx.sqlite.db.SimpleSQLiteQuery;
 
 import java.util.List;
 
@@ -17,6 +19,10 @@ public interface TareaDAO {
     // Listar todas las tareas
     @Query("SELECT * FROM tarea")
     LiveData<List<Tarea>> getAll();
+
+    // Listar tareas con una consulta SQL cruda pasada por parámetro
+    @RawQuery(observedEntities = Tarea.class)
+    LiveData<List<Tarea>> getTareasConQuery(SimpleSQLiteQuery query);
 
     //Anotación que permite realizar una consulta para las tareas con unos ids determinados
     @Query("SELECT * FROM tarea WHERE _id IN (:tareaIds)")
@@ -45,19 +51,4 @@ public interface TareaDAO {
     @Update
     // Method que realiza una operación de actualización
     void update(Tarea tarea);
-
-    @Query("SELECT * FROM tarea ORDER BY " +
-            // título
-            "CASE WHEN :criterioOrdenamiento = '1' AND :asc = 1 THEN titulo END ASC, " +
-            "CASE WHEN :criterioOrdenamiento = '1' AND :asc = 0 THEN titulo END DESC, " +
-            // fechaCreacion
-            "CASE WHEN :criterioOrdenamiento = '2' AND :asc = 1 THEN fechaCreacion END ASC, " +
-            "CASE WHEN :criterioOrdenamiento = '2' AND :asc = 0 THEN fechaCreacion END DESC, " +
-            // fechaObjetivo
-            "CASE WHEN :criterioOrdenamiento = '3' AND :asc = 1 THEN fechaObjetivo END ASC, " +
-            "CASE WHEN :criterioOrdenamiento = '3' AND :asc = 0 THEN fechaObjetivo END DESC, " +
-            // progreso
-            "CASE WHEN :criterioOrdenamiento = '4' AND :asc = 1 THEN progreso END ASC, " +
-            "CASE WHEN :criterioOrdenamiento = '4' AND :asc = 0 THEN progreso END DESC")
-    LiveData<List<Tarea>> getTareasFiltradasYOrdenadas(String criterioOrdenamiento, int asc);
 }

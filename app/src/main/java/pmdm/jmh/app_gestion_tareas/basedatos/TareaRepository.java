@@ -3,6 +3,7 @@ package pmdm.jmh.app_gestion_tareas.basedatos;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+import androidx.sqlite.db.SimpleSQLiteQuery;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -20,13 +21,35 @@ public class TareaRepository {
         tareaDao = db.tareaDAO();
     }
 
-    public LiveData<List<Tarea>> getTareasFiltradasYOrdenadas(String criterioOrdenamiento, boolean asc) {
-        return tareaDao.getTareasFiltradasYOrdenadas(criterioOrdenamiento, asc ? 1 : 0);
+    // Este method construye una consulta personalizada según sus criterios
+    public LiveData<List<Tarea>> getTareas(boolean soloPrioritarias, String criterioOrdenamiento, boolean asc) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT * FROM tarea");
+
+        // WHERE
+        if (soloPrioritarias) {
+            sql.append(" WHERE prioritaria = 1");
+        }
+
+        // ORDER BY
+        String columna;
+        switch (criterioOrdenamiento) {
+            case "2": columna = "fechaCreacion"; break;
+            case "3": columna = "fechaObjetivo"; break;
+            case "4": columna = "progreso"; break;
+            case "1":
+            default: columna = "titulo"; break;
+        }
+        sql.append(" ORDER BY ").append(columna).append(asc ? " ASC" : " DESC");
+
+        SimpleSQLiteQuery query = new SimpleSQLiteQuery(sql.toString());
+        return tareaDao.getTareasConQuery(query);
     }
 
-    // CRUD
+    // CRUD implementado en el repositorio
     public boolean insertarTarea(Tarea t) {
         try {
+            // Lanzo un runnable que inserta una tarea con executor
             executor.execute(() -> tareaDao.insertAll(t));
             return true;
         } catch (Exception e) {

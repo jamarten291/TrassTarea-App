@@ -108,23 +108,24 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
 
         // Se inicia el ViewModel para poder ver los cambios de los datos en tiempo real
         viewModel = new ViewModelProvider(this).get(ListadoTareasViewModel.class);
-        viewModel.getTareasOrdenadas(criterioOrden, ordenAsc).observe(this, v -> {
+        viewModel.getTareas().observe(this, v -> {
             adaptadorTarea.setDatos(v);
 
             // Visibilidad según haya notas o no
-            rvTareas.setVisibility(v.isEmpty() ?
-                    RecyclerView.INVISIBLE :
-                    RecyclerView.VISIBLE
+            rvTareas.setVisibility(v.isEmpty()
+                    ? RecyclerView.INVISIBLE
+                    : RecyclerView.VISIBLE
             );
-            tvSinTareas.setVisibility(v.isEmpty() ?
-                    TextView.VISIBLE :
-                    TextView.INVISIBLE
+            tvSinTareas.setVisibility(v.isEmpty()
+                    ? TextView.VISIBLE
+                    : TextView.INVISIBLE
             );
         });
     }
 
     @Override
     protected void onResume() {
+        // Este method también se ejecuta al iniciar la app
         super.onResume();
         SharedPreferences userDetails = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -148,6 +149,9 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         criterioOrden = userDetails.getString("criterio", "2");
         ordenAsc = userDetails.getBoolean("orden", true);
         almacenamientoSd = userDetails.getBoolean("sd", false);
+
+        // Actualiza los criterios de ordenación en el ViewModel
+        viewModel.setParams(filtroPorPrioridad, criterioOrden, ordenAsc);
     }
 
     @Override
@@ -172,6 +176,9 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
             launcher.launch(intent);
         } else if (id == R.id.item_prioritarias) {
             filtroPorPrioridad = !filtroPorPrioridad;
+
+            // Vuelve a actualizar los criterios de ordenación para aplicar cambios
+            viewModel.setParams(filtroPorPrioridad, criterioOrden, ordenAsc);
         } else if (id == R.id.item_preferencias) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.item_salir) {
