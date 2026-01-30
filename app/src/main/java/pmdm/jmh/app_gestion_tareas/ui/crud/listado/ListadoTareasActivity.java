@@ -2,7 +2,6 @@ package pmdm.jmh.app_gestion_tareas.ui.crud.listado;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,14 +23,13 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
@@ -51,9 +49,10 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
     private ListadoTareasViewModel viewModel;
 
     // Preferencias
-    private boolean filtradoActualmente = false;
+    private boolean filtroPorPrioridad = false;
     private String criterioOrden;
     private boolean ordenAsc;
+    private boolean almacenamientoSd;
 
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -109,8 +108,20 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         // Se inicia el ViewModel para poder ver los cambios de los datos en tiempo real
         viewModel = new ViewModelProvider(this).get(ListadoTareasViewModel.class);
         viewModel.getTareas().observe(this, v -> {
+            // TODO fix filtering bugs
+            ordenarSegunPreferencias(v);
+
             // Se actualiza la lista del RecyclerView
-            adaptadorTarea.setDatos(v);
+            if (filtroPorPrioridad) {
+                // Se aplica un filtro según las tareas sean prioritarias o no
+                adaptadorTarea.setDatos(v
+                        .stream()
+                        .filter(Tarea::isPrioritaria)
+                        .collect(Collectors.toList())
+                );
+            } else {
+                adaptadorTarea.setDatos(v);
+            }
 
             // Visibilidad según haya notas o no
             rvTareas.setVisibility(v.isEmpty() ?
@@ -148,10 +159,10 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
 
         criterioOrden = userDetails.getString("criterio", "2");
         ordenAsc = userDetails.getBoolean("orden", true);
-        boolean almacenamientoSd = userDetails.getBoolean("sd", false);
+        almacenamientoSd = userDetails.getBoolean("sd", false);
     }
 
-    private void ordenarSegunPreferencias(ArrayList<Tarea> listaDesordenada) {
+    private void ordenarSegunPreferencias(List<Tarea> listaDesordenada) {
         switch (criterioOrden) {
             case "1":
                 listaDesordenada.sort(
@@ -161,10 +172,15 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
             case "2":
                 listaDesordenada.sort(
                         Comparator.comparingLong(t ->
-                                t.getFechaCreacionLocalDate().get(ChronoField.INSTANT_SECONDS))
+                                // Epoch Day cuenta los días desde 1/1/1970 hasta la fecha seleccionada
+                                t.getFechaCreacionLocalDate().toEpochDay())
                 );
                 break;
             case "3":
+                listaDesordenada.sort(
+                        Comparator.comparingLong(t ->
+                                t.getFechaObjetivoLocalDate().toEpochDay())
+                );
                 break;
             case "4":
                 listaDesordenada.sort(
@@ -199,7 +215,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
             Intent intent = new Intent(this, CrearTareaActivity.class);
             launcher.launch(intent);
         } else if (id == R.id.item_prioritarias) {
-            filtradoActualmente = !filtradoActualmente;
+            filtroPorPrioridad = !filtroPorPrioridad;
         } else if (id == R.id.item_preferencias) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.item_salir) {
