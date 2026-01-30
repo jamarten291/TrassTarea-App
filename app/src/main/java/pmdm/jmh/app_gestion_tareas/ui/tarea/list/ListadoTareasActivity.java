@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.database.repository.TareaRepository;
 import pmdm.jmh.app_gestion_tareas.util.HelperClass;
-import pmdm.jmh.app_gestion_tareas.adapters.TareaAdapter;
+import pmdm.jmh.app_gestion_tareas.ui.adapters.TareaAdapter;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
 import pmdm.jmh.app_gestion_tareas.ui.tarea.create.CrearTareaActivity;
