@@ -22,7 +22,7 @@
             android:exported="false"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".ui.tarea.edit.EditarTareaActivity"
+            android:name=".ui.tarea.update.EditarTareaActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.AppGestionTareas.NoActionBar" />
         <activity

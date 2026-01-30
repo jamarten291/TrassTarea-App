@@ -57,5 +57,6 @@
     <string name="settings_sd">Almacenamiento en tarjeta SD</string>
     <string name="tv_add_file">Adjunta un archivo</string>
     <string name="descripcion">Descripción</string>
+    <string name="archivo_seleccionado">Archivo seleccionado correctamente</string>
 
 </resources>

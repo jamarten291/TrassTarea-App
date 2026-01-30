@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.ui.adapters;
+package pmdm.jmh.app_gestion_tareas.ui.tarea.list.adapters;
 
 import android.content.Context;
 import android.content.Intent;

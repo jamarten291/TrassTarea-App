@@ -20,7 +20,7 @@ import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
 import pmdm.jmh.app_gestion_tareas.ui.fragments.FragmentoA;
 import pmdm.jmh.app_gestion_tareas.ui.fragments.FragmentoB;
-import pmdm.jmh.app_gestion_tareas.ui.tarea.TipoArchivo;
+import pmdm.jmh.app_gestion_tareas.ui.helpers.TipoArchivo;
 
 public class CrearTareaActivity extends BaseFilePickerActivity implements
         FragmentoA.ComunicacionFragmentoA,

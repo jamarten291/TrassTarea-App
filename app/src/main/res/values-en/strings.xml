@@ -71,5 +71,6 @@
     </string-array>
     <string name="tv_add_file">Attach a file</string>
     <string name="descripcion">Description</string>
+    <string name="archivo_seleccionado">File picked successfully</string>
 
 </resources>

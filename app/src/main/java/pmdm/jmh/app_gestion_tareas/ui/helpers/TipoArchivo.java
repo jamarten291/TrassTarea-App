@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.ui.tarea;
+package pmdm.jmh.app_gestion_tareas.ui.helpers;
 
 public enum TipoArchivo {
     DESCONOCIDO,

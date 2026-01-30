@@ -7,8 +7,6 @@ import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.webkit.MimeTypeMap;
 
-import pmdm.jmh.app_gestion_tareas.ui.tarea.TipoArchivo;
-
 public class FilePickerUtils {
     // Method que clasifica una URI según su tipo
     public static TipoArchivo classifyUri(Uri uri, Context context) {

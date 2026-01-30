@@ -3,12 +3,13 @@ package pmdm.jmh.app_gestion_tareas.ui.helpers;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import pmdm.jmh.app_gestion_tareas.ui.tarea.TipoArchivo;
+import pmdm.jmh.app_gestion_tareas.R;
 
 public abstract class BaseFilePickerActivity extends AppCompatActivity {
     protected ActivityResultLauncher<Intent> openDocumentLauncher;
@@ -27,20 +28,29 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
 
                             // Llama a un method abstracto para hacer algo con el archivo
                             onFilePicked(uri, tipo);
+                            Toast.makeText(this, R.string.archivo_seleccionado, Toast.LENGTH_SHORT).show();
 
-                            // TODO give information to the user after file attachment via text fields
+                            // TODO guardar copias de archivos en carpetas de la app
                         }
                     }
                 }
         );
     }
 
-    // Method que lanza una intención FilePicker de un tipo pasado por parámetro usando el lanzador de la clase
-    // Toda clase que extienda esta clase podrá usar este method
+    /**
+     * Method que lanza una intención FilePicker de un tipo pasado por parámetro. Se usa el lanzador
+     * de esta clase para lanzar dicho intent.
+     * @param mimeType Tipo de archivo admitido en el FilePicker que será lanzado.
+     */
     protected void launchFilePicker(String mimeType) {
         openDocumentLauncher.launch(FilePickerUtils.createFilePickerIntent(mimeType));
     }
 
-    // Clase abstracta que especifica lo que se debe hacer con el archivo seleccionado dependiendo de su implementación
+    /**
+     * Clase abstracta que especifica lo que se debe hacer con un archivo seleccionado dependiendo
+     * de su implementación
+     * @param uri Uri del archivo seleccionado por el usuario
+     * @param tipo Tipo del archivo seleccionado por el usuario
+     */
     protected abstract void onFilePicked(Uri uri, TipoArchivo tipo);
 }
