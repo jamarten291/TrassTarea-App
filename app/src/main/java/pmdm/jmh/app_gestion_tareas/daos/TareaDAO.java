@@ -45,4 +45,19 @@ public interface TareaDAO {
     @Update
     // Method que realiza una operación de actualización
     void update(Tarea tarea);
+
+    @Query("SELECT * FROM tarea ORDER BY " +
+            // título
+            "CASE WHEN :criterioOrdenamiento = '1' AND :asc = 1 THEN titulo END ASC, " +
+            "CASE WHEN :criterioOrdenamiento = '1' AND :asc = 0 THEN titulo END DESC, " +
+            // fechaCreacion
+            "CASE WHEN :criterioOrdenamiento = '2' AND :asc = 1 THEN fechaCreacion END ASC, " +
+            "CASE WHEN :criterioOrdenamiento = '2' AND :asc = 0 THEN fechaCreacion END DESC, " +
+            // fechaObjetivo
+            "CASE WHEN :criterioOrdenamiento = '3' AND :asc = 1 THEN fechaObjetivo END ASC, " +
+            "CASE WHEN :criterioOrdenamiento = '3' AND :asc = 0 THEN fechaObjetivo END DESC, " +
+            // progreso
+            "CASE WHEN :criterioOrdenamiento = '4' AND :asc = 1 THEN progreso END ASC, " +
+            "CASE WHEN :criterioOrdenamiento = '4' AND :asc = 0 THEN progreso END DESC")
+    LiveData<List<Tarea>> getTareasFiltradasYOrdenadas(String criterioOrdenamiento, int asc);
 }

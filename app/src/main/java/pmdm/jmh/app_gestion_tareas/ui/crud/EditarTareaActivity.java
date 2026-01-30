@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
+import pmdm.jmh.app_gestion_tareas.basedatos.TareaRepository;
 import pmdm.jmh.app_gestion_tareas.controlador.BaseFilePickerActivity;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
@@ -39,7 +40,7 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
     private FragmentoA fragmentoA;
     private FragmentoB fragmentoB;
     private FragmentManager fragmentManager;
-    private DatabaseApp databaseApp;
+    private TareaRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
         });
 
         // Instancio un DatabaseApp
-        databaseApp = DatabaseApp.getInstance(getApplicationContext());
+        repository = new TareaRepository(getApplication());
 
         // Recupero los datos lanzados desde la actividad ListadoTareas
         Bundle extras = getIntent().getExtras();
@@ -138,17 +139,14 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
             tareaEditada.setId(tareaPorEditar.getId());
 
             intent.putExtra(ARG_OP, OPERACION_ACTUAL);
-            try {
-                Executor executor = Executors.newSingleThreadExecutor();
-                executor.execute(new EditarTarea(tareaEditada));
+
+            // Actualizar tarea devuelve un boolean indicando si ha salido bien la operación
+            if (repository.actualizarTarea(tareaEditada)) {
                 setResult(RESULT_OK, intent);
-            } catch (Exception e) {
+            } else {
                 setResult(RESULT_CANCELED, intent);
-            } finally {
-                finish();
             }
 
-            setResult(RESULT_OK, intent);
             finish();
         }
     }
@@ -187,19 +185,6 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
             launchFilePicker("audio");
         } else if (id == R.id.bt_documento) {
             launchFilePicker("text/plain");
-        }
-    }
-
-    class EditarTarea implements Runnable {
-        private Tarea tarea;
-
-        public EditarTarea(Tarea tarea) {
-            this.tarea = tarea;
-        }
-
-        @Override
-        public void run() {
-            databaseApp.tareaDAO().update(this.tarea);
         }
     }
 }

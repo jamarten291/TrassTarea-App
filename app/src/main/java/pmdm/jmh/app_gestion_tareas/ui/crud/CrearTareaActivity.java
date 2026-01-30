@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
+import pmdm.jmh.app_gestion_tareas.basedatos.TareaRepository;
 import pmdm.jmh.app_gestion_tareas.controlador.BaseFilePickerActivity;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
@@ -38,7 +39,7 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     private FragmentoA fragmentoA;
     private FragmentoB fragmentoB;
     private FragmentManager fragmentManager;
-    private DatabaseApp databaseApp;
+    private TareaRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
         fragmentoA = new FragmentoA();
         fragmentManager = getSupportFragmentManager();
 
-        databaseApp = DatabaseApp.getInstance(getApplicationContext());
+        repository = new TareaRepository(getApplication());
 
         if(savedInstanceState == null)
             fragmentManager.beginTransaction().add(R.id.frag_container, fragmentoA).commit();
@@ -116,15 +117,15 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
             );
 
             intent.putExtra(ARG_OP, OPERACION_ACTUAL);
-            try {
-                Executor executor = Executors.newSingleThreadExecutor();
-                executor.execute(new CrearTarea(nuevaTarea));
+
+            // Insertar tarea devuelve un boolean indicando si ha salido bien la operación
+            if (repository.insertarTarea(nuevaTarea)) {
                 setResult(RESULT_OK, intent);
-            } catch (Exception e) {
+            } else {
                 setResult(RESULT_CANCELED, intent);
-            } finally {
-                finish();
             }
+
+            finish();
         }
     }
 
@@ -162,19 +163,6 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
             launchFilePicker("audio");
         } else if (id == R.id.bt_documento) {
             launchFilePicker("text/plain");
-        }
-    }
-
-    class CrearTarea implements Runnable {
-        private Tarea tarea;
-
-        public CrearTarea(Tarea tarea) {
-            this.tarea = tarea;
-        }
-
-        @Override
-        public void run() {
-            databaseApp.tareaDAO().insertAll(this.tarea);
         }
     }
 }

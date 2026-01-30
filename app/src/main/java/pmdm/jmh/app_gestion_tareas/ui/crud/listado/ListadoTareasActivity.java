@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
+import pmdm.jmh.app_gestion_tareas.basedatos.TareaRepository;
 import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
 import pmdm.jmh.app_gestion_tareas.adaptadores.TareaAdapter;
 import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
@@ -45,7 +46,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
     private TareaAdapter adaptadorTarea;
     private RecyclerView rvTareas;
     private TextView tvSinTareas;
-    private DatabaseApp databaseApp;
+    private TareaRepository repository;
     private ListadoTareasViewModel viewModel;
 
     // Preferencias
@@ -90,8 +91,8 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         tvSinTareas = findViewById(R.id.tv_sin_tareas);
         registerForContextMenu(rvTareas);
 
-        // Se instancia un DatabaseApp
-        databaseApp = DatabaseApp.getInstance(getApplicationContext());
+        // Se instancia un repositorio de tareas para acceder al DAO
+        repository = new TareaRepository(getApplication());
 
         // Inicialización de adaptador del RecyclerView
         adaptadorTarea = new TareaAdapter(
@@ -107,21 +108,8 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
 
         // Se inicia el ViewModel para poder ver los cambios de los datos en tiempo real
         viewModel = new ViewModelProvider(this).get(ListadoTareasViewModel.class);
-        viewModel.getTareas().observe(this, v -> {
-            // TODO fix filtering bugs
-            ordenarSegunPreferencias(v);
-
-            // Se actualiza la lista del RecyclerView
-            if (filtroPorPrioridad) {
-                // Se aplica un filtro según las tareas sean prioritarias o no
-                adaptadorTarea.setDatos(v
-                        .stream()
-                        .filter(Tarea::isPrioritaria)
-                        .collect(Collectors.toList())
-                );
-            } else {
-                adaptadorTarea.setDatos(v);
-            }
+        viewModel.getTareasOrdenadas(criterioOrden, ordenAsc).observe(this, v -> {
+            adaptadorTarea.setDatos(v);
 
             // Visibilidad según haya notas o no
             rvTareas.setVisibility(v.isEmpty() ?
@@ -160,38 +148,6 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         criterioOrden = userDetails.getString("criterio", "2");
         ordenAsc = userDetails.getBoolean("orden", true);
         almacenamientoSd = userDetails.getBoolean("sd", false);
-    }
-
-    private void ordenarSegunPreferencias(List<Tarea> listaDesordenada) {
-        switch (criterioOrden) {
-            case "1":
-                listaDesordenada.sort(
-                        Comparator.comparingInt(t -> t.getTitulo().charAt(0))
-                );
-                break;
-            case "2":
-                listaDesordenada.sort(
-                        Comparator.comparingLong(t ->
-                                // Epoch Day cuenta los días desde 1/1/1970 hasta la fecha seleccionada
-                                t.getFechaCreacionLocalDate().toEpochDay())
-                );
-                break;
-            case "3":
-                listaDesordenada.sort(
-                        Comparator.comparingLong(t ->
-                                t.getFechaObjetivoLocalDate().toEpochDay())
-                );
-                break;
-            case "4":
-                listaDesordenada.sort(
-                        Comparator.comparingInt(Tarea::getProgreso)
-                );
-                break;
-        }
-
-        if (!ordenAsc) {
-            Collections.reverse(listaDesordenada);
-        }
     }
 
     @Override
@@ -253,8 +209,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                     .setMessage(R.string.mensaje_dialog_borrar)
                     .setPositiveButton(R.string.alert_aceptar,
                             (dialog, which) -> {
-                                Executor executor = Executors.newSingleThreadExecutor();
-                                executor.execute(new EliminarTarea(tareaSeleccionada));
+                                repository.borrarTarea(tareaSeleccionada);
                             })
                     .setNegativeButton(R.string.alert_cancelar, null);
             AlertDialog dialog = builder.create();
@@ -262,18 +217,5 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
             return true;
         }
         return super.onContextItemSelected(item);
-    }
-
-    class EliminarTarea implements Runnable {
-        private Tarea tarea;
-
-        public EliminarTarea(Tarea tarea) {
-            this.tarea = tarea;
-        }
-
-        @Override
-        public void run() {
-            databaseApp.tareaDAO().delete(this.tarea);
-        }
     }
 }
