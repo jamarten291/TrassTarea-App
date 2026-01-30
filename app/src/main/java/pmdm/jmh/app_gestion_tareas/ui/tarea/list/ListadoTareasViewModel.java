@@ -1,18 +1,17 @@
-package pmdm.jmh.app_gestion_tareas.ui.crud.listado;
+package pmdm.jmh.app_gestion_tareas.ui.tarea.list;
 
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import java.util.List;
 
-import pmdm.jmh.app_gestion_tareas.basedatos.TareaRepository;
-import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
+import pmdm.jmh.app_gestion_tareas.database.repository.TareaRepository;
+import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
 
 public class ListadoTareasViewModel extends AndroidViewModel {
     private final TareaRepository repository;

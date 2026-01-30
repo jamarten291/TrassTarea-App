@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.interfaces;
+package pmdm.jmh.app_gestion_tareas.ui.interfaces;
 
 public interface DataArguments {
     String ARG_PARAM1 = "titulo";

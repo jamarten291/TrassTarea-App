@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.ui.crud.listado;
+package pmdm.jmh.app_gestion_tareas.ui.tarea.list;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,22 +24,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 import pmdm.jmh.app_gestion_tareas.R;
-import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
-import pmdm.jmh.app_gestion_tareas.basedatos.TareaRepository;
-import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
-import pmdm.jmh.app_gestion_tareas.adaptadores.TareaAdapter;
-import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
-import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
-import pmdm.jmh.app_gestion_tareas.ui.crud.CrearTareaActivity;
-import pmdm.jmh.app_gestion_tareas.ui.crud.EditarTareaActivity;
+import pmdm.jmh.app_gestion_tareas.database.repository.TareaRepository;
+import pmdm.jmh.app_gestion_tareas.util.HelperClass;
+import pmdm.jmh.app_gestion_tareas.adapters.TareaAdapter;
+import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
+import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
+import pmdm.jmh.app_gestion_tareas.ui.tarea.create.CrearTareaActivity;
+import pmdm.jmh.app_gestion_tareas.ui.tarea.edit.EditarTareaActivity;
 import pmdm.jmh.app_gestion_tareas.ui.prefs.SettingsActivity;
 
 public class ListadoTareasActivity extends AppCompatActivity implements DataArguments {

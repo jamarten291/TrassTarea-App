@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.ui.crud;
+package pmdm.jmh.app_gestion_tareas.ui.tarea;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -11,7 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import pmdm.jmh.app_gestion_tareas.R;
-import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
+import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 
 public class DescripcionActivity extends AppCompatActivity
     implements DataArguments {

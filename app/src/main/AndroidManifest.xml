@@ -12,25 +12,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppGestionTareas">
         <activity
-            android:name=".ui.crud.DescripcionActivity"
+            android:name=".ui.tarea.DescripcionActivity"
             android:exported="false" />
         <activity
-            android:name=".controlador.BaseFilePickerActivity"
+            android:name=".ui.helpers.BaseFilePickerActivity"
             android:exported="false" />
         <activity
             android:name=".ui.prefs.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".ui.crud.EditarTareaActivity"
+            android:name=".ui.tarea.edit.EditarTareaActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.AppGestionTareas.NoActionBar" />
         <activity
-            android:name=".ui.crud.CrearTareaActivity"
+            android:name=".ui.tarea.create.CrearTareaActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.AppGestionTareas.NoActionBar" />
         <activity
-            android:name=".ui.crud.listado.ListadoTareasActivity"
+            android:name=".ui.tarea.list.ListadoTareasActivity"
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"

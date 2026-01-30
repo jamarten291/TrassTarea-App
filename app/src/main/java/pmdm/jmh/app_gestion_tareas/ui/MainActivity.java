@@ -11,7 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import pmdm.jmh.app_gestion_tareas.R;
-import pmdm.jmh.app_gestion_tareas.ui.crud.listado.ListadoTareasActivity;
+import pmdm.jmh.app_gestion_tareas.ui.tarea.list.ListadoTareasActivity;
 
 public class MainActivity extends AppCompatActivity {
 

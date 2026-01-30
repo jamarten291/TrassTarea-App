@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/listado_activity_gradient"
-    tools:context=".ui.crud.listado.ListadoTareasActivity">
+    tools:context=".ui.tarea.list.ListadoTareasActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_tareas"

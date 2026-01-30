@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.adaptadores;
+package pmdm.jmh.app_gestion_tareas.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,10 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import pmdm.jmh.app_gestion_tareas.R;
-import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
-import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
-import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
-import pmdm.jmh.app_gestion_tareas.ui.crud.DescripcionActivity;
+import pmdm.jmh.app_gestion_tareas.util.HelperClass;
+import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
+import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
+import pmdm.jmh.app_gestion_tareas.ui.tarea.DescripcionActivity;
 
 public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHolder>
     implements DataArguments {

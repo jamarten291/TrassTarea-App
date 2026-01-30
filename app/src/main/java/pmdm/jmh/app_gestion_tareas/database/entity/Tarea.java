@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.entidades;
+package pmdm.jmh.app_gestion_tareas.database.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
+import pmdm.jmh.app_gestion_tareas.util.HelperClass;
 
 @Entity
 public class Tarea implements Parcelable {

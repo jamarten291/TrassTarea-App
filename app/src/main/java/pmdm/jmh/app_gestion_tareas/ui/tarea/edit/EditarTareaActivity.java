@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.ui.crud;
+package pmdm.jmh.app_gestion_tareas.ui.tarea.edit;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,18 +12,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
 import pmdm.jmh.app_gestion_tareas.R;
-import pmdm.jmh.app_gestion_tareas.basedatos.DatabaseApp;
-import pmdm.jmh.app_gestion_tareas.basedatos.TareaRepository;
-import pmdm.jmh.app_gestion_tareas.controlador.BaseFilePickerActivity;
-import pmdm.jmh.app_gestion_tareas.controlador.HelperClass;
-import pmdm.jmh.app_gestion_tareas.interfaces.DataArguments;
-import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
-import pmdm.jmh.app_gestion_tareas.ui.fragmentos.FragmentoA;
-import pmdm.jmh.app_gestion_tareas.ui.fragmentos.FragmentoB;
+import pmdm.jmh.app_gestion_tareas.database.repository.TareaRepository;
+import pmdm.jmh.app_gestion_tareas.ui.helpers.BaseFilePickerActivity;
+import pmdm.jmh.app_gestion_tareas.util.HelperClass;
+import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
+import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
+import pmdm.jmh.app_gestion_tareas.ui.fragments.FragmentoA;
+import pmdm.jmh.app_gestion_tareas.ui.fragments.FragmentoB;
+import pmdm.jmh.app_gestion_tareas.ui.tarea.TipoArchivo;
 
 public class EditarTareaActivity extends BaseFilePickerActivity implements
         FragmentoA.ComunicacionFragmentoA,

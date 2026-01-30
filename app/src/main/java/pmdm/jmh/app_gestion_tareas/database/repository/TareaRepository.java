@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.basedatos;
+package pmdm.jmh.app_gestion_tareas.database.repository;
 
 import android.app.Application;
 
@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import pmdm.jmh.app_gestion_tareas.daos.TareaDAO;
-import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
+import pmdm.jmh.app_gestion_tareas.database.DatabaseApp;
+import pmdm.jmh.app_gestion_tareas.database.dao.TareaDAO;
+import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
 
 public class TareaRepository {
     private final TareaDAO tareaDao;

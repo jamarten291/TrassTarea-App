@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    tools:context=".ui.fragmentos.FragmentoB">
+    tools:context=".ui.fragments.FragmentoB">
 
     <ScrollView
         android:id="@+id/scrollView2"

@@ -1,15 +1,14 @@
-package pmdm.jmh.app_gestion_tareas.controlador;
+package pmdm.jmh.app_gestion_tareas.ui.helpers;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import pmdm.jmh.app_gestion_tareas.ui.crud.TipoArchivo;
+import pmdm.jmh.app_gestion_tareas.ui.tarea.TipoArchivo;
 
 public abstract class BaseFilePickerActivity extends AppCompatActivity {
     protected ActivityResultLauncher<Intent> openDocumentLauncher;

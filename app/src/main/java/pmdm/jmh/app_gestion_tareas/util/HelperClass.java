@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.controlador;
+package pmdm.jmh.app_gestion_tareas.util;
 
 import android.content.Context;
 

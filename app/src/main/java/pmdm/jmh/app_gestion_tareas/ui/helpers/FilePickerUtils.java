@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.controlador;
+package pmdm.jmh.app_gestion_tareas.ui.helpers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.webkit.MimeTypeMap;
 
-import pmdm.jmh.app_gestion_tareas.ui.crud.TipoArchivo;
+import pmdm.jmh.app_gestion_tareas.ui.tarea.TipoArchivo;
 
 public class FilePickerUtils {
     // Method que clasifica una URI según su tipo

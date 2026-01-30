@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.daos;
+package pmdm.jmh.app_gestion_tareas.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -11,7 +11,7 @@ import androidx.sqlite.db.SimpleSQLiteQuery;
 
 import java.util.List;
 
-import pmdm.jmh.app_gestion_tareas.entidades.Tarea;
+import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
 
 @Dao
 public interface TareaDAO {
