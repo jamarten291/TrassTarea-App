@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.database.repository.TareaRepository;
 import pmdm.jmh.app_gestion_tareas.ui.helpers.BaseFilePickerActivity;
+import pmdm.jmh.app_gestion_tareas.ui.helpers.FileManager;
 import pmdm.jmh.app_gestion_tareas.util.HelperClass;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
@@ -30,10 +31,11 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
     private Tarea tareaPorEditar;
     private final int OPERACION_ACTUAL = 2;
     private String titulo, fechaInicio, fechaObjetivo, descripcion;
-    private String URL_img, URL_aud, URL_vid, URL_doc;
+    private Uri URL_img_src, URL_aud_src, URL_vid_src, URL_doc_src;
     private int progresoIndex;
     private byte progresoValue;
     private boolean prioridad;
+    private boolean sd = false;
     private FragmentoA fragmentoA;
     private FragmentoB fragmentoB;
     private FragmentManager fragmentManager;
@@ -50,7 +52,7 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
             return insets;
         });
 
-        // Instancio un DatabaseApp
+        // Instancio un Repository
         repository = new TareaRepository(getApplication());
 
         // Recupero los datos lanzados desde la actividad ListadoTareas
@@ -69,6 +71,9 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
                     tareaPorEditar.getProgreso(),
                     tareaPorEditar.isPrioritaria()
             );
+
+            // Almaceno la preferencia de almacenamiento SD en una variable
+            sd = extras.getBoolean(ARG_SD_STORAGE);
 
             // Se inicializan los fragmentos
             fragmentManager = getSupportFragmentManager();
@@ -128,12 +133,23 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
                     fechaInicio,
                     fechaObjetivo,
                     prioridad,
-                    URL_doc,
-                    URL_img,
-                    URL_aud,
-                    URL_vid
+                    tareaPorEditar.getURL_doc(),
+                    tareaPorEditar.getURL_img(),
+                    tareaPorEditar.getURL_aud(),
+                    tareaPorEditar.getURL_vid()
             );
             tareaEditada.setId(tareaPorEditar.getId());
+
+            FileManager.attachFilesToTarea(
+                    this,
+                    tareaEditada,
+                    // Si la URI es nula, no cambiará nada, de lo contrario actualizará la URI
+                    URL_img_src,
+                    URL_vid_src,
+                    URL_aud_src,
+                    URL_doc_src,
+                    sd
+            );
 
             intent.putExtra(ARG_OP, OPERACION_ACTUAL);
 
@@ -149,20 +165,20 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
     }
 
     @Override
-    protected void onFilePicked(Uri uri, TipoArchivo tipo, String nombre) {
-        // Dependiendo del tipo de archivo seleccionado, se guarda su path en una determinada variable
+    protected void onFilePicked(Uri uri, TipoArchivo tipo) {
+        // Consigo la URI de origen y la guardo en una variable a la cual accederé posteriormente
         switch (tipo) {
             case IMAGEN:
-                URL_img = uri.getPath();
+                URL_img_src = uri;
                 break;
             case VIDEO:
-                URL_vid = uri.getPath();
+                URL_vid_src = uri;
                 break;
             case AUDIO:
-                URL_aud = uri.getPath();
+                URL_aud_src = uri;
                 break;
             case DOCUMENTO:
-                URL_doc = uri.getPath();
+                URL_doc_src = uri;
                 break;
             default:
         }

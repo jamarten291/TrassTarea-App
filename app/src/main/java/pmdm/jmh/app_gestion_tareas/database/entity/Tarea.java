@@ -203,6 +203,10 @@ public class Tarea implements Parcelable {
         progreso = in.readByte();
         prioritaria = in.readBoolean();
         descripcion = in.readString();
+        URL_img = in.readString();
+        URL_aud = in.readString();
+        URL_vid = in.readString();
+        URL_doc = in.readString();
     }
 
     @Override
@@ -214,6 +218,10 @@ public class Tarea implements Parcelable {
         dest.writeByte(progreso);
         dest.writeBoolean(prioritaria);
         dest.writeString(descripcion);
+        dest.writeString(URL_img);
+        dest.writeString(URL_aud);
+        dest.writeString(URL_vid);
+        dest.writeString(URL_doc);
     }
 
     @Override

@@ -45,7 +45,6 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     private FragmentoB fragmentoB;
     private FragmentManager fragmentManager;
     private TareaRepository repository;
-    private File fileFolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,26 +124,15 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
                     null
             );
 
-            fileFolder = sd
-                    ? getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-                    : getFilesDir();
-            File img = new File(fileFolder, FilePickerUtils.getFileName(this, URL_img_src));
-            File vid = new File(fileFolder, FilePickerUtils.getFileName(this, URL_vid_src));
-            File aud = new File(fileFolder, FilePickerUtils.getFileName(this, URL_aud_src));
-            File doc = new File(fileFolder, FilePickerUtils.getFileName(this, URL_doc_src));
-
-            if (FileManager.createUriCopyForApplication(this, URL_img_src, img, sd)) {
-                nuevaTarea.setURL_img(img.getPath());
-            }
-            if (FileManager.createUriCopyForApplication(this, URL_vid_src, aud, sd)) {
-                nuevaTarea.setURL_vid(vid.getPath());
-            }
-            if (FileManager.createUriCopyForApplication(this, URL_doc_src, vid, sd)) {
-                nuevaTarea.setURL_doc(doc.getPath());
-            }
-            if (FileManager.createUriCopyForApplication(this, URL_aud_src, doc, sd)) {
-                nuevaTarea.setURL_aud(aud.getPath());
-            }
+            FileManager.attachFilesToTarea(
+                    this,
+                    nuevaTarea,
+                    URL_img_src,
+                    URL_vid_src,
+                    URL_aud_src,
+                    URL_doc_src,
+                    sd
+            );
 
             intent.putExtra(ARG_OP, OPERACION_ACTUAL);
 
@@ -161,7 +149,7 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     }
 
     @Override
-    protected void onFilePicked(Uri uri, TipoArchivo tipo, String nombre) {
+    protected void onFilePicked(Uri uri, TipoArchivo tipo) {
         // Consigo la URI de origen y la guardo en una variable a la cual accederé posteriormente
         switch (tipo) {
             case IMAGEN:

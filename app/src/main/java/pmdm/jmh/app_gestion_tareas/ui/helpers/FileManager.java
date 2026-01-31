@@ -15,7 +15,7 @@ import java.util.function.Function;
 import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
 
 public class FileManager {
-    public static boolean createUriCopyForApplication(Context c, Uri uri, File dest, boolean sd) {
+    public static boolean createUriCopyForApplication(Context c, Uri uri, File dest) {
         if (uri == null) return false;
 
         try (InputStream in = c.getContentResolver().openInputStream(uri);
@@ -33,7 +33,7 @@ public class FileManager {
         }
     }
 
-    private static boolean checkIfExternalStorageIsAvailable() {
+    public static boolean checkIfExternalStorageIsAvailable() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
@@ -53,6 +53,29 @@ public class FileManager {
         if (aud != null && aud.exists()) aud.delete();
         if (vid != null && vid.exists()) vid.delete();
         if (doc != null && doc.exists()) doc.delete();
+    }
+
+    public static void attachFilesToTarea(Context c, Tarea t, Uri img_src, Uri vid_src, Uri aud_src, Uri doc_src, boolean sd) {
+        File fileFolder = sd && FileManager.checkIfExternalStorageIsAvailable()
+                ? c.getExternalFilesDir(null)
+                : c.getFilesDir();
+        File img = new File(fileFolder, FilePickerUtils.getFileName(c, img_src));
+        File vid = new File(fileFolder, FilePickerUtils.getFileName(c, vid_src));
+        File aud = new File(fileFolder, FilePickerUtils.getFileName(c, aud_src));
+        File doc = new File(fileFolder, FilePickerUtils.getFileName(c, doc_src));
+
+        if (createUriCopyForApplication(c, img_src, img)) {
+            t.setURL_img(img.getPath());
+        }
+        if (createUriCopyForApplication(c, vid_src, aud)) {
+            t.setURL_vid(vid.getPath());
+        }
+        if (createUriCopyForApplication(c, doc_src, vid)) {
+            t.setURL_doc(doc.getPath());
+        }
+        if (createUriCopyForApplication(c, aud_src, doc)) {
+            t.setURL_aud(aud.getPath());
+        }
     }
 
 }

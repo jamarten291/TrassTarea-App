@@ -204,6 +204,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         if (itemId == R.id.mc_editar) {
             Intent intent = new Intent(this, EditarTareaActivity.class);
             intent.putExtra(ARG_TAREA, tareaSeleccionada);
+            intent.putExtra(ARG_SD_STORAGE, almacenamientoSd);
             launcher.launch(intent);
             return true;
         } else if (itemId == R.id.mc_borrar) {
