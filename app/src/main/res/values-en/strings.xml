@@ -14,7 +14,9 @@
     <string name="alert_aceptar">Accept</string>
     <string name="alert_cancelar">Cancel</string>
     <string name="titulo_dialog_borrar">Delete a task</string>
+    <string name="titulo_dialog_archivo">Edit a file attachment</string>
     <string name="mensaje_dialog_borrar">Are you sure you want to delete this task?</string>
+    <string name="mensaje_dialog_archivo">What are you going to do with this file?</string>
     <string name="operacion_error">Error: No operation could be performed</string>
     <string name="operacion_actualizar">Task updated successfully</string>
     <string name="operacion_agregar">Task added successfully</string>
@@ -71,6 +73,7 @@
     </string-array>
     <string name="tv_add_file">Attach a file</string>
     <string name="descripcion">Description</string>
-    <string name="archivo_seleccionado">File picked successfully</string>
+    <string name="archivo_seleccionado">File attached successfully</string>
+    <string name="archivo_eliminado">File marked for deletion, to preserve it, cancel the edition</string>
 
 </resources>

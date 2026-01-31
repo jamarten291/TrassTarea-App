@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -15,7 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.database.repository.TareaRepository;
 import pmdm.jmh.app_gestion_tareas.ui.helpers.BaseFilePickerActivity;
-import pmdm.jmh.app_gestion_tareas.ui.helpers.FileManager;
+import pmdm.jmh.app_gestion_tareas.ui.helpers.FileUtils;
 import pmdm.jmh.app_gestion_tareas.util.HelperClass;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
@@ -32,6 +33,12 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
     private final int OPERACION_ACTUAL = 2;
     private String titulo, fechaInicio, fechaObjetivo, descripcion;
     private Uri URL_img_src, URL_aud_src, URL_vid_src, URL_doc_src;
+
+    // Falso por defecto, pero cambia si se marca para eliminación
+    private boolean img_delete = false;
+    private boolean aud_delete = false;
+    private boolean vid_delete = false;
+    private boolean doc_delete = false;
     private int progresoIndex;
     private byte progresoValue;
     private boolean prioridad;
@@ -126,21 +133,17 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
             Intent intent = new Intent();
 
             progresoValue = (byte) (25 * progresoIndex);
-            Tarea tareaEditada = new Tarea(
-                    titulo,
-                    descripcion,
-                    progresoValue,
-                    fechaInicio,
-                    fechaObjetivo,
-                    prioridad,
-                    tareaPorEditar.getURL_doc(),
-                    tareaPorEditar.getURL_img(),
-                    tareaPorEditar.getURL_aud(),
-                    tareaPorEditar.getURL_vid()
-            );
-            tareaEditada.setId(tareaPorEditar.getId());
+            Tarea tareaEditada = getTareaEditada();
 
-            FileManager.attachFilesToTarea(
+            // Este method borra tanto la URI del archivo asignada a la tarea como el archivo
+            FileUtils.deleteTareaFiles(tareaEditada,
+                    img_delete,
+                    aud_delete,
+                    vid_delete,
+                    doc_delete
+            );
+
+            FileUtils.attachFilesToTarea(
                     this,
                     tareaEditada,
                     // Si la URI es nula, no cambiará nada, de lo contrario actualizará la URI
@@ -164,6 +167,24 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
         }
     }
 
+    @NonNull
+    private Tarea getTareaEditada() {
+        Tarea tareaEditada = new Tarea(
+                titulo,
+                descripcion,
+                progresoValue,
+                fechaInicio,
+                fechaObjetivo,
+                prioridad,
+                tareaPorEditar.getURL_doc(),
+                tareaPorEditar.getURL_img(),
+                tareaPorEditar.getURL_aud(),
+                tareaPorEditar.getURL_vid()
+        );
+        tareaEditada.setId(tareaPorEditar.getId());
+        return tareaEditada;
+    }
+
     @Override
     protected void onFilePicked(Uri uri, TipoArchivo tipo) {
         // Consigo la URI de origen y la guardo en una variable a la cual accederé posteriormente
@@ -185,7 +206,7 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
     }
 
     @Override
-    public void onFilePickerClicked(View view) {
+    public void onFileAttached(View view) {
         int id = view.getId();
 
         // Dependiendo del botón pulsado, se lanza un FilePicker con un MIME type específico
@@ -197,7 +218,28 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
         } else if (id == R.id.bt_audio) {
             launchFilePicker("audio");
         } else if (id == R.id.bt_documento) {
-            launchFilePicker("text/plain");
+            launchFilePicker("doc");
+        }
+    }
+
+    @Override
+    public void onFileDeleted(View view) {
+        int id = view.getId();
+
+        // Dependiendo del botón pulsado, se lanza un FilePicker con un MIME type específico
+        // Se usa el method heredado de la superclase para lanzar el FilePicker
+        if (id == R.id.bt_imagen) {
+            URL_img_src = null;
+            img_delete = true;
+        } else if (id == R.id.bt_video) {
+            URL_vid_src = null;
+            vid_delete = true;
+        } else if (id == R.id.bt_audio) {
+            URL_aud_src = null;
+            aud_delete = true;
+        } else if (id == R.id.bt_documento) {
+            URL_doc_src = null;
+            doc_delete = true;
         }
     }
 }

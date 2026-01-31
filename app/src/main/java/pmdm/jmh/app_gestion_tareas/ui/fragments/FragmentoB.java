@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
@@ -25,7 +27,8 @@ public class FragmentoB extends Fragment implements DataArguments {
     public interface ComunicacionFragmentoB {
         void onBotonVolverClicked();
         void onBotonGuardarClicked();
-        void onFilePickerClicked(View view);
+        void onFileAttached(View view);
+        void onFileDeleted(View view);
     }
     private ComunicacionFragmentoB comunicador;
 
@@ -92,10 +95,10 @@ public class FragmentoB extends Fragment implements DataArguments {
         btGuardar.setOnClickListener(v -> comunicador.onBotonGuardarClicked());
         btVolver.setOnClickListener(v -> comunicador.onBotonVolverClicked());
 
-        btAdjImagen.setOnClickListener(v -> comunicador.onFilePickerClicked(v));
-        btAdjVideo.setOnClickListener(v -> comunicador.onFilePickerClicked(v));
-        btAdjAudio.setOnClickListener(v -> comunicador.onFilePickerClicked(v));
-        btAdjDocumento.setOnClickListener(v -> comunicador.onFilePickerClicked(v));
+        btAdjImagen.setOnClickListener(this::onClick);
+        btAdjVideo.setOnClickListener(this::onClick);
+        btAdjAudio.setOnClickListener(this::onClick);
+        btAdjDocumento.setOnClickListener(this::onClick);
 
         // Datos de la descripción en caso de que hubiese una escrita
         etDescripcion.setText(descripcion);
@@ -103,6 +106,22 @@ public class FragmentoB extends Fragment implements DataArguments {
         return fragmentoB;
     }
 
+    public void onClick(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle(R.string.titulo_dialog_archivo)
+                .setMessage(R.string.mensaje_dialog_archivo)
+                .setPositiveButton(R.string.item_agregar,
+                        (dialog, which) -> {
+                            comunicador.onFileAttached(view);
+                        })
+                .setNegativeButton(R.string.mc_borrar,
+                        (dialog, which) -> {
+                            comunicador.onFileDeleted(view);
+                            Toast.makeText(requireContext(), R.string.archivo_eliminado, Toast.LENGTH_SHORT).show();
+                        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
     // Getters para recuperar la descripción y los enlaces a los archivos
     public String getDescripcion() {
         return etDescripcion.getText().toString();

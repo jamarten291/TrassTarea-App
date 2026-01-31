@@ -3,7 +3,6 @@ package pmdm.jmh.app_gestion_tareas.ui.tarea.create;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Spinner;
 
@@ -13,14 +12,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
-import java.io.File;
-import java.io.IOException;
-
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.database.repository.TareaRepository;
 import pmdm.jmh.app_gestion_tareas.ui.helpers.BaseFilePickerActivity;
-import pmdm.jmh.app_gestion_tareas.ui.helpers.FileManager;
-import pmdm.jmh.app_gestion_tareas.ui.helpers.FilePickerUtils;
+import pmdm.jmh.app_gestion_tareas.ui.helpers.FileUtils;
 import pmdm.jmh.app_gestion_tareas.util.HelperClass;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
@@ -124,7 +119,7 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
                     null
             );
 
-            FileManager.attachFilesToTarea(
+            FileUtils.attachFilesToTarea(
                     this,
                     nuevaTarea,
                     URL_img_src,
@@ -169,7 +164,7 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     }
 
     @Override
-    public void onFilePickerClicked(View view) {
+    public void onFileAttached(View view) {
         int id = view.getId();
 
         // Dependiendo del botón pulsado, se lanza un FilePicker con un MIME type específico
@@ -182,6 +177,23 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
             launchFilePicker("audio");
         } else if (id == R.id.bt_documento) {
             launchFilePicker("text/plain");
+        }
+    }
+
+    @Override
+    public void onFileDeleted(View view) {
+        int id = view.getId();
+
+        // Dependiendo del botón pulsado, se lanza un FilePicker con un MIME type específico
+        // Se usa el method heredado de la superclase para lanzar el FilePicker
+        if (id == R.id.bt_imagen) {
+            URL_img_src = null;
+        } else if (id == R.id.bt_video) {
+            URL_vid_src = null;
+        } else if (id == R.id.bt_audio) {
+            URL_aud_src = null;
+        } else if (id == R.id.bt_documento) {
+            URL_doc_src = null;
         }
     }
 }
