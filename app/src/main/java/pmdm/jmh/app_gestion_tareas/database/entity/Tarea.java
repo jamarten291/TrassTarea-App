@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+import pmdm.jmh.app_gestion_tareas.ui.helpers.FileUtils;
 import pmdm.jmh.app_gestion_tareas.util.HelperClass;
 
 @Entity
@@ -167,6 +168,23 @@ public class Tarea implements Parcelable {
 
     public void setURL_vid(String URL_vid) {
         this.URL_vid = URL_vid;
+    }
+
+    // Getters de los nombres de los archivos
+    public String getNombreImg() {
+        return FileUtils.getFileNameFromPath(URL_img);
+    }
+
+    public String getNombreDoc() {
+        return FileUtils.getFileNameFromPath(URL_doc);
+    }
+
+    public String getNombreAud() {
+        return FileUtils.getFileNameFromPath(URL_aud);
+    }
+
+    public String getNombreVid() {
+        return FileUtils.getFileNameFromPath(URL_vid);
     }
 
     @NonNull

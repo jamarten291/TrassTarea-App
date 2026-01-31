@@ -139,4 +139,14 @@ public class FileUtils {
 
         return "null";
     }
+
+    // Method que devuelve el nombre de un archivo en base a su ruta
+    public static String getFileNameFromPath(String path) {
+        if (path == null || path.isEmpty()) return null;
+        String[] parts = path.split("/");
+        if (parts.length == 0) return null;
+
+        // Devuelve el último elemento del array
+        return parts[parts.length - 1];
+    }
 }
