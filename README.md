@@ -58,9 +58,10 @@ App de Android desarrollada en Java para crear, organizar y hacer seguimiento de
 
 - La pantalla principal muestra el listado de tareas.
 - Usa el botón + (o FAB) para crear una nueva tarea: agrega título, descripción, prioridad y fecha de vencimiento.
-- Toca una tarea para editarla o deslízala/usa el menú contextual para eliminarla.
-- Marca la casilla o usa el gesto indicado para marcarla como completada.
-- Usa la barra de búsqueda y filtros para encontrar tareas por texto, estado o prioridad.
+- Toca una tarea para ver sus detalles o usa el menú contextual para eliminarla/editarla.
+- Edita la tarea y establece el progreso a Finalizada para indicar que la has completado.
+- Usa los filtros de las preferencias para indicar criterios de ordenamiento.
+- Usa el botón de estrella para filtrar y solo ver las tareas prioritarias
 
 ---
 
@@ -98,7 +99,7 @@ Por favor abre Issues para reportar bugs o solicitar nuevas funcionalidades.
 
 ## Licencia
 
-Este proyecto está bajo la licencia MIT. Cambia o añade la licencia que prefieras.
+Este proyecto está bajo la licencia MIT.
 
 ---
 
