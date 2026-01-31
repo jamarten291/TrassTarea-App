@@ -20,6 +20,7 @@ import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.database.repository.TareaRepository;
 import pmdm.jmh.app_gestion_tareas.ui.helpers.BaseFilePickerActivity;
 import pmdm.jmh.app_gestion_tareas.ui.helpers.FileManager;
+import pmdm.jmh.app_gestion_tareas.ui.helpers.FilePickerUtils;
 import pmdm.jmh.app_gestion_tareas.util.HelperClass;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
@@ -34,7 +35,8 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
 {
     private final int OPERACION_ACTUAL = 1;
     private String titulo, fechaInicio, fechaObjetivo, descripcion;
-    private String URL_img, URL_aud, URL_vid, URL_doc;
+    private Uri URL_img_src, URL_aud_src, URL_vid_src, URL_doc_src;
+    private String URL_img_dst, URL_aud_dst, URL_vid_dst, URL_doc_dst;
     private int progresoIndex;
     private byte progresoValue;
     private boolean prioridad;
@@ -43,6 +45,7 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     private FragmentoB fragmentoB;
     private FragmentManager fragmentManager;
     private TareaRepository repository;
+    private File fileFolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,15 +119,37 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
                     fechaInicio,
                     fechaObjetivo,
                     prioridad,
-                    URL_doc,
-                    URL_img,
-                    URL_aud,
-                    URL_vid
+                    null,
+                    null,
+                    null,
+                    null
             );
+
+            fileFolder = sd
+                    ? getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+                    : getFilesDir();
+            File img = new File(fileFolder, FilePickerUtils.getFileName(this, URL_img_src));
+            File vid = new File(fileFolder, FilePickerUtils.getFileName(this, URL_vid_src));
+            File aud = new File(fileFolder, FilePickerUtils.getFileName(this, URL_aud_src));
+            File doc = new File(fileFolder, FilePickerUtils.getFileName(this, URL_doc_src));
+
+            if (FileManager.createUriCopyForApplication(this, URL_img_src, img, sd)) {
+                nuevaTarea.setURL_img(img.getPath());
+            }
+            if (FileManager.createUriCopyForApplication(this, URL_vid_src, aud, sd)) {
+                nuevaTarea.setURL_vid(vid.getPath());
+            }
+            if (FileManager.createUriCopyForApplication(this, URL_doc_src, vid, sd)) {
+                nuevaTarea.setURL_doc(doc.getPath());
+            }
+            if (FileManager.createUriCopyForApplication(this, URL_aud_src, doc, sd)) {
+                nuevaTarea.setURL_aud(aud.getPath());
+            }
 
             intent.putExtra(ARG_OP, OPERACION_ACTUAL);
 
-            // Insertar tarea devuelve un boolean indicando si ha salido bien la operación
+            // Actualizar tarea devuelve un boolean indicando si ha salido bien la operación
+            // Esto actualiza la misma tarea y añade el URI de los archivos
             if (repository.insertarTarea(nuevaTarea)) {
                 setResult(RESULT_OK, intent);
             } else {
@@ -137,39 +162,21 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
 
     @Override
     protected void onFilePicked(Uri uri, TipoArchivo tipo, String nombre) {
-        // Me aseguro de que la carpeta de la tarea tiene un nombre único
-        String nombreSubDir = titulo + fechaInicio + fechaObjetivo;
-        File subDir = null;
-
-        if (sd && FileManager.checkIfExternalStorageIsAvailable()) {
-            subDir = new File(Environment.getExternalStorageDirectory(), nombreSubDir);
-        } else {
-            // Si la carpeta no existe, creo una
-            subDir = new File(getFilesDir(), nombreSubDir);
-        }
-
-        if (!subDir.exists()) subDir.mkdirs();
-        File dest = new File(subDir, nombre);
-
-        try {
-            switch (tipo) {
-                case IMAGEN:
-                    FileManager.copyUriToInternalStorage(this, uri, dest);
-                    URL_img = dest.getPath();
-                    break;
-                case VIDEO:
-                    URL_vid = uri.getPath();
-                    break;
-                case AUDIO:
-                    URL_aud = uri.getPath();
-                    break;
-                case DOCUMENTO:
-                    URL_doc = uri.getPath();
-                    break;
-                default:
-            }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
+        // Consigo la URI de origen y la guardo en una variable a la cual accederé posteriormente
+        switch (tipo) {
+            case IMAGEN:
+                URL_img_src = uri;
+                break;
+            case VIDEO:
+                URL_vid_src = uri;
+                break;
+            case AUDIO:
+                URL_aud_src = uri;
+                break;
+            case DOCUMENTO:
+                URL_doc_src = uri;
+                break;
+            default:
         }
     }
 

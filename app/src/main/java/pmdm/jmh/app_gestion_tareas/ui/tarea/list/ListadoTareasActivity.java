@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.database.repository.TareaRepository;
+import pmdm.jmh.app_gestion_tareas.ui.helpers.FileManager;
 import pmdm.jmh.app_gestion_tareas.ui.tarea.list.adapters.TareaAdapter;
 import pmdm.jmh.app_gestion_tareas.util.HelperClass;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
@@ -211,6 +212,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
                     .setMessage(R.string.mensaje_dialog_borrar)
                     .setPositiveButton(R.string.alert_aceptar,
                             (dialog, which) -> {
+                                FileManager.deleteTareaFiles(tareaSeleccionada);
                                 repository.borrarTarea(tareaSeleccionada);
                             })
                     .setNegativeButton(R.string.alert_cancelar, null);

@@ -64,6 +64,6 @@ public class FilePickerUtils {
             // ignorar
         }
 
-        return null;
+        return "null";
     }
 }

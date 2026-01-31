@@ -43,6 +43,9 @@ public interface TareaDAO {
     //Method que realiza la inserción anterior
     void insertAll(Tarea... tareas);
 
+    @Insert
+    long insertTareaAndReturnId(Tarea tarea);
+
     //Anotación que permite realizar el borrado de un producto
     @Delete
     //Method que realiza el borrado anterior

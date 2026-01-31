@@ -6,8 +6,13 @@ import androidx.lifecycle.LiveData;
 import androidx.sqlite.db.SimpleSQLiteQuery;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicLong;
 
 import pmdm.jmh.app_gestion_tareas.database.DatabaseApp;
 import pmdm.jmh.app_gestion_tareas.database.dao.TareaDAO;
@@ -56,6 +61,20 @@ public class TareaRepository {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public long insertarTareaYDevolverId(Tarea t) {
+        // Callable permite que un Runnable devuelva un valor
+        Callable<Long> insertCallable = () -> tareaDao.insertTareaAndReturnId(t);
+        long rowId = 0;
+
+        try {
+            // Se devuelve el valor, en caso de que no se pueda, saltará una excepción
+            rowId = insertCallable.call();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return rowId;
     }
 
     public LiveData<List<Tarea>> getAll() {
