@@ -13,7 +13,8 @@
         android:theme="@style/Theme.AppGestionTareas">
         <activity
             android:name=".ui.tarea.DescripcionActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Base.Theme.AppGestionTareas.NoActionBar" />
         <activity
             android:name=".ui.helpers.BaseFilePickerActivity"
             android:exported="false" />

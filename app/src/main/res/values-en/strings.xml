@@ -71,7 +71,7 @@
         <item>Remaining days</item>
         <item>Progress</item>
     </string-array>
-    <string name="tv_add_file">Attach a file</string>
+    <string name="tv_edit_file">Manage task files</string>
     <string name="descripcion">Description</string>
     <string name="archivo_seleccionado">File attached successfully</string>
     <string name="archivo_eliminado">File marked for deletion, to preserve it, cancel the edition</string>

@@ -57,7 +57,7 @@
     <string name="settings_criterio">Criterio</string>
     <string name="settings_orden">Orden</string>
     <string name="settings_sd">Almacenamiento en tarjeta SD</string>
-    <string name="tv_add_file">Adjunta un archivo</string>
+    <string name="tv_edit_file">Gestiona los archivos de la tarea</string>
     <string name="descripcion">Descripción</string>
     <string name="archivo_seleccionado">Archivo adjuntado correctamente</string>
     <string name="archivo_eliminado">Archivo marcado para eliminación, para conservarlo cancela la edición</string>

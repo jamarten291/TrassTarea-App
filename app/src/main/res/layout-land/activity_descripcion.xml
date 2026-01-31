@@ -22,18 +22,20 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frag_container"
-        android:layout_width="350dp"
-        android:layout_height="625dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_detalles">
 
         <ScrollView
-            android:layout_width="match_parent"
+            android:id="@+id/scrollView3"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/tableLayout"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/bt_salir"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -62,13 +64,12 @@
         <TableLayout
             android:id="@+id/tableLayout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="1dp"
-            android:layout_marginBottom="32dp"
+            android:layout_height="0dp"
+            android:layout_margin="16sp"
             app:layout_constraintBottom_toTopOf="@+id/bt_salir"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toEndOf="@+id/scrollView3"
+            app:layout_constraintTop_toTopOf="parent">
 
             <!-- Row 1 -->
             <TableRow
@@ -103,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableStart="@drawable/video_24px"
-                    android:padding="8dp"/>
+                    android:padding="8dp" />
 
                 <TextView
                     android:id="@+id/cell_vid"
@@ -125,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableStart="@drawable/audio_24px"
-                    android:padding="8dp"/>
+                    android:padding="8dp" />
 
                 <TextView
                     android:id="@+id/cell_aud"
@@ -147,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableStart="@drawable/document_24px"
-                    android:padding="8dp"/>
+                    android:padding="8dp" />
 
                 <TextView
                     android:id="@+id/cell_doc"
@@ -159,6 +160,13 @@
             </TableRow>
 
         </TableLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="389dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
