@@ -14,5 +14,6 @@ public interface DataArguments {
     String ARG_VIDEO = "uri_video";
     String ARG_AUDIO = "uri_audio";
     String ARG_DOC = "uri_documento";
+    String ARG_SD_STORAGE = "sd";
 
 }

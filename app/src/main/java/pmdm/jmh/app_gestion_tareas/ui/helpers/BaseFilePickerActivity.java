@@ -25,9 +25,10 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
                         if (uri != null) {
                             // Clasifica el archivo seleccionado según su tipo
                             TipoArchivo tipo = FilePickerUtils.classifyUri(uri, this);
+                            String nombre = FilePickerUtils.getFileName(this, uri);
 
                             // Llama a un method abstracto para hacer algo con el archivo
-                            onFilePicked(uri, tipo);
+                            onFilePicked(uri, tipo, nombre);
                             Toast.makeText(this, R.string.archivo_seleccionado, Toast.LENGTH_SHORT).show();
 
                             // TODO guardar copias de archivos en carpetas de la app
@@ -49,8 +50,10 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
     /**
      * Clase abstracta que especifica lo que se debe hacer con un archivo seleccionado dependiendo
      * de su implementación
-     * @param uri Uri del archivo seleccionado por el usuario
-     * @param tipo Tipo del archivo seleccionado por el usuario
+     *
+     * @param uri    Uri del archivo seleccionado por el usuario
+     * @param tipo   Tipo del archivo seleccionado por el usuario
+     * @param nombre
      */
-    protected abstract void onFilePicked(Uri uri, TipoArchivo tipo);
+    protected abstract void onFilePicked(Uri uri, TipoArchivo tipo, String nombre);
 }

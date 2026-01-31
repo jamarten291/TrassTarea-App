@@ -15,14 +15,7 @@ public class FilePickerUtils {
         String mime = context.getContentResolver().getType(uri);
 
         // Si no hay MIME, obtener nombre y extraer extensión
-        String name = null;
-        try (Cursor cursor = context.getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
-            if (cursor != null && cursor.moveToFirst()) {
-                name = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
-            }
-        } catch (Exception e) {
-            // ignorar
-        }
+        String name = getFileName(context, uri);
 
         String extension = null;
         if (mime == null && name != null && name.contains(".")) {
@@ -60,5 +53,17 @@ public class FilePickerUtils {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType(file + "/*");
         return intent;
+    }
+
+    public static String getFileName(Context context, Uri uri) {
+        try (Cursor cursor = context.getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
+            }
+        } catch (Exception e) {
+            // ignorar
+        }
+
+        return null;
     }
 }

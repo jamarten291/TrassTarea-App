@@ -149,7 +149,7 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
     }
 
     @Override
-    protected void onFilePicked(Uri uri, TipoArchivo tipo) {
+    protected void onFilePicked(Uri uri, TipoArchivo tipo, String nombre) {
         // Dependiendo del tipo de archivo seleccionado, se guarda su path en una determinada variable
         switch (tipo) {
             case IMAGEN:

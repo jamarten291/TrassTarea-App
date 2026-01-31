@@ -3,6 +3,7 @@ package pmdm.jmh.app_gestion_tareas.ui.tarea.create;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Spinner;
 
@@ -12,9 +13,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
+import java.io.File;
+import java.io.IOException;
+
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.database.repository.TareaRepository;
 import pmdm.jmh.app_gestion_tareas.ui.helpers.BaseFilePickerActivity;
+import pmdm.jmh.app_gestion_tareas.ui.helpers.FileManager;
 import pmdm.jmh.app_gestion_tareas.util.HelperClass;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
@@ -33,6 +38,7 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     private int progresoIndex;
     private byte progresoValue;
     private boolean prioridad;
+    private boolean sd = false;
     private FragmentoA fragmentoA;
     private FragmentoB fragmentoB;
     private FragmentManager fragmentManager;
@@ -48,6 +54,9 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) sd = extras.getBoolean(ARG_SD_STORAGE);
 
         fragmentoA = new FragmentoA();
         fragmentManager = getSupportFragmentManager();
@@ -127,22 +136,40 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     }
 
     @Override
-    protected void onFilePicked(Uri uri, TipoArchivo tipo) {
-        // Dependiendo del tipo de archivo seleccionado, se guarda su path en una determinada variable
-        switch (tipo) {
-            case IMAGEN:
-                URL_img = uri.getPath();
-                break;
-            case VIDEO:
-                URL_vid = uri.getPath();
-                break;
-            case AUDIO:
-                URL_aud = uri.getPath();
-                break;
-            case DOCUMENTO:
-                URL_doc = uri.getPath();
-                break;
-            default:
+    protected void onFilePicked(Uri uri, TipoArchivo tipo, String nombre) {
+        // Me aseguro de que la carpeta de la tarea tiene un nombre único
+        String nombreSubDir = titulo + fechaInicio + fechaObjetivo;
+        File subDir = null;
+
+        if (sd && FileManager.checkIfExternalStorageIsAvailable()) {
+            subDir = new File(Environment.getExternalStorageDirectory(), nombreSubDir);
+        } else {
+            // Si la carpeta no existe, creo una
+            subDir = new File(getFilesDir(), nombreSubDir);
+        }
+
+        if (!subDir.exists()) subDir.mkdirs();
+        File dest = new File(subDir, nombre);
+
+        try {
+            switch (tipo) {
+                case IMAGEN:
+                    FileManager.copyUriToInternalStorage(this, uri, dest);
+                    URL_img = dest.getPath();
+                    break;
+                case VIDEO:
+                    URL_vid = uri.getPath();
+                    break;
+                case AUDIO:
+                    URL_aud = uri.getPath();
+                    break;
+                case DOCUMENTO:
+                    URL_doc = uri.getPath();
+                    break;
+                default:
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
     }
 

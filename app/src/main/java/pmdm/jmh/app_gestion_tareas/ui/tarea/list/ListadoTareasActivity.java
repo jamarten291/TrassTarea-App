@@ -167,6 +167,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
             HelperClass.showBasicAlertDialog(this, R.string.app_name, R.string.mensaje_acerca);
         } else if (id == R.id.item_agregar) {
             Intent intent = new Intent(this, CrearTareaActivity.class);
+            intent.putExtra(ARG_SD_STORAGE, almacenamientoSd);
             launcher.launch(intent);
         } else if (id == R.id.item_prioritarias) {
             filtroPorPrioridad = !filtroPorPrioridad;
