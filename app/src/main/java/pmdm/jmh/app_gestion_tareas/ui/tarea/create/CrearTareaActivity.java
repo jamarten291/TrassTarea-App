@@ -3,13 +3,16 @@ package pmdm.jmh.app_gestion_tareas.ui.tarea.create;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import pmdm.jmh.app_gestion_tareas.R;
@@ -32,7 +35,6 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     private String titulo, fechaInicio, fechaObjetivo, descripcion;
     private Uri URL_img_src, URL_aud_src, URL_vid_src, URL_doc_src;
     private int progresoIndex;
-    private byte progresoValue;
     private boolean prioridad;
     private boolean sd = false;
     private FragmentoA fragmentoA;
@@ -64,6 +66,44 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(ARG_SD_STORAGE, sd);
+        outState.putAll(fragmentoA.collectData());
+        outState.putParcelable(ARG_IMAGEN, URL_img_src);
+        outState.putParcelable(ARG_VIDEO, URL_vid_src);
+        outState.putParcelable(ARG_AUDIO, URL_aud_src);
+        outState.putParcelable(ARG_DOC, URL_doc_src);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        sd = savedInstanceState.getBoolean(ARG_SD_STORAGE);
+        URL_img_src = savedInstanceState.getParcelable(ARG_IMAGEN, Uri.class);
+        URL_vid_src = savedInstanceState.getParcelable(ARG_VIDEO, Uri.class);
+        URL_aud_src = savedInstanceState.getParcelable(ARG_AUDIO, Uri.class);
+        URL_doc_src = savedInstanceState.getParcelable(ARG_DOC, Uri.class);
+
+        // Recomenzar el fragmento con los datos restaurados
+        fragmentManager = getSupportFragmentManager();
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.frag_container);
+
+        titulo = savedInstanceState.getString(ARG_PARAM1);
+        fechaInicio = savedInstanceState.getString(ARG_PARAM2);
+        fechaObjetivo = savedInstanceState.getString(ARG_PARAM3);
+        progresoIndex = savedInstanceState.getInt(ARG_PARAM4);
+        prioridad = savedInstanceState.getBoolean(ARG_PARAM5);
+
+        // Dependiendo de la instancia del fragmento, casteo a FragmentoA o FragmentoB
+        if (currentFragment instanceof FragmentoA) {
+            fragmentoA = (FragmentoA) currentFragment;
+        } else if (currentFragment instanceof FragmentoB) {
+            fragmentoB = (FragmentoB) currentFragment;
+        }
+    }
+
+    @Override
     public void onBotonSiguienteClicked() {
         if (fragmentoA != null) {
             Bundle data = fragmentoA.collectData();
@@ -89,8 +129,13 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     @Override
     public void onBotonVolverClicked() {
         descripcion = fragmentoB.getDescripcion();
-
-        fragmentoA = FragmentoA.newInstance(titulo, fechaInicio, fechaObjetivo, progresoIndex, prioridad);
+        fragmentoA = FragmentoA.newInstance(
+                titulo,
+                fechaInicio,
+                fechaObjetivo,
+                progresoIndex,
+                prioridad
+        );
         if (!fragmentoA.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoA).commit();
         }
@@ -106,7 +151,7 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
         } else {
             Intent intent = new Intent();
 
-            progresoValue = (byte) (25 * progresoIndex);
+            byte progresoValue = (byte) (25 * progresoIndex);
             Tarea nuevaTarea = new Tarea(
                     titulo,
                     descripcion,

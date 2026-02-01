@@ -146,6 +146,10 @@ public class FragmentoA extends Fragment implements DataArguments {
         dateFragment.show(getParentFragmentManager(), "datePicker");
     }
 
+    /**
+     * Crea un bundle con los datos de entrada del fragmento.
+     * @return Un bundle que contiene los datos del fragmento.
+     */
     public Bundle collectData() {
         Bundle b = new Bundle();
         b.putString(ARG_PARAM1, etTitulo != null ? etTitulo.getText().toString() : titulo);

@@ -96,6 +96,10 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
         outState.putParcelable(ARG_TAREA, tareaPorEditar);
         outState.putString(ARG_PARAM6, descripcion);
         outState.putBoolean(ARG_SD_STORAGE, sd);
+        outState.putParcelable(ARG_IMAGEN, URL_img_src);
+        outState.putParcelable(ARG_VIDEO, URL_vid_src);
+        outState.putParcelable(ARG_AUDIO, URL_aud_src);
+        outState.putParcelable(ARG_DOC, URL_doc_src);
     }
 
     @Override
@@ -105,6 +109,10 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
         tareaPorEditar = savedInstanceState.getParcelable(ARG_TAREA, Tarea.class);
         descripcion = savedInstanceState.getString(ARG_PARAM6);
         sd = savedInstanceState.getBoolean(ARG_SD_STORAGE);
+        URL_img_src = savedInstanceState.getParcelable(ARG_IMAGEN, Uri.class);
+        URL_vid_src = savedInstanceState.getParcelable(ARG_VIDEO, Uri.class);
+        URL_aud_src = savedInstanceState.getParcelable(ARG_AUDIO, Uri.class);
+        URL_doc_src = savedInstanceState.getParcelable(ARG_DOC, Uri.class);
 
         // Restablezco las variables con los datos de la tarea para no perderlos
         titulo = tareaPorEditar.getTitulo();
@@ -151,7 +159,6 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
     @Override
     public void onBotonVolverClicked() {
         descripcion = fragmentoB.getDescripcion();
-
         fragmentoA = FragmentoA.newInstance(
                 titulo,
                 fechaInicio,
