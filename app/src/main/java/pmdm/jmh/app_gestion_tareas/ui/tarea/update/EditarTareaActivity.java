@@ -226,8 +226,9 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
     public void onFileDeleted(View view) {
         int id = view.getId();
 
-        // Dependiendo del botón pulsado, se lanza un FilePicker con un MIME type específico
-        // Se usa el method heredado de la superclase para lanzar el FilePicker
+        // Dependiendo del botón pulsado, se marca el archivo asignado al botón para la eliminación
+        // Esto lo hago solo en EditarTareaActivity, ya que los archivos no se guardan hasta que no
+        // se pulse el botón de guardado en GuardarTareaActivity
         if (id == R.id.bt_imagen) {
             URL_img_src = null;
             img_delete = true;

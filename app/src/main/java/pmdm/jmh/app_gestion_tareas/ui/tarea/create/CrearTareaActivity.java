@@ -184,8 +184,8 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     public void onFileDeleted(View view) {
         int id = view.getId();
 
-        // Dependiendo del botón pulsado, se lanza un FilePicker con un MIME type específico
-        // Se usa el method heredado de la superclase para lanzar el FilePicker
+        // Se establece a null la URI del archivo asociado al ImageButton pulsado
+        // De este modo, no podrá crearse ni adjuntarse ese archivo
         if (id == R.id.bt_imagen) {
             URL_img_src = null;
         } else if (id == R.id.bt_video) {

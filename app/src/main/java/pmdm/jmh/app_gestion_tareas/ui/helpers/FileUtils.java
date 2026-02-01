@@ -17,17 +17,25 @@ import java.util.function.Function;
 
 import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
 
+/**
+ * Clase que ofrece varias funciones para gestión de archivos en las tareas
+ */
 public class FileUtils {
-    public static boolean createUriCopyForApplication(Context c, Uri uri, File dest) {
+    private static boolean createUriCopy(Context c, Uri uri, File dest) {
+        // Si la URI es nula, devuelve false, esto es útil, ya que la URI es null por defecto si no
+        // ha sido asignada
         if (uri == null) return false;
 
         try (InputStream in = c.getContentResolver().openInputStream(uri);
              OutputStream out = new FileOutputStream(dest)) {
             if (in == null)
                 throw new FileNotFoundException("InputStream nulo para URI: " + uri);
+
+            // Buffer que se rellena con los bytes del archivo origen
             byte[] buf = new byte[8192];
             int len;
             while ((len = in.read(buf)) > 0) {
+                // Escribe en el destino los bytes del origen
                 out.write(buf, 0, len);
             }
             return true;
@@ -36,7 +44,7 @@ public class FileUtils {
         }
     }
 
-    public static boolean checkIfExternalStorageIsAvailable() {
+    private static boolean checkIfExternalStorageIsAvailable() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
@@ -53,45 +61,39 @@ public class FileUtils {
         File doc = fileFromPath.apply(t.getURL_doc());
 
         // Elimina tanto el archivo como la URI asignada a la tarea
+        // Borra la URI si primero ha borrado el archivo exitosamente
         if (img != null && img.exists() && deleteImage) {
-            img.delete();
-            t.setURL_img(null);
+            if (img.delete()) t.setURL_img(null);
         }
         if (aud != null && aud.exists() && deleteAudio) {
-            aud.delete();
-            t.setURL_aud(null);
+            if (aud.delete()) t.setURL_aud(null);
         }
         if (vid != null && vid.exists() && deleteVideo) {
-            vid.delete();
-            t.setURL_vid(null);
+            if (vid.delete()) t.setURL_vid(null);
         }
         if (doc != null && doc.exists() && deleteDocument) {
-            doc.delete();
-            t.setURL_doc(null);
+            if (doc.delete()) t.setURL_doc(null);
         }
     }
 
     public static void attachFilesToTarea(Context c, Tarea t, Uri img_src, Uri vid_src, Uri aud_src, Uri doc_src, boolean sd) {
-        File fileFolder = sd && FileUtils.checkIfExternalStorageIsAvailable()
+        // Si se quiere almacenar en el SD, comprueba que tenga disponible el almacenamiento externo.
+        // De lo contrario, guarda en la memoria interna
+        File appFolder = sd && FileUtils.checkIfExternalStorageIsAvailable()
                 ? c.getExternalFilesDir(null)
                 : c.getFilesDir();
-        File img = new File(fileFolder, getFileNameByUri(c, img_src));
-        File vid = new File(fileFolder, getFileNameByUri(c, vid_src));
-        File aud = new File(fileFolder, getFileNameByUri(c, aud_src));
-        File doc = new File(fileFolder, getFileNameByUri(c, doc_src));
 
-        if (createUriCopyForApplication(c, img_src, img)) {
-            t.setURL_img(img.getPath());
-        }
-        if (createUriCopyForApplication(c, vid_src, vid)) {
-            t.setURL_vid(vid.getPath());
-        }
-        if (createUriCopyForApplication(c, doc_src, doc)) {
-            t.setURL_doc(doc.getPath());
-        }
-        if (createUriCopyForApplication(c, aud_src, aud)) {
-            t.setURL_aud(aud.getPath());
-        }
+        // Crea el archivo concatenando la ruta de almacenamiento de la app con el nombre de la URI
+        File img = new File(appFolder, getFileNameByUri(c, img_src));
+        File vid = new File(appFolder, getFileNameByUri(c, vid_src));
+        File aud = new File(appFolder, getFileNameByUri(c, aud_src));
+        File doc = new File(appFolder, getFileNameByUri(c, doc_src));
+
+        // Si crea la copia en la app exitosamente, asigna la ruta del archivo a la tarea
+        if (createUriCopy(c, img_src, img)) t.setURL_img(img.getPath());
+        if (createUriCopy(c, vid_src, vid)) t.setURL_vid(vid.getPath());
+        if (createUriCopy(c, doc_src, doc)) t.setURL_doc(doc.getPath());
+        if (createUriCopy(c, aud_src, aud)) t.setURL_aud(aud.getPath());
     }
 
     // Method que clasifica una URI según su tipo
@@ -129,18 +131,24 @@ public class FileUtils {
     }
 
     public static String getFileNameByUri(Context context, Uri uri) {
+        // Abre un cursor para ver el nombre del archivo de la URI
         try (Cursor cursor = context.getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
             if (cursor != null && cursor.moveToFirst()) {
+                // Busca el nombre del archivo en el cursor
                 return cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
             }
         } catch (Exception e) {
             // ignorar
         }
 
-        return "null";
+        return "";
     }
 
-    // Method que devuelve el nombre de un archivo en base a su ruta
+    /**
+     * Method que devuelve el nombre de un archivo en base a su ruta.
+     * @param path Ruta completa del archivo.
+     * @return Nombre del archivo.
+     */
     public static String getFileNameFromPath(String path) {
         if (path == null || path.isEmpty()) return null;
         String[] parts = path.split("/");

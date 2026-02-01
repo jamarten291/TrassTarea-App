@@ -107,22 +107,34 @@ public class FragmentoB extends Fragment implements DataArguments {
     }
 
     public void onClick(View view) {
+        // Construyo un AlertDialog en el que se puede Agregar o Borrar un archivo adjunto
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle(R.string.titulo_dialog_archivo)
                 .setMessage(R.string.mensaje_dialog_archivo)
+
+                // Establezco un botón positivo el cual si es pulsado, lanzará el method abstracto
+                // que adjunta archivos a la Tarea
                 .setPositiveButton(R.string.item_agregar,
                         (dialog, which) -> {
                             comunicador.onFileAttached(view);
                         })
+
+                // Establezco un botón negativo el cual si es pulsado, lanzará el method abstracto
+                // que establece a null la URI del archivo, y si existe, lo borra
                 .setNegativeButton(R.string.mc_borrar,
                         (dialog, which) -> {
                             comunicador.onFileDeleted(view);
+
+                            // Muestro una pequeña advertencia al usuario y le recuerdo que la
+                            // eliminación puede cancelarse si se cancela la edición o creación de
+                            // la tarea
                             Toast.makeText(requireContext(), R.string.archivo_eliminado, Toast.LENGTH_SHORT).show();
                         });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-    // Getters para recuperar la descripción y los enlaces a los archivos
+
+    // Getter para recuperar la descripción
     public String getDescripcion() {
         return etDescripcion.getText().toString();
     }
