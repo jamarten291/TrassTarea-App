@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import pmdm.jmh.app_gestion_tareas.R;
@@ -40,7 +41,6 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
     private boolean vid_delete = false;
     private boolean doc_delete = false;
     private int progresoIndex;
-    private byte progresoValue;
     private boolean prioridad;
     private boolean sd = false;
     private FragmentoA fragmentoA;
@@ -65,43 +65,79 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
         // Recupero los datos lanzados desde la actividad ListadoTareas
         Bundle extras = getIntent().getExtras();
 
-        if (extras != null) {
-            // Almaceno la tarea mandada en la intención en una variable
-            tareaPorEditar = extras.getParcelable(ARG_TAREA, Tarea.class);
+        // Almaceno la tarea mandada en la intención en una variable
+        tareaPorEditar = extras.getParcelable(ARG_TAREA, Tarea.class);
 
-            // Se actualizan los datos con la tarea encontrada
-            descripcion = tareaPorEditar.getDescripcion();
-            fragmentoA = FragmentoA.newInstance(
-                    tareaPorEditar.getTitulo(),
-                    tareaPorEditar.getFechaCreacion(),
-                    tareaPorEditar.getFechaObjetivo(),
-                    tareaPorEditar.getProgreso(),
-                    tareaPorEditar.isPrioritaria()
-            );
+        // Divido el progreso en 25 para obtener el índice equivalente del spinner y pasarlo al
+        // fragmento
+        int indiceSpinnerProgreso = tareaPorEditar.getProgreso() / 25;
+        fragmentoA = FragmentoA.newInstance(
+                tareaPorEditar.getTitulo(),
+                tareaPorEditar.getFechaCreacion(),
+                tareaPorEditar.getFechaObjetivo(),
+                indiceSpinnerProgreso,
+                tareaPorEditar.isPrioritaria()
+        );
+        descripcion = tareaPorEditar.getDescripcion();
 
-            // Almaceno la preferencia de almacenamiento SD en una variable
-            sd = extras.getBoolean(ARG_SD_STORAGE);
+        // Almaceno la preferencia de almacenamiento SD en una variable
+        sd = extras.getBoolean(ARG_SD_STORAGE);
 
-            // Se inicializan los fragmentos
-            fragmentManager = getSupportFragmentManager();
-            if(savedInstanceState == null)
-                fragmentManager.beginTransaction().add(R.id.frag_container, fragmentoA).commit();
-        } else {
-            finish();
+        // Se inicializan los fragmentos
+        fragmentManager = getSupportFragmentManager();
+        if(savedInstanceState == null)
+            fragmentManager.beginTransaction().add(R.id.frag_container, fragmentoA).commit();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Guardamos el estado de las variables importantes
+        outState.putParcelable(ARG_TAREA, tareaPorEditar);
+        outState.putString(ARG_PARAM6, descripcion);
+        outState.putBoolean(ARG_SD_STORAGE, sd);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restauramos el estado de las variables
+        tareaPorEditar = savedInstanceState.getParcelable(ARG_TAREA, Tarea.class);
+        descripcion = savedInstanceState.getString(ARG_PARAM6);
+        sd = savedInstanceState.getBoolean(ARG_SD_STORAGE);
+
+        // Restablezco las variables con los datos de la tarea para no perderlos
+        titulo = tareaPorEditar.getTitulo();
+        fechaInicio = tareaPorEditar.getFechaCreacion();
+        fechaObjetivo = tareaPorEditar.getFechaObjetivo();
+        progresoIndex = tareaPorEditar.getProgreso() / 25;
+        prioridad = tareaPorEditar.isPrioritaria();
+
+        // Recomenzar el fragmento con los datos restaurados
+        fragmentManager = getSupportFragmentManager();
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.frag_container);
+
+        // Dependiendo de la instancia del fragmento, casteo a FragmentoA o FragmentoB
+        if (currentFragment instanceof FragmentoA) {
+            fragmentoA = (FragmentoA) currentFragment;
+        } else if (currentFragment instanceof FragmentoB) {
+            fragmentoB = (FragmentoB) currentFragment;
         }
     }
 
     @Override
     public void onBotonSiguienteClicked() {
-        titulo = fragmentoA.getTitulo();
-        fechaInicio = fragmentoA.getFechaInicio();
-        fechaObjetivo = fragmentoA.getFechaObjetivo();
-        progresoIndex = fragmentoA.getProgresoIndex();
-        prioridad = fragmentoA.isPrioridad();
-
-        fragmentoB = FragmentoB.newInstance(titulo, fechaInicio, fechaObjetivo, progresoIndex, prioridad, descripcion);
-        if (!fragmentoB.isAdded()) {
-            fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoB).commit();
+        if (fragmentoA != null) {
+            Bundle data = fragmentoA.collectData();
+            titulo = data.getString(ARG_PARAM1);
+            fechaInicio = data.getString(ARG_PARAM2);
+            fechaObjetivo = data.getString(ARG_PARAM3);
+            progresoIndex = data.getInt(ARG_PARAM4);
+            prioridad = data.getBoolean(ARG_PARAM5);
+            fragmentoB = FragmentoB.newInstance(data, descripcion);
+            if (!fragmentoB.isAdded()) {
+                fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoB).commit();
+            }
         }
     }
 
@@ -116,7 +152,13 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
     public void onBotonVolverClicked() {
         descripcion = fragmentoB.getDescripcion();
 
-        fragmentoA = FragmentoA.newInstance(titulo, fechaInicio, fechaObjetivo, progresoIndex, prioridad);
+        fragmentoA = FragmentoA.newInstance(
+                titulo,
+                fechaInicio,
+                fechaObjetivo,
+                progresoIndex,
+                prioridad
+        );
         if (!fragmentoA.isAdded()) {
             fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoA).commit();
         }
@@ -132,7 +174,6 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
         } else {
             Intent intent = new Intent();
 
-            progresoValue = (byte) (25 * progresoIndex);
             Tarea tareaEditada = getTareaEditada();
 
             // Este method borra tanto la URI del archivo asignada a la tarea como el archivo
@@ -169,6 +210,8 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
 
     @NonNull
     private Tarea getTareaEditada() {
+        // Convierto el índice a su valor en la tarea multiplicando por 25
+        byte progresoValue = (byte) (25 * progresoIndex);
         Tarea tareaEditada = new Tarea(
                 titulo,
                 descripcion,

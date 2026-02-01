@@ -31,7 +31,6 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     private final int OPERACION_ACTUAL = 1;
     private String titulo, fechaInicio, fechaObjetivo, descripcion;
     private Uri URL_img_src, URL_aud_src, URL_vid_src, URL_doc_src;
-    private String URL_img_dst, URL_aud_dst, URL_vid_dst, URL_doc_dst;
     private int progresoIndex;
     private byte progresoValue;
     private boolean prioridad;
@@ -66,15 +65,17 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
 
     @Override
     public void onBotonSiguienteClicked() {
-        titulo = fragmentoA.getTitulo();
-        fechaInicio = fragmentoA.getFechaInicio();
-        fechaObjetivo = fragmentoA.getFechaObjetivo();
-        progresoIndex = fragmentoA.getProgresoIndex();
-        prioridad = fragmentoA.isPrioridad();
-
-        fragmentoB = FragmentoB.newInstance(titulo, fechaInicio, fechaObjetivo, progresoIndex, prioridad, descripcion);
-        if (!fragmentoB.isAdded()) {
-            fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoB).commit();
+        if (fragmentoA != null) {
+            Bundle data = fragmentoA.collectData();
+            titulo = data.getString(ARG_PARAM1);
+            fechaInicio = data.getString(ARG_PARAM2);
+            fechaObjetivo = data.getString(ARG_PARAM3);
+            progresoIndex = data.getInt(ARG_PARAM4);
+            prioridad = data.getBoolean(ARG_PARAM5);
+            fragmentoB = FragmentoB.newInstance(data, descripcion);
+            if (!fragmentoB.isAdded()) {
+                fragmentManager.beginTransaction().replace(R.id.frag_container, fragmentoB).commit();
+            }
         }
     }
 

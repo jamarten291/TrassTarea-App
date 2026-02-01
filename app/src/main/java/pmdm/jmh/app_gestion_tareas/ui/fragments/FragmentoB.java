@@ -44,16 +44,10 @@ public class FragmentoB extends Fragment implements DataArguments {
         // Required empty public constructor
     }
 
-    public static FragmentoB newInstance(String param1, String param2, String param3, int param4, boolean param5, String param6) {
+    public static FragmentoB newInstance(Bundle args, String desc) {
         FragmentoB fragment = new FragmentoB();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        args.putString(ARG_PARAM3, param3);
-        args.putInt(ARG_PARAM4, param4);
-        args.putBoolean(ARG_PARAM5, param5);
-        args.putString(ARG_PARAM6, param6);
         fragment.setArguments(args);
+        args.putString(ARG_PARAM6, desc);
         return fragment;
     }
 

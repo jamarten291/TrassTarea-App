@@ -84,12 +84,7 @@ public class FragmentoA extends Fragment implements DataArguments {
             titulo = getArguments().getString(ARG_PARAM1);
             fechaInicio = getArguments().getString(ARG_PARAM2);
             fechaObjetivo = getArguments().getString(ARG_PARAM3);
-
-            // El valor de progreso de una tarea es un número del 1 al 100
-            // Se divide el valor de progreso de la tarea para obtener el índice del spinner
-            int progresoValue = getArguments().getInt(ARG_PARAM4);
-            progresoIndex = progresoValue / 25;
-
+            progresoIndex = getArguments().getInt(ARG_PARAM4);
             prioridad = getArguments().getBoolean(ARG_PARAM5);
         }
     }
@@ -151,24 +146,13 @@ public class FragmentoA extends Fragment implements DataArguments {
         dateFragment.show(getParentFragmentManager(), "datePicker");
     }
 
-    // Getters para recuperar los datos desde la actividad
-    public String getTitulo() {
-        return etTitulo.getText().toString();
-    }
-
-    public String getFechaInicio() {
-        return etFechaCreacion.getText().toString();
-    }
-
-    public String getFechaObjetivo() {
-        return etFechaObjetivo.getText().toString();
-    }
-
-    public int getProgresoIndex() {
-        return spProgreso.getSelectedItemPosition();
-    }
-
-    public boolean isPrioridad() {
-        return cbPrioritaria.isChecked();
+    public Bundle collectData() {
+        Bundle b = new Bundle();
+        b.putString(ARG_PARAM1, etTitulo != null ? etTitulo.getText().toString() : titulo);
+        b.putString(ARG_PARAM2, etFechaCreacion != null ? etFechaCreacion.getText().toString() : fechaInicio);
+        b.putString(ARG_PARAM3, etFechaObjetivo != null ? etFechaObjetivo.getText().toString() : fechaObjetivo);
+        b.putInt(ARG_PARAM4, spProgreso != null ? spProgreso.getSelectedItemPosition() : progresoIndex);
+        b.putBoolean(ARG_PARAM5, cbPrioritaria != null ? cbPrioritaria.isChecked() : prioridad);
+        return b;
     }
 }
