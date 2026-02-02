@@ -27,6 +27,7 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
     implements DataArguments {
     private List<Tarea> adaptadorTarea;
     private int posicion;
+    private boolean soloPrioritarias;
 
     public TareaAdapter(List<Tarea> adaptadorTarea) {
         this.adaptadorTarea = adaptadorTarea;
@@ -49,6 +50,11 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
         this.posicion = posicion;
     }
 
+    public void setSoloPrioritarias(boolean soloPrioritarias) {
+        this.soloPrioritarias = soloPrioritarias;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public TareaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -59,15 +65,21 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
     @Override
     public void onBindViewHolder(@NonNull TareaViewHolder holder, int position) {
         Tarea tareaActual = adaptadorTarea.get(position);
-        holder.setTarea(tareaActual);
 
-        //Si detectamos un click, hacemos que el atributo "posicion" del Adaptador
-        //sea igual a la posición del elemento del RecyclerView donde se haga el click largo.
-        //Así conseguimos guardar el elemento sobre el que tenemos que actuar.
-        holder.itemView.setOnLongClickListener(v -> {
-            setPosicion(holder.getBindingAdapterPosition());
-            return false;
-        });
+        if (soloPrioritarias && !tareaActual.isPrioritaria()) {
+            holder.itemView.setVisibility(View.GONE);
+        } else {
+            holder.setTarea(tareaActual);
+
+            //Si detectamos un click, hacemos que el atributo "posicion" del Adaptador
+            //sea igual a la posición del elemento del RecyclerView donde se haga el click largo.
+            //Así conseguimos guardar el elemento sobre el que tenemos que actuar.
+            holder.itemView.setOnLongClickListener(v -> {
+                setPosicion(holder.getBindingAdapterPosition());
+                return false;
+            });
+            holder.itemView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

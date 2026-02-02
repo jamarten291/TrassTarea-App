@@ -146,7 +146,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         almacenamientoSd = userDetails.getBoolean("sd", false);
 
         // Actualiza los criterios de ordenación en el ViewModel
-        viewModel.setParams(filtroPorPrioridad, criterioOrden, ordenAsc);
+        viewModel.setParams(criterioOrden, ordenAsc);
     }
 
     @Override
@@ -173,8 +173,7 @@ public class ListadoTareasActivity extends AppCompatActivity implements DataArgu
         } else if (id == R.id.item_prioritarias) {
             filtroPorPrioridad = !filtroPorPrioridad;
 
-            // Vuelve a actualizar los criterios de ordenación para aplicar cambios
-            viewModel.setParams(filtroPorPrioridad, criterioOrden, ordenAsc);
+            adaptadorTarea.setSoloPrioritarias(filtroPorPrioridad);
         } else if (id == R.id.item_preferencias) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.item_salir) {

@@ -28,14 +28,9 @@ public class TareaRepository {
     }
 
     // Este method construye una consulta personalizada según sus criterios
-    public LiveData<List<Tarea>> getTareas(boolean soloPrioritarias, String criterioOrdenamiento, boolean asc) {
+    public LiveData<List<Tarea>> getTareas(String criterioOrdenamiento, boolean asc) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT * FROM tarea");
-
-        // WHERE
-        if (soloPrioritarias) {
-            sql.append(" WHERE prioritaria = 1");
-        }
 
         // ORDER BY
         String columna;

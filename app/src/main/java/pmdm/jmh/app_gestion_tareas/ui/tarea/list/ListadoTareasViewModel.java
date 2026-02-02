@@ -30,7 +30,7 @@ public class ListadoTareasViewModel extends AndroidViewModel {
         // Hace que el LiveData cambie si sus criterios de ordenación son cambiados
         // TODO crear listener de preferencias
         tareas = Transformations.switchMap(criterios, c ->
-                repository.getTareas(c.soloPrioritarias, c.criterio, c.asc)
+                repository.getTareas(c.criterio, c.asc)
         );
     }
 
@@ -38,19 +38,17 @@ public class ListadoTareasViewModel extends AndroidViewModel {
         return tareas;
     }
 
-    public void setParams(boolean soloPrioritarias, String criterio, boolean asc) {
+    public void setParams(String criterio, boolean asc) {
         // Se cambian los criterios de ordenación por otros pasados por parámetro
-        criterios.setValue(new Criterios(soloPrioritarias, criterio, asc));
+        criterios.setValue(new Criterios(criterio, asc));
     }
 
     // Esta clase representa los criterios de ordenacion que se tomarán al mostrar la lista de tareas
     private static class Criterios {
-        boolean soloPrioritarias;
         final String criterio;
         final boolean asc;
 
-        Criterios(boolean s, String c, boolean a) {
-            soloPrioritarias = s;
+        Criterios(String c, boolean a) {
             criterio = c;
             asc = a;
         }
