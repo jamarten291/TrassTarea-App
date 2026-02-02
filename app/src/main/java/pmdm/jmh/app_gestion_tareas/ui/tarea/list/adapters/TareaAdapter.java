@@ -59,6 +59,8 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
     @Override
     public void onBindViewHolder(@NonNull TareaViewHolder holder, int position) {
         Tarea tareaActual = adaptadorTarea.get(position);
+
+        // TODO implementar filtro de prioridad en el propio bind del ViewHolder
         holder.setTarea(tareaActual);
 
         //Si detectamos un click, hacemos que el atributo "posicion" del Adaptador
