@@ -75,5 +75,9 @@
     <string name="descripcion">Description</string>
     <string name="archivo_seleccionado">File attached successfully</string>
     <string name="archivo_eliminado">File marked for deletion, to preserve it, cancel the edition</string>
+    <string name="summary_tema_claro">Light</string>
+    <string name="summary_tema_oscuro">Dark</string>
+    <string name="summary_orden_asc">Ascendant</string>
+    <string name="summary_orden_desc">Descendant</string>
 
 </resources>

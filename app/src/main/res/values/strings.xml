@@ -61,5 +61,9 @@
     <string name="descripcion">Descripción</string>
     <string name="archivo_seleccionado">Archivo adjuntado correctamente</string>
     <string name="archivo_eliminado">Archivo marcado para eliminación, para conservarlo cancela la edición</string>
+    <string name="summary_tema_claro">Claro</string>
+    <string name="summary_tema_oscuro">Oscuro</string>
+    <string name="summary_orden_asc">Ascendente</string>
+    <string name="summary_orden_desc">Descendente</string>
 
 </resources>

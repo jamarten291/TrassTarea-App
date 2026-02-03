@@ -5,6 +5,8 @@
         <SwitchPreference
             android:defaultValue="true"
             android:key="tema"
+            app:summaryOff="@string/summary_tema_oscuro"
+            app:summaryOn="@string/summary_tema_claro"
             app:title="@string/settings_tema" />
         <ListPreference
             android:defaultValue="2"
@@ -27,6 +29,8 @@
         <SwitchPreference
             android:defaultValue="true"
             app:key="orden"
+            app:summaryOff="@string/summary_orden_desc"
+            app:summaryOn="@string/summary_orden_asc"
             app:title="@string/settings_orden" />
 
     </PreferenceCategory>
