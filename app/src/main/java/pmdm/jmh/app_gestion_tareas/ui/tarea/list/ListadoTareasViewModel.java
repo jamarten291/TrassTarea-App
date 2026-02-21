@@ -28,7 +28,6 @@ public class ListadoTareasViewModel extends AndroidViewModel {
         repository = new TareaRepository(application);
 
         // Hace que el LiveData cambie si sus criterios de ordenación son cambiados
-        // TODO crear listener de preferencias
         tareas = Transformations.switchMap(criterios, c ->
                 repository.getTareas(c.soloPrioritarias, c.criterio, c.asc)
         );

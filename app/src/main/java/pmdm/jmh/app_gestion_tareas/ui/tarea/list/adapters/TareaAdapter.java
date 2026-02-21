@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -16,6 +18,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.util.HelperClass;
@@ -27,6 +31,9 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
     implements DataArguments {
     private List<Tarea> adaptadorTarea;
     private int posicion;
+
+    // Executor para animar el view holder del adaptador
+    private Executor executor = Executors.newSingleThreadExecutor();
 
     public TareaAdapter(List<Tarea> adaptadorTarea) {
         this.adaptadorTarea = adaptadorTarea;
@@ -60,7 +67,6 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
     public void onBindViewHolder(@NonNull TareaViewHolder holder, int position) {
         Tarea tareaActual = adaptadorTarea.get(position);
 
-        // TODO implementar filtro de prioridad en el propio bind del ViewHolder
         holder.setTarea(tareaActual);
 
         //Si detectamos un click, hacemos que el atributo "posicion" del Adaptador
@@ -70,6 +76,10 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
             setPosicion(holder.getBindingAdapterPosition());
             return false;
         });
+
+        // Animación para el view holder
+        Animation animation = AnimationUtils.loadAnimation(holder.c, R.anim.slide_in_up);
+        executor.execute(() -> holder.itemView.startAnimation(animation));
     }
 
     @Override
