@@ -51,7 +51,8 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
         };
 
         Intent intentArchivos = new Intent();
-        intentArchivos.setType(Intent.ACTION_GET_CONTENT);
+        intentArchivos.setAction(Intent.ACTION_GET_CONTENT);
+        intentArchivos.addCategory(Intent.CATEGORY_OPENABLE);
 
         if ("doc".equals(mimeType)) {
             intentArchivos.setType("*/*");
