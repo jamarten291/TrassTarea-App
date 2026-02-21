@@ -3,6 +3,7 @@ package pmdm.jmh.app_gestion_tareas.ui.helpers;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -25,7 +26,6 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
                         if (uri != null) {
                             // Clasifica el archivo seleccionado según su tipo
                             TipoArchivo tipo = FileUtils.classifyUriByType(uri, this);
-                            String nombre = FileUtils.getFileNameByUri(this, uri);
 
                             // Llama a un method abstracto para hacer algo con el archivo
                             onFilePicked(uri, tipo);
@@ -49,19 +49,51 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
                 "text/plain",
                 "text/html"
         };
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
 
-        // Si se trata de un documento, mete más mimes, si no, simplemente agrega el mime pasado por
-        // parámetro
-        if ("doc".equalsIgnoreCase(mimeType)) {
-            intent.setType("*/*");
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, docMimeTypes);
+        Intent intentArchivos = new Intent();
+        intentArchivos.setType(Intent.ACTION_GET_CONTENT);
+
+        if ("doc".equals(mimeType)) {
+            intentArchivos.setType("*/*");
+            // Se colocan varios mimes para el documento
+            intentArchivos.putExtra(Intent.EXTRA_MIME_TYPES, docMimeTypes);
+            intentArchivos.setAction(Intent.ACTION_OPEN_DOCUMENT);
+            openDocumentLauncher.launch(intentArchivos);
         } else {
-            intent.setType(mimeType + "/*");
-        }
+            intentArchivos.setType(mimeType + "/*");
 
-        openDocumentLauncher.launch(intent);
+            // Se inicializa un ActionChooser
+            Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+            chooser.putExtra(Intent.EXTRA_INTENT, intentArchivos);
+            Intent[] intentArray = new Intent[1];
+
+            // Dependiendo del archivo se agrega otro intent
+            switch (mimeType) {
+                case "image":
+                    chooser.putExtra(Intent.EXTRA_TITLE, "Fotos");
+
+                    Intent aCamara = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intentArray[0] = aCamara;
+                    chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                    break;
+                case "video":
+                    chooser.putExtra(Intent.EXTRA_TITLE, "Vídeos");
+
+                    Intent aCamaraVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                    intentArray[0] = aCamaraVideo; //Opciones secundarias, hay 1 sola
+                    chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                    break;
+                case "audio":
+                    chooser.putExtra(Intent.EXTRA_TITLE, "Grabaciones");
+
+                    Intent aGrabadora = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                    intentArray[0] = aGrabadora; //Opciones secundarias, hay 1 sola
+                    chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                    break;
+            }
+
+            openDocumentLauncher.launch(chooser);
+        }
     }
 
     /**
