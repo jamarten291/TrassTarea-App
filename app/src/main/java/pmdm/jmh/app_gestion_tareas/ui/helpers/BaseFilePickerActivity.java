@@ -1,39 +1,61 @@
 package pmdm.jmh.app_gestion_tareas.ui.helpers;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
 import pmdm.jmh.app_gestion_tareas.R;
 
 public abstract class BaseFilePickerActivity extends AppCompatActivity {
-    protected ActivityResultLauncher<Intent> openDocumentLauncher;
+    protected Uri imageUri = null;
+    protected ActivityResultLauncher<Intent> openDocumentLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Uri uri = result.getData().getData();
+                    if (uri != null) {
+                        // Clasifica el archivo seleccionado según su tipo
+                        TipoArchivo tipo = FileUtils.classifyUriByType(uri, this);
+
+                        // Llama a un method abstracto para hacer algo con el archivo
+                        onFilePicked(uri, tipo);
+                        Toast.makeText(this, R.string.archivo_seleccionado, Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Si getData() es nulo y hay una uri de imagen, se da por hecho que se ha abierto la cámara
+                        if (imageUri != null) onFilePicked(imageUri, TipoArchivo.IMAGEN);
+                    }
+                }
+            }
+    );
+
+    // ActivityResultLauncher para la solicitud de permisos
+    private final ActivityResultLauncher<String> lanzadorPermisos =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+            isGranted -> {
+                if (!isGranted) {
+                    Toast.makeText(this, "No se pudieron conceder los permisos", Toast.LENGTH_SHORT).show();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        openDocumentLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                        Uri uri = result.getData().getData();
-                        if (uri != null) {
-                            // Clasifica el archivo seleccionado según su tipo
-                            TipoArchivo tipo = FileUtils.classifyUriByType(uri, this);
-
-                            // Llama a un method abstracto para hacer algo con el archivo
-                            onFilePicked(uri, tipo);
-                            Toast.makeText(this, R.string.archivo_seleccionado, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-        );
     }
 
     /**
@@ -71,29 +93,63 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
             // Dependiendo del archivo se agrega otro intent
             switch (mimeType) {
                 case "image":
-                    chooser.putExtra(Intent.EXTRA_TITLE, "Fotos");
-
-                    Intent aCamara = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intentArray[0] = aCamara;
-                    chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                    if(comprobarPermisoCamara()) {
+                        lanzarChooserImagen(chooser);
+                    } else {
+                        pedirPermisoCamara();
+                    }
                     break;
                 case "video":
                     chooser.putExtra(Intent.EXTRA_TITLE, "Vídeos");
-
                     Intent aCamaraVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                    intentArray[0] = aCamaraVideo; //Opciones secundarias, hay 1 sola
-                    chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                    if (aCamaraVideo.resolveActivity(getPackageManager()) != null) {
+                        intentArray[0] = aCamaraVideo;
+                        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                    }
                     break;
+
                 case "audio":
                     chooser.putExtra(Intent.EXTRA_TITLE, "Grabaciones");
-
                     Intent aGrabadora = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-                    intentArray[0] = aGrabadora; //Opciones secundarias, hay 1 sola
-                    chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                    if (aGrabadora.resolveActivity(getPackageManager()) != null) {
+                        intentArray[0] = aGrabadora;
+                        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                    }
                     break;
             }
 
             openDocumentLauncher.launch(chooser);
+        }
+    }
+
+    private void lanzarChooserImagen(Intent chooser) {
+        chooser.putExtra(Intent.EXTRA_TITLE, "Fotos");
+        Intent[] intentArray = new Intent[1];
+
+        try {
+            Intent aCamara = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            // Verificamos que haya una cámara disponible antes de añadirla
+            if (aCamara.resolveActivity(getPackageManager()) != null) {
+                File tempFile = FileUtils.crearArchivoTemporal(this);
+                imageUri = FileProvider.getUriForFile(this,
+                        "pmdm.jmh.app_gestion_tareas.FileProvider",
+                        tempFile);
+
+                aCamara.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+
+                // Conceder permisos de lectura/escritura sobre el URI al intent
+                aCamara.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                aCamara.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+                intentArray[0] = aCamara;
+                chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+            }
+            // Si no hay cámara, el chooser solo mostrará la galería (intentArchivos)
+
+        } catch (IOException e) {
+            Toast.makeText(this, "Error al crear el archivo temporal", Toast.LENGTH_LONG).show();
+            Log.e("Error", Objects.requireNonNull(e.getMessage()));
         }
     }
 
@@ -105,4 +161,15 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
      * @param tipo   Tipo del archivo seleccionado por el usuario
      */
     protected abstract void onFilePicked(Uri uri, TipoArchivo tipo);
+
+    //Metodo para comprobar si se ha concedido el permiso
+    private boolean comprobarPermisoCamara() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    //Metodo para solicitar el permiso al usuario
+    private void pedirPermisoCamara() {
+        lanzadorPermisos.launch(Manifest.permission.CAMERA);
+    }
 }
