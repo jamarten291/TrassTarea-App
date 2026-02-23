@@ -13,8 +13,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import pmdm.jmh.app_gestion_tareas.R;
-import pmdm.jmh.app_gestion_tareas.ui.fragments.ImageDialogFragment;
-import pmdm.jmh.app_gestion_tareas.ui.fragments.VideoDialogFragment;
+import pmdm.jmh.app_gestion_tareas.ui.fragments.media.DocumentDialogFragment;
+import pmdm.jmh.app_gestion_tareas.ui.fragments.media.ImageDialogFragment;
+import pmdm.jmh.app_gestion_tareas.ui.fragments.media.VideoDialogFragment;
 import pmdm.jmh.app_gestion_tareas.ui.helpers.FileUtils;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 
@@ -74,6 +75,8 @@ public class DescripcionActivity extends AppCompatActivity
             String audioUri = data.getString(ARG_AUDIO);
             if (audioUri != null) {
                 tvAud.setText(FileUtils.getFileNameFromPath(audioUri));
+
+                // TODO cambiar Uri.parse por Uri.fromFile en todos los DialogFragment para mapeo explícito
                 MediaPlayer mp = MediaPlayer.create(this, Uri.parse(audioUri));
                 mp.setLooping(false);
 
@@ -93,7 +96,8 @@ public class DescripcionActivity extends AppCompatActivity
             if (docUri != null) {
                 tvDoc.setText(FileUtils.getFileNameFromPath(docUri));
                 tvDoc.setOnClickListener(v -> {
-
+                    DocumentDialogFragment dialog = new DocumentDialogFragment(docUri);
+                    dialog.show(getSupportFragmentManager(), "document_dialog");
                 });
             } else {
                 tvDoc.setText(R.string.no_archivo);

@@ -1,4 +1,4 @@
-package pmdm.jmh.app_gestion_tareas.ui.fragments;
+package pmdm.jmh.app_gestion_tareas.ui.fragments.media;
 
 import android.app.Dialog;
 import android.net.Uri;
@@ -7,18 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ImageView;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 import pmdm.jmh.app_gestion_tareas.R;
 
-public class ImageDialogFragment extends DialogFragment {
-    private final String imageUri;
+public class VideoDialogFragment extends DialogFragment {
+    private final String videoUri;
 
-    public ImageDialogFragment(String imageUri) {
-        this.imageUri = imageUri;
+    public VideoDialogFragment(String videoUri) {
+        this.videoUri = videoUri;
     }
 
     @NonNull
@@ -32,17 +32,24 @@ public class ImageDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_image, container, false);
+        return inflater.inflate(R.layout.dialog_video, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ImageView imageView = view.findViewById(R.id.image_view);
-        imageView.setImageURI(Uri.parse(imageUri));
+        VideoView videoView = view.findViewById(R.id.video_view);
+        videoView.setVideoURI(Uri.parse(videoUri));
+        videoView.start();
 
-        // Cerrar el diálogo al tocar la imagen
-        imageView.setOnClickListener(v -> dismiss());
+        // Manejar clics en el video para pausar/reproducir
+        videoView.setOnClickListener(v -> {
+            if (videoView.isPlaying()) {
+                videoView.pause();
+            } else {
+                videoView.start();
+            }
+        });
     }
 }
