@@ -10,6 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.File;
+
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 
@@ -44,9 +46,48 @@ public class DescripcionActivity extends AppCompatActivity
         if (data != null) {
             tvDesc.setText(data.getString(ARG_PARAM6));
             tvImg.setText(data.getString(ARG_IMAGEN));
+            tvImg.setOnClickListener(v -> {
+                TextView tv = (TextView) v;
+                String nombreArchivo = tv.getText().toString();
+                File archivoActual = new File(getFilesDir(), nombreArchivo);
+
+                if (archivoActual.exists()) {
+
+                }
+            });
+
             tvVid.setText(data.getString(ARG_VIDEO));
+            tvVid.setOnClickListener(v -> {
+                TextView tv = (TextView) v;
+                String nombreArchivo = tv.getText().toString();
+                File archivoActual = new File(getFilesDir(), nombreArchivo);
+
+                if (archivoActual.exists()) {
+
+                }
+            });
+
             tvAud.setText(data.getString(ARG_AUDIO));
+            tvAud.setOnClickListener(v -> {
+                TextView tv = (TextView) v;
+                String nombreArchivo = tv.getText().toString();
+                File archivoActual = new File(getFilesDir(), nombreArchivo);
+
+                if (archivoActual.exists()) {
+
+                }
+            });
+
             tvDoc.setText(data.getString(ARG_DOC));
+            tvDoc.setOnClickListener(v -> {
+                TextView tv = (TextView) v;
+                String nombreArchivo = tv.getText().toString();
+                File archivoActual = new File(getFilesDir(), nombreArchivo);
+
+                if (archivoActual.exists()) {
+
+                }
+            });
         } else {
             tvDesc.setText("");
             tvImg.setText("");
