@@ -171,10 +171,10 @@ public class TareaAdapter extends RecyclerView.Adapter<TareaAdapter.TareaViewHol
             if (pos != RecyclerView.NO_POSITION) {
                 Intent intent = new Intent(c, DescripcionActivity.class);
                 intent.putExtra(ARG_PARAM6, tareaActual.getDescripcion());
-                intent.putExtra(ARG_IMAGEN, tareaActual.getNombreImg());
-                intent.putExtra(ARG_VIDEO, tareaActual.getNombreVid());
-                intent.putExtra(ARG_AUDIO, tareaActual.getNombreAud());
-                intent.putExtra(ARG_DOC, tareaActual.getNombreDoc());
+                intent.putExtra(ARG_IMAGEN, tareaActual.getURL_img());
+                intent.putExtra(ARG_VIDEO, tareaActual.getURL_vid());
+                intent.putExtra(ARG_AUDIO, tareaActual.getURL_aud());
+                intent.putExtra(ARG_DOC, tareaActual.getURL_doc());
                 c.startActivity(intent);
             }
         }

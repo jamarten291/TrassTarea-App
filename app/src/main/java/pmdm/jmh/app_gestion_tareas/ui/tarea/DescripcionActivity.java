@@ -1,5 +1,6 @@
 package pmdm.jmh.app_gestion_tareas.ui.tarea;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +14,8 @@ import androidx.core.view.WindowInsetsCompat;
 import java.io.File;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.ui.fragments.VideoDialogFragment;
+import pmdm.jmh.app_gestion_tareas.ui.helpers.FileUtils;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 
 public class DescripcionActivity extends AppCompatActivity
@@ -56,15 +59,11 @@ public class DescripcionActivity extends AppCompatActivity
                 }
             });
 
-            tvVid.setText(data.getString(ARG_VIDEO));
+            String videoUri = data.getString(ARG_VIDEO);
+            tvVid.setText(FileUtils.getFileNameByUri(this, Uri.parse(videoUri)));
             tvVid.setOnClickListener(v -> {
-                TextView tv = (TextView) v;
-                String nombreArchivo = tv.getText().toString();
-                File archivoActual = new File(getFilesDir(), nombreArchivo);
-
-                if (archivoActual.exists()) {
-
-                }
+                VideoDialogFragment dialog = new VideoDialogFragment(videoUri);
+                dialog.show(getSupportFragmentManager(), "video_dialog");
             });
 
             tvAud.setText(data.getString(ARG_AUDIO));
