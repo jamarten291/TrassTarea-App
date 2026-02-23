@@ -93,6 +93,8 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
             // Dependiendo del archivo se agrega otro intent
             switch (mimeType) {
                 case "image":
+                    // TODO arreglar glitch al solicitar permisos al usuario que causa que
+                    //  la galería se muestre primero
                     if(comprobarPermisoCamara()) {
                         lanzarChooserImagen(chooser);
                     } else {
@@ -136,6 +138,7 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
                         "pmdm.jmh.app_gestion_tareas.FileProvider",
                         tempFile);
 
+                // TODO arreglar bug al guardar la imagen tomada desde la cámara
                 aCamara.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
                 // Conceder permisos de lectura/escritura sobre el URI al intent

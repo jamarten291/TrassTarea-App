@@ -76,7 +76,8 @@ public class DescripcionActivity extends AppCompatActivity
             if (audioUri != null) {
                 tvAud.setText(FileUtils.getFileNameFromPath(audioUri));
 
-                // TODO cambiar Uri.parse por Uri.fromFile en todos los DialogFragment para mapeo explícito
+                // TODO cambiar Uri.parse por Uri.fromFile en todos los DialogFragment
+                //  para mapeo explícito
                 MediaPlayer mp = MediaPlayer.create(this, Uri.parse(audioUri));
                 mp.setLooping(false);
 
