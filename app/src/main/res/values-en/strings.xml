@@ -79,5 +79,7 @@
     <string name="summary_tema_oscuro">Dark</string>
     <string name="summary_orden_asc">Ascendant</string>
     <string name="summary_orden_desc">Descendant</string>
+    <string name="no_archivo">No file</string>
+    <string name="reproduciendo">Playing…</string>
 
 </resources>

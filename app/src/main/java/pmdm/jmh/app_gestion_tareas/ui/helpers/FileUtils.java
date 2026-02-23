@@ -13,6 +13,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.function.Function;
 
 import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
@@ -156,5 +159,21 @@ public class FileUtils {
 
         // Devuelve el último elemento del array
         return parts[parts.length - 1];
+    }
+
+    public static File crearArchivoTemporal(Context c) throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
+                .format(new Date());
+        String nombreArchivoImagen = "JPEG_" + timeStamp + "_";
+        File rutaFoto = c.getFilesDir();
+        //File rutaExterna = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File archivoImagen = File.createTempFile(
+                nombreArchivoImagen,    // prefijo
+                ".jpg",                 // sufijo
+                rutaFoto                // directorio
+        );
+
+        return archivoImagen;
     }
 }

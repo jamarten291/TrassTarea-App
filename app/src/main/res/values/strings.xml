@@ -65,5 +65,6 @@
     <string name="summary_tema_oscuro">Oscuro</string>
     <string name="summary_orden_asc">Ascendente</string>
     <string name="summary_orden_desc">Descendente</string>
-
+    <string name="no_archivo">Sin archivo</string>
+    <string name="reproduciendo">"Reproduciendo…"</string>
 </resources>

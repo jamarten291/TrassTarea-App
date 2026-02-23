@@ -1,5 +1,7 @@
 package pmdm.jmh.app_gestion_tareas.ui.tarea;
 
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,6 +13,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.ui.fragments.media.DocumentDialogFragment;
+import pmdm.jmh.app_gestion_tareas.ui.fragments.media.ImageDialogFragment;
+import pmdm.jmh.app_gestion_tareas.ui.fragments.media.VideoDialogFragment;
+import pmdm.jmh.app_gestion_tareas.ui.helpers.FileUtils;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
 
 public class DescripcionActivity extends AppCompatActivity
@@ -43,16 +49,60 @@ public class DescripcionActivity extends AppCompatActivity
         Bundle data = getIntent().getExtras();
         if (data != null) {
             tvDesc.setText(data.getString(ARG_PARAM6));
-            tvImg.setText(data.getString(ARG_IMAGEN));
-            tvVid.setText(data.getString(ARG_VIDEO));
-            tvAud.setText(data.getString(ARG_AUDIO));
-            tvDoc.setText(data.getString(ARG_DOC));
-        } else {
-            tvDesc.setText("");
-            tvImg.setText("");
-            tvVid.setText("");
-            tvAud.setText("");
-            tvDoc.setText("");
+
+            String imageUri = data.getString(ARG_IMAGEN);
+            if (imageUri != null) {
+                tvImg.setText(FileUtils.getFileNameFromPath(imageUri));
+                tvImg.setOnClickListener(v -> {
+                    ImageDialogFragment dialog = new ImageDialogFragment(imageUri);
+                    dialog.show(getSupportFragmentManager(), "image_dialog");
+                });
+            } else {
+                tvImg.setText(R.string.no_archivo);
+            }
+
+            String videoUri = data.getString(ARG_VIDEO);
+            if (videoUri != null) {
+                tvVid.setText(FileUtils.getFileNameFromPath(videoUri));
+                tvVid.setOnClickListener(v -> {
+                    VideoDialogFragment dialog = new VideoDialogFragment(videoUri);
+                    dialog.show(getSupportFragmentManager(), "video_dialog");
+                });
+            } else {
+                tvVid.setText(R.string.no_archivo);
+            }
+
+            String audioUri = data.getString(ARG_AUDIO);
+            if (audioUri != null) {
+                tvAud.setText(FileUtils.getFileNameFromPath(audioUri));
+
+                // TODO cambiar Uri.parse por Uri.fromFile en todos los DialogFragment
+                //  para mapeo explícito
+                MediaPlayer mp = MediaPlayer.create(this, Uri.parse(audioUri));
+                mp.setLooping(false);
+
+                // Listener que reproduce el audio cuando se pulsa sobre el TextView
+                tvAud.setOnClickListener(v -> {
+                    if (mp.isPlaying()) {
+                        mp.pause();
+                    } else {
+                        mp.start();
+                    }
+                });
+            } else {
+                tvAud.setText(R.string.no_archivo);
+            }
+
+            String docUri = data.getString(ARG_DOC);
+            if (docUri != null) {
+                tvDoc.setText(FileUtils.getFileNameFromPath(docUri));
+                tvDoc.setOnClickListener(v -> {
+                    DocumentDialogFragment dialog = new DocumentDialogFragment(docUri);
+                    dialog.show(getSupportFragmentManager(), "document_dialog");
+                });
+            } else {
+                tvDoc.setText(R.string.no_archivo);
+            }
         }
     }
 }
