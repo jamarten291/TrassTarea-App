@@ -1,5 +1,6 @@
 package pmdm.jmh.app_gestion_tareas.ui.tarea;
 
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
@@ -11,9 +12,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.io.File;
-
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.ui.fragments.ImageDialogFragment;
 import pmdm.jmh.app_gestion_tareas.ui.fragments.VideoDialogFragment;
 import pmdm.jmh.app_gestion_tareas.ui.helpers.FileUtils;
 import pmdm.jmh.app_gestion_tareas.ui.interfaces.DataArguments;
@@ -48,51 +48,56 @@ public class DescripcionActivity extends AppCompatActivity
         Bundle data = getIntent().getExtras();
         if (data != null) {
             tvDesc.setText(data.getString(ARG_PARAM6));
-            tvImg.setText(data.getString(ARG_IMAGEN));
-            tvImg.setOnClickListener(v -> {
-                TextView tv = (TextView) v;
-                String nombreArchivo = tv.getText().toString();
-                File archivoActual = new File(getFilesDir(), nombreArchivo);
 
-                if (archivoActual.exists()) {
-
-                }
-            });
+            String imageUri = data.getString(ARG_IMAGEN);
+            if (imageUri != null) {
+                tvImg.setText(FileUtils.getFileNameFromPath(imageUri));
+                tvImg.setOnClickListener(v -> {
+                    ImageDialogFragment dialog = new ImageDialogFragment(imageUri);
+                    dialog.show(getSupportFragmentManager(), "image_dialog");
+                });
+            } else {
+                tvImg.setText(R.string.no_archivo);
+            }
 
             String videoUri = data.getString(ARG_VIDEO);
-            tvVid.setText(FileUtils.getFileNameByUri(this, Uri.parse(videoUri)));
-            tvVid.setOnClickListener(v -> {
-                VideoDialogFragment dialog = new VideoDialogFragment(videoUri);
-                dialog.show(getSupportFragmentManager(), "video_dialog");
-            });
+            if (videoUri != null) {
+                tvVid.setText(FileUtils.getFileNameFromPath(videoUri));
+                tvVid.setOnClickListener(v -> {
+                    VideoDialogFragment dialog = new VideoDialogFragment(videoUri);
+                    dialog.show(getSupportFragmentManager(), "video_dialog");
+                });
+            } else {
+                tvVid.setText(R.string.no_archivo);
+            }
 
-            tvAud.setText(data.getString(ARG_AUDIO));
-            tvAud.setOnClickListener(v -> {
-                TextView tv = (TextView) v;
-                String nombreArchivo = tv.getText().toString();
-                File archivoActual = new File(getFilesDir(), nombreArchivo);
+            String audioUri = data.getString(ARG_AUDIO);
+            if (audioUri != null) {
+                tvAud.setText(FileUtils.getFileNameFromPath(audioUri));
+                MediaPlayer mp = MediaPlayer.create(this, Uri.parse(audioUri));
+                mp.setLooping(false);
 
-                if (archivoActual.exists()) {
+                // Listener que reproduce el audio cuando se pulsa sobre el TextView
+                tvAud.setOnClickListener(v -> {
+                    if (mp.isPlaying()) {
+                        mp.pause();
+                    } else {
+                        mp.start();
+                    }
+                });
+            } else {
+                tvAud.setText(R.string.no_archivo);
+            }
 
-                }
-            });
+            String docUri = data.getString(ARG_DOC);
+            if (docUri != null) {
+                tvDoc.setText(FileUtils.getFileNameFromPath(docUri));
+                tvDoc.setOnClickListener(v -> {
 
-            tvDoc.setText(data.getString(ARG_DOC));
-            tvDoc.setOnClickListener(v -> {
-                TextView tv = (TextView) v;
-                String nombreArchivo = tv.getText().toString();
-                File archivoActual = new File(getFilesDir(), nombreArchivo);
-
-                if (archivoActual.exists()) {
-
-                }
-            });
-        } else {
-            tvDesc.setText("");
-            tvImg.setText("");
-            tvVid.setText("");
-            tvAud.setText("");
-            tvDoc.setText("");
+                });
+            } else {
+                tvDoc.setText(R.string.no_archivo);
+            }
         }
     }
 }
