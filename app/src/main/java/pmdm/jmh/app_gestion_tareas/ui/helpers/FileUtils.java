@@ -25,20 +25,48 @@ import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
  */
 public class FileUtils {
     private static boolean createUriCopy(Context c, Uri uri, File dest) {
-        // Si la URI es nula, devuelve false, esto es útil, ya que la URI es null por defecto si no
-        // ha sido asignada
         if (uri == null) return false;
+
+        // Comprobamos si el origen y destino son el mismo archivo físico.
+        // Esto es crucial para evitar truncar el archivo al abrir el FileOutputStream.
+        
+        // Caso 1: URI de tipo file
+        if ("file".equals(uri.getScheme())) {
+            File sourceFile = new File(uri.getPath());
+            if (sourceFile.getAbsolutePath().equals(dest.getAbsolutePath())) {
+                return true; 
+            }
+        }
+        
+        // Caso 2: URI de tipo content (como los de FileProvider)
+        // Intentamos comparar el nombre del archivo si está en la misma carpeta de la app
+        if ("content".equals(uri.getScheme())) {
+            String fileName = getFileNameByUri(c, uri);
+            File appFilesDir = c.getFilesDir();
+            File appExternalFilesDir = c.getExternalFilesDir(null);
+            
+            boolean isSameFile = false;
+            if (dest.getParentFile() != null) {
+                if (dest.getParentFile().getAbsolutePath().equals(appFilesDir.getAbsolutePath()) ||
+                    (appExternalFilesDir != null && dest.getParentFile().getAbsolutePath().equals(appExternalFilesDir.getAbsolutePath()))) {
+                    
+                    if (dest.getName().equals(fileName)) {
+                        isSameFile = true;
+                    }
+                }
+            }
+            
+            if (isSameFile) return true;
+        }
 
         try (InputStream in = c.getContentResolver().openInputStream(uri);
              OutputStream out = new FileOutputStream(dest)) {
             if (in == null)
                 throw new FileNotFoundException("InputStream nulo para URI: " + uri);
 
-            // Buffer que se rellena con los bytes del archivo origen
             byte[] buf = new byte[8192];
             int len;
             while ((len = in.read(buf)) > 0) {
-                // Escribe en el destino los bytes del origen
                 out.write(buf, 0, len);
             }
             return true;
@@ -52,7 +80,6 @@ public class FileUtils {
     }
 
     public static void deleteTareaFiles(Tarea t, boolean deleteImage, boolean deleteAudio, boolean deleteVideo, boolean deleteDocument) {
-        // helper para crear File solo si la ruta es válida
         Function<String, File> fileFromPath = path -> {
             if (path == null || path.isEmpty()) return null;
             return new File(path);
@@ -63,8 +90,6 @@ public class FileUtils {
         File vid = fileFromPath.apply(t.getURL_vid());
         File doc = fileFromPath.apply(t.getURL_doc());
 
-        // Elimina tanto el archivo como la URI asignada a la tarea
-        // Borra la URI si primero ha borrado el archivo exitosamente
         if (img != null && img.exists() && deleteImage) {
             if (img.delete()) t.setURL_img(null);
         }
@@ -80,38 +105,36 @@ public class FileUtils {
     }
 
     public static void attachFilesToTarea(Context c, Tarea t, Uri img_src, Uri vid_src, Uri aud_src, Uri doc_src, boolean sd) {
-        // Si se quiere almacenar en el SD, comprueba que tenga disponible el almacenamiento externo.
-        // De lo contrario, guarda en la memoria interna
         File appFolder = sd && FileUtils.checkIfExternalStorageIsAvailable()
                 ? c.getExternalFilesDir(null)
                 : c.getFilesDir();
 
-        // Crea el archivo concatenando la ruta de almacenamiento de la app con el nombre de la URI
-        File img = new File(appFolder, getFileNameByUri(c, img_src));
-        File vid = new File(appFolder, getFileNameByUri(c, vid_src));
-        File aud = new File(appFolder, getFileNameByUri(c, aud_src));
-        File doc = new File(appFolder, getFileNameByUri(c, doc_src));
-
-        // Si crea la copia en la app exitosamente, asigna la ruta del archivo a la tarea
-        if (createUriCopy(c, img_src, img)) t.setURL_img(img.getPath());
-        if (createUriCopy(c, vid_src, vid)) t.setURL_vid(vid.getPath());
-        if (createUriCopy(c, doc_src, doc)) t.setURL_doc(doc.getPath());
-        if (createUriCopy(c, aud_src, aud)) t.setURL_aud(aud.getPath());
+        if (img_src != null) {
+            File img = new File(appFolder, getFileNameByUri(c, img_src));
+            if (createUriCopy(c, img_src, img)) t.setURL_img(img.getPath());
+        }
+        if (vid_src != null) {
+            File vid = new File(appFolder, getFileNameByUri(c, vid_src));
+            if (createUriCopy(c, vid_src, vid)) t.setURL_vid(vid.getPath());
+        }
+        if (doc_src != null) {
+            File doc = new File(appFolder, getFileNameByUri(c, doc_src));
+            if (createUriCopy(c, doc_src, doc)) t.setURL_doc(doc.getPath());
+        }
+        if (aud_src != null) {
+            File aud = new File(appFolder, getFileNameByUri(c, aud_src));
+            if (createUriCopy(c, aud_src, aud)) t.setURL_aud(aud.getPath());
+        }
     }
 
-    // Method que clasifica una URI según su tipo
     public static TipoArchivo classifyUriByType(Uri uri, Context context) {
         if (uri == null) return TipoArchivo.DESCONOCIDO;
 
         String mime = context.getContentResolver().getType(uri);
-
-        // Si no hay MIME, obtener nombre y extraer extensión
         String name = getFileNameByUri(context, uri);
 
-        String extension = null;
         if (mime == null && name != null && name.contains(".")) {
-            // Obtiene la extensión haciendo un substring
-            extension = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
+            String extension = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
             mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
 
@@ -119,7 +142,6 @@ public class FileUtils {
             if (mime.startsWith("image/")) return TipoArchivo.IMAGEN;
             if (mime.startsWith("video/")) return TipoArchivo.VIDEO;
             if (mime.startsWith("audio/")) return TipoArchivo.AUDIO;
-            // documentos comunes
             switch (mime) {
                 case "application/pdf":
                 case "application/msword":
@@ -134,46 +156,39 @@ public class FileUtils {
     }
 
     public static String getFileNameByUri(Context context, Uri uri) {
-        // Abre un cursor para ver el nombre del archivo de la URI
+        if (uri == null) return "";
         try (Cursor cursor = context.getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
             if (cursor != null && cursor.moveToFirst()) {
-                // Busca el nombre del archivo en el cursor
                 return cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
             }
         } catch (Exception e) {
             // ignorar
         }
 
-        return "";
+        String path = uri.getPath();
+        if (path != null && path.contains("/")) {
+            return path.substring(path.lastIndexOf('/') + 1);
+        }
+
+        return "archivo_" + System.currentTimeMillis();
     }
 
-    /**
-     * Method que devuelve el nombre de un archivo en base a su ruta.
-     * @param path Ruta completa del archivo.
-     * @return Nombre del archivo.
-     */
     public static String getFileNameFromPath(String path) {
         if (path == null || path.isEmpty()) return null;
         String[] parts = path.split("/");
         if (parts.length == 0) return null;
-
-        // Devuelve el último elemento del array
         return parts[parts.length - 1];
     }
 
     public static File crearArchivoTemporal(Context c) throws IOException {
-        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
                 .format(new Date());
         String nombreArchivoImagen = "JPEG_" + timeStamp + "_";
         File rutaFoto = c.getFilesDir();
-        //File rutaExterna = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File archivoImagen = File.createTempFile(
-                nombreArchivoImagen,    // prefijo
-                ".jpg",                 // sufijo
-                rutaFoto                // directorio
+        return File.createTempFile(
+                nombreArchivoImagen,
+                ".jpg",
+                rutaFoto
         );
-
-        return archivoImagen;
     }
 }

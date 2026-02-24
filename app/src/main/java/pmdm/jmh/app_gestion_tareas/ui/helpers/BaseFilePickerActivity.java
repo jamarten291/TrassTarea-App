@@ -9,9 +9,9 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -27,8 +27,8 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
     protected ActivityResultLauncher<Intent> openDocumentLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    Uri uri = result.getData().getData();
+                if (result.getResultCode() == RESULT_OK) {
+                    Uri uri = (result.getData() != null) ? result.getData().getData() : null;
                     if (uri != null) {
                         // Clasifica el archivo seleccionado según su tipo
                         TipoArchivo tipo = FileUtils.classifyUriByType(uri, this);
@@ -37,8 +37,11 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
                         onFilePicked(uri, tipo);
                         Toast.makeText(this, R.string.archivo_seleccionado, Toast.LENGTH_SHORT).show();
                     } else {
-                        // Si getData() es nulo y hay una uri de imagen, se da por hecho que se ha abierto la cámara
-                        if (imageUri != null) onFilePicked(imageUri, TipoArchivo.IMAGEN);
+                        // Si getData() o su uri es nulo y hay una uri de imagen, se da por hecho que se ha abierto la cámara
+                        if (imageUri != null) {
+                            onFilePicked(imageUri, TipoArchivo.IMAGEN);
+                            Toast.makeText(this, R.string.archivo_seleccionado, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
@@ -56,6 +59,17 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            imageUri = savedInstanceState.getParcelable("base_image_uri");
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (imageUri != null) {
+            outState.putParcelable("base_image_uri", imageUri);
+        }
     }
 
     /**
@@ -93,8 +107,6 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
             // Dependiendo del archivo se agrega otro intent
             switch (mimeType) {
                 case "image":
-                    // TODO arreglar glitch al solicitar permisos al usuario que causa que
-                    //  la galería se muestre primero
                     if(comprobarPermisoCamara()) {
                         lanzarChooserImagen(chooser);
                     } else {
@@ -129,27 +141,21 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
         Intent[] intentArray = new Intent[1];
 
         try {
+            // Creamos el archivo temporal antes de lanzar la cámara
+            File tempFile = FileUtils.crearArchivoTemporal(this);
+            imageUri = FileProvider.getUriForFile(this,
+                    "pmdm.jmh.app_gestion_tareas.FileProvider",
+                    tempFile);
+
             Intent aCamara = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            // Verificamos que haya una cámara disponible antes de añadirla
             if (aCamara.resolveActivity(getPackageManager()) != null) {
-                File tempFile = FileUtils.crearArchivoTemporal(this);
-                imageUri = FileProvider.getUriForFile(this,
-                        "pmdm.jmh.app_gestion_tareas.FileProvider",
-                        tempFile);
-
-                // TODO arreglar bug al guardar la imagen tomada desde la cámara
                 aCamara.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-
-                // Conceder permisos de lectura/escritura sobre el URI al intent
                 aCamara.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 aCamara.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
                 intentArray[0] = aCamara;
                 chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
             }
-            // Si no hay cámara, el chooser solo mostrará la galería (intentArchivos)
-
         } catch (IOException e) {
             Toast.makeText(this, "Error al crear el archivo temporal", Toast.LENGTH_LONG).show();
             Log.e("Error", Objects.requireNonNull(e.getMessage()));
