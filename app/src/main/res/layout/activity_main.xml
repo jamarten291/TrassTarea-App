@@ -9,6 +9,15 @@
     android:backgroundTintMode="src_in"
     tools:context=".ui.MainActivity">
 
+    <pmdm.jmh.app_gestion_tareas.ui.tarea.AnimatedBackgroundView
+        android:id="@+id/animatedBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/tv_slogan"
         android:layout_width="wrap_content"

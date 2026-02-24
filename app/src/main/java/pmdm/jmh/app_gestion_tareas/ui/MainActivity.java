@@ -18,6 +18,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import pmdm.jmh.app_gestion_tareas.R;
+import pmdm.jmh.app_gestion_tareas.ui.tarea.AnimatedBackgroundView;
 import pmdm.jmh.app_gestion_tareas.ui.tarea.list.ListadoTareasActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btEntrar;
     private ImageView logo;
     private TextView eslogan;
+
+    // Vista personalizada del fondo animado
+    private AnimatedBackgroundView animatedBackground;
     private final Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         btEntrar = findViewById(R.id.bt_entrar);
         logo = findViewById(R.id.iv_logo);
         eslogan = findViewById(R.id.tv_slogan);
+        animatedBackground = findViewById(R.id.animatedBackground);
 
         // Animaciones
         Animation logoAnimation = AnimationUtils.loadAnimation(this, R.anim.scale_up_down);
@@ -59,5 +64,22 @@ public class MainActivity extends AppCompatActivity {
             logo.startAnimation(logoAnimation);
             eslogan.startAnimation(sloganAnimation);
         }));
+    }
+
+    // Ciclo de vida: pausar/reanudar los hilos de la vista animada
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (animatedBackground != null) {
+            animatedBackground.reanudar();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (animatedBackground != null) {
+            animatedBackground.detener();
+        }
     }
 }
