@@ -24,6 +24,7 @@ import pmdm.jmh.app_gestion_tareas.R;
 
 public abstract class BaseFilePickerActivity extends AppCompatActivity {
     protected Uri imageUri = null;
+    private String pendingMimeType = null;
     protected ActivityResultLauncher<Intent> openDocumentLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -51,16 +52,22 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> lanzadorPermisos =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(),
             isGranted -> {
-                if (!isGranted) {
+                if (isGranted) {
+                    if (pendingMimeType != null) {
+                        launchFilePicker(pendingMimeType);
+                    }
+                } else {
                     Toast.makeText(this, "No se pudieron conceder los permisos", Toast.LENGTH_SHORT).show();
                 }
+                pendingMimeType = null;
             });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            imageUri = savedInstanceState.getParcelable("base_image_uri");
+            imageUri = savedInstanceState.getParcelable("base_image_uri", Uri.class);
+            pendingMimeType = savedInstanceState.getString("pending_mime_type");
         }
     }
 
@@ -69,6 +76,9 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         if (imageUri != null) {
             outState.putParcelable("base_image_uri", imageUri);
+        }
+        if (pendingMimeType != null) {
+            outState.putString("pending_mime_type", pendingMimeType);
         }
     }
 
@@ -85,6 +95,7 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
                 "text/plain",
                 "text/html"
         };
+        boolean shouldLaunchImmediately = true;
 
         Intent intentArchivos = new Intent();
         intentArchivos.setAction(Intent.ACTION_GET_CONTENT);
@@ -110,18 +121,25 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
                     if(comprobarPermisoCamara()) {
                         lanzarChooserImagen(chooser);
                     } else {
+                        shouldLaunchImmediately = false;
+                        pendingMimeType = mimeType;
                         pedirPermisoCamara();
                     }
                     break;
                 case "video":
-                    chooser.putExtra(Intent.EXTRA_TITLE, "Vídeos");
-                    Intent aCamaraVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                    if (aCamaraVideo.resolveActivity(getPackageManager()) != null) {
-                        intentArray[0] = aCamaraVideo;
-                        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                    if(comprobarPermisoCamara()) {
+                        chooser.putExtra(Intent.EXTRA_TITLE, "Vídeos");
+                        Intent aCamaraVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                        if (aCamaraVideo.resolveActivity(getPackageManager()) != null) {
+                            intentArray[0] = aCamaraVideo;
+                            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                        }
+                    } else {
+                        shouldLaunchImmediately = false;
+                        pendingMimeType = mimeType;
+                        pedirPermisoCamara();
                     }
                     break;
-
                 case "audio":
                     chooser.putExtra(Intent.EXTRA_TITLE, "Grabaciones");
                     Intent aGrabadora = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
@@ -132,7 +150,8 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
                     break;
             }
 
-            openDocumentLauncher.launch(chooser);
+            // Si no hay un mime pendiente, se lanza inmediatamente el chooser
+            if (shouldLaunchImmediately) openDocumentLauncher.launch(chooser);
         }
     }
 
