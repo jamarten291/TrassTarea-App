@@ -12,6 +12,8 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import java.io.File;
+
 import pmdm.jmh.app_gestion_tareas.R;
 
 public class VideoDialogFragment extends DialogFragment {
@@ -40,7 +42,9 @@ public class VideoDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         VideoView videoView = view.findViewById(R.id.video_view);
-        videoView.setVideoURI(Uri.parse(videoUri));
+        videoView.setVideoURI(Uri.fromFile(new File(videoUri)));
+
+        // TODO fix video playback problem due to the app not finding the file
         videoView.start();
 
         // Manejar clics en el video para pausar/reproducir

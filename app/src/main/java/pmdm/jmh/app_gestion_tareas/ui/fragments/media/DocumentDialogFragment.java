@@ -2,6 +2,7 @@ package pmdm.jmh.app_gestion_tareas.ui.fragments.media;
 
 import android.app.Dialog;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,7 +59,22 @@ public class DocumentDialogFragment extends DialogFragment {
                     .openInputStream(uri);
 
             if (inputStream != null) {
-                String contenido = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+                String contenido = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    contenido = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+                } else {
+                    // Se inicializa un buffer de bytes para obtener los bytes del inputStream
+                    byte[] bytes = new byte[inputStream.available()];
+                    byte nextByte;
+                    int cont = 0;
+
+                    // Se lee hasta llegar al byte -1, el cual indica que es el final de archivo
+                    while ((nextByte = (byte) inputStream.read()) != -1 && cont < bytes.length) {
+                        // Se agregan los bytes al buffer
+                        bytes[cont++] = nextByte;
+                    }
+                    contenido = new String(bytes, StandardCharsets.UTF_8);
+                }
                 inputStream.close();
 
                 if ("text/html".equals(mimeType)) {

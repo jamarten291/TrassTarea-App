@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.function.Function;
 
 import pmdm.jmh.app_gestion_tareas.database.entity.Tarea;
@@ -32,7 +33,7 @@ public class FileUtils {
         
         // Caso 1: URI de tipo file
         if ("file".equals(uri.getScheme())) {
-            File sourceFile = new File(uri.getPath());
+            File sourceFile = new File(Objects.requireNonNull(uri.getPath()));
             if (sourceFile.getAbsolutePath().equals(dest.getAbsolutePath())) {
                 return true; 
             }

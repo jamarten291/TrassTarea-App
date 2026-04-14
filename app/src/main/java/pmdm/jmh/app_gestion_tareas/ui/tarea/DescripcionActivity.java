@@ -12,6 +12,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.File;
+
 import pmdm.jmh.app_gestion_tareas.R;
 import pmdm.jmh.app_gestion_tareas.ui.fragments.media.DocumentDialogFragment;
 import pmdm.jmh.app_gestion_tareas.ui.fragments.media.ImageDialogFragment;
@@ -75,10 +77,7 @@ public class DescripcionActivity extends AppCompatActivity
             String audioUri = data.getString(ARG_AUDIO);
             if (audioUri != null) {
                 tvAud.setText(FileUtils.getFileNameFromPath(audioUri));
-
-                // TODO cambiar Uri.parse por Uri.fromFile en todos los DialogFragment
-                //  para mapeo explícito
-                MediaPlayer mp = MediaPlayer.create(this, Uri.parse(audioUri));
+                MediaPlayer mp = MediaPlayer.create(this, Uri.fromFile(new File(audioUri)));
                 mp.setLooping(false);
 
                 // Listener que reproduce el audio cuando se pulsa sobre el TextView
