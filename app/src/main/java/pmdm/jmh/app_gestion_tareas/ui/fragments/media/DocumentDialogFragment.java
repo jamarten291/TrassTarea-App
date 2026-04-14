@@ -59,7 +59,7 @@ public class DocumentDialogFragment extends DialogFragment {
                     .openInputStream(uri);
 
             if (inputStream != null) {
-                String contenido = null;
+                String contenido;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     contenido = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 } else {
