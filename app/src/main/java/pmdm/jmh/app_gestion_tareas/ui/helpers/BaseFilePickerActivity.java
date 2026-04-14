@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -66,7 +67,11 @@ public abstract class BaseFilePickerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            imageUri = savedInstanceState.getParcelable("base_image_uri", Uri.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                imageUri = savedInstanceState.getParcelable("base_image_uri", Uri.class);
+            } else {
+                imageUri = savedInstanceState.getParcelable("base_image_uri");
+            }
             pendingMimeType = savedInstanceState.getString("pending_mime_type");
         }
     }

@@ -2,8 +2,8 @@ package pmdm.jmh.app_gestion_tareas.ui.tarea.create;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Spinner;
 
@@ -80,10 +80,17 @@ public class CrearTareaActivity extends BaseFilePickerActivity implements
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         sd = savedInstanceState.getBoolean(ARG_SD_STORAGE);
-        URL_img_src = savedInstanceState.getParcelable(ARG_IMAGEN, Uri.class);
-        URL_vid_src = savedInstanceState.getParcelable(ARG_VIDEO, Uri.class);
-        URL_aud_src = savedInstanceState.getParcelable(ARG_AUDIO, Uri.class);
-        URL_doc_src = savedInstanceState.getParcelable(ARG_DOC, Uri.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            URL_img_src = savedInstanceState.getParcelable(ARG_IMAGEN, Uri.class);
+            URL_vid_src = savedInstanceState.getParcelable(ARG_VIDEO, Uri.class);
+            URL_aud_src = savedInstanceState.getParcelable(ARG_AUDIO, Uri.class);
+            URL_doc_src = savedInstanceState.getParcelable(ARG_DOC, Uri.class);
+        } else {
+            URL_img_src = savedInstanceState.getParcelable(ARG_IMAGEN);
+            URL_vid_src = savedInstanceState.getParcelable(ARG_VIDEO);
+            URL_aud_src = savedInstanceState.getParcelable(ARG_AUDIO);
+            URL_doc_src = savedInstanceState.getParcelable(ARG_DOC);
+        }
 
         // Recomenzar el fragmento con los datos restaurados
         fragmentManager = getSupportFragmentManager();

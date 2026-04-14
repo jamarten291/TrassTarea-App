@@ -2,6 +2,7 @@ package pmdm.jmh.app_gestion_tareas.ui.tarea.update;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Spinner;
@@ -66,7 +67,11 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
         Bundle extras = getIntent().getExtras();
 
         // Almaceno la tarea mandada en la intención en una variable
-        tareaPorEditar = extras.getParcelable(ARG_TAREA, Tarea.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            tareaPorEditar = extras.getParcelable(ARG_TAREA, Tarea.class);
+        } else {
+            tareaPorEditar = extras.getParcelable(ARG_TAREA);
+        }
 
         // Divido el progreso en 25 para obtener el índice equivalente del spinner y pasarlo al
         // fragmento
@@ -106,13 +111,21 @@ public class EditarTareaActivity extends BaseFilePickerActivity implements
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         // Restauramos el estado de las variables
-        tareaPorEditar = savedInstanceState.getParcelable(ARG_TAREA, Tarea.class);
         descripcion = savedInstanceState.getString(ARG_PARAM6);
         sd = savedInstanceState.getBoolean(ARG_SD_STORAGE);
-        URL_img_src = savedInstanceState.getParcelable(ARG_IMAGEN, Uri.class);
-        URL_vid_src = savedInstanceState.getParcelable(ARG_VIDEO, Uri.class);
-        URL_aud_src = savedInstanceState.getParcelable(ARG_AUDIO, Uri.class);
-        URL_doc_src = savedInstanceState.getParcelable(ARG_DOC, Uri.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            tareaPorEditar = savedInstanceState.getParcelable(ARG_TAREA, Tarea.class);
+            URL_img_src = savedInstanceState.getParcelable(ARG_IMAGEN, Uri.class);
+            URL_vid_src = savedInstanceState.getParcelable(ARG_VIDEO, Uri.class);
+            URL_aud_src = savedInstanceState.getParcelable(ARG_AUDIO, Uri.class);
+            URL_doc_src = savedInstanceState.getParcelable(ARG_DOC, Uri.class);
+        } else {
+            tareaPorEditar = savedInstanceState.getParcelable(ARG_TAREA);
+            URL_img_src = savedInstanceState.getParcelable(ARG_IMAGEN);
+            URL_vid_src = savedInstanceState.getParcelable(ARG_VIDEO);
+            URL_aud_src = savedInstanceState.getParcelable(ARG_AUDIO);
+            URL_doc_src = savedInstanceState.getParcelable(ARG_DOC);
+        }
 
         // Restablezco las variables con los datos de la tarea para no perderlos
         titulo = tareaPorEditar.getTitulo();
